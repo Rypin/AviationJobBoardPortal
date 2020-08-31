@@ -1,0 +1,300 @@
+{% extends "userProfile/base.html" %}
+{% block content %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<img src="https://i.pinimg.com/originals/61/58/82/61588210ffcb02408ae558b908fe8db5.jpg"  width = 1000 height = 200/>
+<div class="container emp-profile">
+            
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="profile-img">
+                            <img src="https://i.redd.it/s02r2226k9z21.jpg" border = "2" style = "border-radius:50%;"/>
+                            <!-- <div class="file btn btn-lg btn-primary">
+                                Change Photo
+                                <input name = "Change Photo" type="file" name="file"/>
+                            
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><b>Basic Informations</b></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="work-tab" data-toggle="tab" href="#work" role="tab" aria-controls="work" aria-selected="false"><b>Working Experiences</b></a>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab" aria-controls="edit" aria-selected="false"><b>Edit Profile</b></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+				
+				
+                <div class="row">
+                    <!-- <div class="col-md-4">
+                        <div class="profile-work">
+                            <p>WORK LINK</p>
+                            <a href="">Website Link</a><br/>
+                            <a href="">Bootsnipp Profile</a><br/>
+                            <a href="">Bootply Profile</a>
+                            <p>SKILLS</p>
+                            <a href="">Web Designer</a><br/>
+                            <a href="">Web Developer</a><br/>
+                            <a href="">WordPress</a><br/>
+                            <a href="">WooCommerce</a><br/>
+                            <a href="">PHP, .Net</a><br/>
+                        </div>
+                    </div> -->
+                    <div class="col-md-8"></div>
+                    <div class="col-md-8">
+					
+					{%for user in users%}
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <!-- basic informations -->
+							
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+					
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><b>Username: </b></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{user.Username}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><b>Name: </b></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{user.name}}</p>
+                                            </div>
+                                        </div>
+										<div class="row">
+                                            <div class="col-md-6">
+                                                <label><b>Nickname: </b></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{user.nickName}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><b>Email: </b></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{user.Email}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><b>Phone Number: </b></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{user.phoneNumber}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><b>Home Address: </b></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{user.Address}}</p>
+                                            </div>
+                                        </div>
+										<details>
+        <summary><b>Edit Profile</b></summary>
+        <form method = 'post' id = 1>
+								{%csrf_token%}
+                                <b>Name: </b>
+                                <input type="text" name="name" value = "{{user.name}}">
+								<br><br>
+
+                                <b>Nickname:</b>
+                                <input type="text" name="nickname" value = "{{user.nickName}}">
+								<br><br>
+
+                                <b>Email:</b>
+                                <input type="text" name="email" value = "{{user.Email}}">
+								<br><br>
+
+								<b>Phone Number:</b>
+                                <input type="text" name="phone" value = "{{user.phoneNumber}}">
+								
+                                <br><br>
+
+                                <b>Address:</b>
+                                <input type="text" name="address" value = "{{user.Address}}">
+
+                                <br><br>
+                                <button type = "button">
+                                    <a href="http://127.0.0.1:8000/profiles/userprofile"><b>Go Back</b></a><br/>
+                                </button>
+								<button type="submit">
+                                    <a href="http://127.0.0.1:8000/profiles/userprofile"><b>Submit</b></a><br/>
+                                </button>
+								<br><br>
+							</form>
+    </details>
+									<button type = "button">
+                                    <a href="http://127.0.0.1:8000/changepassword"><b>Change Password</b></a><br/>
+                                </button>
+                                        <!-- <button class="nav-item">
+                                            <a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab" aria-controls="edit" aria-selected="false"><b>Edit Profile</b></a>
+                                        </button> -->
+                                        
+                                    
+										
+                            </div>
+							
+                            <!-- credit cards -->
+							
+                            <div class="tab-pane fade" id="work" role="tabpanel" aria-labelledby="work-tab">
+								{%for work in works%}
+								{%if work.Username == work.Username%}
+								<b>------------Work Experience below------------</b>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label><b>Job: </b></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{work.job}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label><b>Years: </b></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{work.years}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label><b>company: </b></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{work.company}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label><b>Additional Comments: </b></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{work.comment}}</p>
+                                    </div>
+                                </div>
+								{%endif%}
+								{%endfor%}
+								<button type = "button">
+                                    <a href="http://127.0.0.1:8000/addwork"><b>+</b></a><br/>
+                                </button>
+								<br><br>
+                            </div>
+							
+                            <!-- shipping addresses -->
+                            <!--<div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+								{%for address in addresses%}
+								{%if address.Username == user.Username%}
+								<b>------------shipping address information below------------</b>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label><b>Address: </b></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{address.address}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label><b>City: </b></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{address.city}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label><b>State: </b></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{address.state}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label><b>Zip Code: </b></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{address.zipCode}}</p>
+                                    </div>
+                                </div>
+								{%endif%}
+								{%endfor%}
+								<button type = "button">
+                                    <a href="http://127.0.0.1:8000/profiles/addshippingaddress"><b>+</b></a><br/>
+                                </button>
+								<br><br>
+                            </div>-->
+
+                            <div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+                            
+                                <!-- <div class="row">
+                                    <div class="col-md-4">
+                                        <label><b>Card Type: </b></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>Visa</p>
+                                    </div>
+                                </div> -->
+							<form method = 'post' id = 1>
+								{%csrf_token%}
+                                <b>Name: </b>
+                                <input type="text" name="name" value = "{{user.name}}">
+								<br><br>
+
+                                <b>Nickname:</b>
+                                <input type="text" name="nickname" value = "{{user.nickName}}">
+								<br><br>
+
+                                <b>Email:</b>
+                                <input type="text" name="email" value = "{{user.Email}}">
+								<br><br>
+
+								<b>Phone Number:</b>
+                                <input type="text" name="phone" value = "{{user.phoneNumber}}">
+								
+                                <br><br>
+
+                                <b>Address:</b>
+                                <input type="text" name="address" value = "{{user.Address}}">
+
+                                <br><br>
+                                <button type = "button">
+                                    <a href="http://127.0.0.1:8000/profiles/userprofile"><b>Go Back</b></a><br/>
+                                </button>
+								<button type="submit">
+                                    <a href="http://127.0.0.1:8000/profiles/userprofile"><b>Submit</b></a><br/>
+                                </button>
+								<br><br>
+							</form>
+                            </div>
+							{%endfor%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+        {% endblock content %}

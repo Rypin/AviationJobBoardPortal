@@ -1,0 +1,166 @@
+{% comment %} {% extends "base.html" %} {% endcomment %}
+{% comment %} {% block content %} {% endcomment %}
+
+{% load static %}
+<!-- {%load static %} -->
+{% load sass_tags %}
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link href="{% sass_src '../static/front/scss/nav/nav.scss' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'custom/css/custom.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'vendor/jquery-ui/css/jquery-ui.css' %}">
+
+  {% comment %} <script src="../static/front/js/landing.js" defer></script> {% endcomment %}
+</head>
+<body>
+  <!-- Navigation -->
+   
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+  <button id="toggle" class="navbar-toggle collapsed toggle">
+    {% comment %} <i class="fa fa-bars fa-2x"></i> {% endcomment %}
+    <span><i class="fa fa-bars" aria-hidden="true"></i></span>
+  </button>
+    <div class="container" style="width: auto">
+      
+      {% comment %} <a class="navbar-brand" href="#">Aviation Job Board</a> {% endcomment %}
+      {% comment %} <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"> 
+        <span class="navbar-toggler-icon"></span>
+      </button>  {% endcomment %}
+
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          {% comment %} <li class="nav-item active">
+            <a class="nav-link" href="{% url 'home' %}">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'event_list' %}">Events</a>
+          </li> {% endcomment %}
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="#">Forum</a>
+          </li> {% endcomment %}
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li> {% endcomment %}
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li> {% endcomment %}
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li> {% endcomment %}
+
+        {% if request.get_full_path == "/search/" %}
+      <div class="form-inline mx-auto">
+      <div class="input-group" style="margin-right: 70px">
+         <div class="input-group-prepend"> 
+            <span class="input-group-text" id="basic-addon1">Position</span>
+         </div>
+         {{PostingForm.title}}
+      </div>
+      <div class="input-group">
+         <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Where</span>
+         </div>
+               {{ PostingForm.address }}
+               {{ PostingForm.geolocation }}
+               {{ PostingForm.media.js }}
+      </div>
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+   </div>
+    {% endif %}
+          {% if user.is_authenticated %}
+            {% comment %} <li class="nav-item">
+              <a class="nav-link" href="{% url 'userProfile-home' %}">Profile</a>
+            </li> {% endcomment %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+          {% else %}
+            {% comment %} <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}" style="padding: .5rem 2rem; color: white; 
+              background-color: #1de9b6; border-radius: 2px; font-size: 18px; display: flex;
+              justify-content: center; align-content: center; align-items: center" >Login</a>
+            </li>
+            <li class="nav-item" style="margin-top: -1.1px">
+              <a class="nav-link" href="{% url 'choose_register' %}" style="padding: 0.5rem 2rem; background-color: #ff6d00; 
+              color: white; font-size: 18px; border-radius: 2px; margin-left: 20px; ">Register</a>
+            </li> {% endcomment %}
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    
+  </nav>
+  <nav class="navbar navbar-light bg-white" style="margin-bottom: 40px">
+   
+</nav>
+
+  <div class="container-fluid" style="height: 100%;">
+  <div class = "sideNav">
+    <section class='expandToggle' >
+
+      <ul id="expandToggle" style="padding: 0px">
+        <li>
+          <a href="{% url 'search_page' %}">
+        <i class="fa fa-home icon" aria-hidden="true"></i>
+          <span>Home</span></a>
+        </li>
+        <li>
+          <a href="{% url 'userProfile-home' %}">
+         <i class="fa fa-tachometer icon" aria-hidden="true"></i>
+
+          <span>Profile</span></a>
+        </li>
+        {% comment %} <li>
+          <a href="#">
+          <i class="fa fa-envelope icon" aria-hidden="true"></i>
+          <span>Messages</span>
+          </a>
+
+        </li> {% endcomment %}
+        <li>
+          <a href="#">
+          <i class="fa fa-cogs icon" aria-hidden="true"></i>
+          <span>Settings</span>
+          </a>
+        </li>
+        {% comment %} <li>
+          <a href="#">
+          <i class="fa fa-building icon" aria-hidden="true"></i>
+          <span>Company</span></a>
+        </li> {% endcomment %}
+      </ul>
+    </section>
+  </section>
+
+    </div>
+      
+  <!-- Bootstrap core JavaScript -->
+  {% comment %} <script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script> {% endcomment %}
+  <script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
+  <script src='../static/front/js/nav.js'defer ></script>
+
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="'alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+   {% endif %}
+{% block content %}
+
+{% endblock content %}
+ 
+
+</body>

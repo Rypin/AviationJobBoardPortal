@@ -1,0 +1,188 @@
+﻿{% load static %}
+{% load sass_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Aviation Job Board</title>
+
+  <!-- Bootstrap core CSS -->
+  
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+  <link href="{% sass_src 'front/scss/nav/nav.scss' %}" rel="stylesheet" type="text/css" /> 
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+   
+  <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
+     
+
+    <div class="container">
+      
+      {% comment %} <a class="navbar-brand" href="#">Aviation Job Board</a> {% endcomment %}
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"> 
+        <span class="navbar-toggler-icon"></span>
+      </button> 
+
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'home' %}">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'event_list' %}">Events</a>
+          </li>
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="#">Forum</a>
+          </li> {% endcomment %}
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li> {% endcomment %}
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li> {% endcomment %}
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li> {% endcomment %}
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'userProfile-home' %}">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}" style="padding: .5rem 2rem; color: white; 
+              background-color: #1de9b6; border-radius: 2px; font-size: 18px; display: flex;
+              justify-content: center; align-content: center; align-items: center" >Login</a>
+            </li>
+            <li class="nav-item" style="margin-top: -1.1px">
+              <a class="nav-link" href="{% url 'choose_register' %}" style="padding: 0.5rem 2rem; background-color: #ff6d00; 
+              color: white; font-size: 18px; border-radius: 2px; margin-left: 20px; ">Register</a>
+            </li>
+          {% endif %}
+        </ul>
+          {% comment %} <ul class="navbar-nav ml-auto">
+              <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'home' %}">
+                      Home
+                      <span class="sr-only">(current)</span>
+                  </a>
+              </li>
+              {% if request.user.groups.all.0.name != "employer" %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'search_page'%}">Search</a>
+              </li>
+              {% endif %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'event_list' %}">Events</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">Forum</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">Services</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">Contact</a>
+              </li>
+              {% if user.is_authenticated %}
+              {% if request.user.groups.all.0.name == "jobseeker" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'search_page' %}">Job Search</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'userProfile-home' %}">Profile</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'company_profile' %}">Company Profile</a>
+                </li>
+              {% endif %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
+              <li class="nav-item btn-group">
+                  <button class="btn" style="border: none; background-color:transparent;" id="notifications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-bell" style="color: #fff; font-size:24px; "></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
+                      <a class="dropdown-item" href="#"><b>Wumpus</b> sent you a message.</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#" style=""><img src="https://i.stack.imgur.com/YQu5k.png" style="height:40px; margin-right: 10px;"><b>Bob</b> posted something.</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#"><img src="https://pbs.twimg.com/profile_images/1067242179955896320/mKdx6PgL_400x400.jpg" style="height:40px; margin-right: 10px;"><b>Lockheed</b> has posted an event.</a>
+
+                  </div>
+              </li>
+              <li class="nav-item">
+                  <a class="btn nav-link" href="{% url 'inbox' %}"><i class="fas fa-envelope" style="color: #fff; font-size:24px; "></i></a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'choose_register' %}">Register</a>
+              </li>
+              <li class="nav-item btn-group">
+                  <button class="btn" style="border: none; background-color:transparent;" id="notifications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-bell" style="color: #fff; font-size:24px; "></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
+                      <a class="dropdown-item" href="#"><b>Wumpus</b> sent you a message.</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#" style=""><img src="https://i.stack.imgur.com/YQu5k.png" style="height:40px; margin-right: 10px;"><b>Bob</b> posted something.</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#"><img src="https://pbs.twimg.com/profile_images/1067242179955896320/mKdx6PgL_400x400.jpg" style="height:40px; margin-right: 10px;"><b>Lockheed</b> has posted an event.</a>
+
+                  </div>
+              </li>
+              <li class="nav-item">
+                  <a class="btn nav-link" href="{% url 'inbox' %}"><i class="fas fa-envelope" style="color: #fff; font-size:24px; "></i></a>
+              </li> <!--delete after testing-->
+              {% endif %}
+          </ul> {% endcomment %}
+      </div>
+    </div>
+    
+  </nav>
+    
+  
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
+  <script src='../static/front/js/nav.js'defer ></script>
+
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="'alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+   {% endif %}
+{% block content %}
+
+{% endblock content %}
+
+</body>
+
+</html>

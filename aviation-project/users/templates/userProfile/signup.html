@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <form method = 'POST'>
+		{%csrf_token%}
+        <b>Username:</b>
+        <input type="text" name="username">
+        <br><br>
+        <b>Password:</b>
+        <input type="password" name="password">
+        <br><br>
+        <b>Name: </b>
+        <input type="text" name="name">
+        <br><br>
+        <b>Nickname:</b>
+        <input type="text" name="nickname">
+        <br><br>
+		<b>E-mail:</b>
+        <input type="text" name="email">
+        <br><br>
+		<b>Phone Number</b>
+        <input type="text" name="phone">
+        <br><br>
+        <b>Address: </b>
+        <input type="text" name="address">
+        <br><br>
+        
+        <button type="submit">
+            <a href="http://127.0.0.1:8000/userprofile"><b>Submit</b></a><br/>
+        </button>
+    </form> 
+{%for message in messages%}
+	<b>{{message}}</b>
+{%endfor%}  
+{% endblock content %}

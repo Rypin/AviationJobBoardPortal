@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+
+    input[type=text] {
+        border-radius:0px;
+        border: none;
+        border-bottom: 2px solid grey;
+    }
+    input[type=password] {
+        border-radius: 0px;
+        border: none;
+        border-bottom: 2px solid grey;
+    }
+    .user {
+        margin-right: 10px;
+        border-radius: 0.2rem;
+        background-color: #1de9b6;
+        color: white;
+        border-style: none;
+    }
+
+        .user:hover {
+            background: white;
+            background-color: dodgerblue;
+            transition: all 0.3s ease;
+            color: black;
+        }
+    .employer {
+        border-style: none;
+        border-radius: 0.2rem;
+        background-color: #ff6d00;
+        color: white;
+    }
+
+        .employer:hover {
+            background: white;
+            background-color:dodgerblue;
+            transition: all 0.3s ease;
+            color: black;
+        }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col" style="max-width:50%; height:911px; background: rgb(2,0,36);background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(43,43,184,1) 41%, rgba(0,212,255,1) 100%);">
+
+        </div>
+        <div class="col" style="max-width:500px; margin-top:150px;">
+            <div class="content-section">
+                <h1 class="border-bottom" style="border-bottom-color:black">Register</h1>
+
+                <h3 style="margin-top:30px;"> <a class="user btn-lg" href="{% url 'register' %}">Jobseeker (search for jobs, events, etc...)</a></h3>
+                <h3 style="margin-top:20px;"> <a class="employer btn-lg" href="{% url 'company_register' %}">Company Owner</a></h3>
+            </div>
+
+           
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+{% endblock content %}

@@ -1,0 +1,9 @@
+{
+	"version": 3,
+	"file": "company.css",
+	"sources": [
+		"company.scss"
+	],
+	"names": [],
+	"mappings": "AAAA,AAAA,KAAK,CAAC;EAEF,aAAa,EAAC,GAAG,GACpB"
+}

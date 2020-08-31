@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <h3>{{job.title|capfirst}}</h3>
+    <h2>Description: {{job.description}}</h2>
+    <h2>Deadline: {{job.deadlinedate}}</h2>
+    <h2>address: {{job.address}}</h2>
+    <h2>type: {{job.jobtype}}</h2>
+</div>
+{% endblock %}

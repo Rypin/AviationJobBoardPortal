@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.dropbtn {
+        background-color: rgb(29, 63, 85);
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        }
+
+        .dropbtn:hover, .dropbtn:focus {
+        background-color: rgb(38, 91, 126);
+        }
+
+
+        .dropdown {
+        position: relative;
+        display: inline-block;
+        }
+
+        .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        }
+
+        .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        }
+
+        .dropdown a:hover {background-color: #ddd;}
+
+        .show {display: block;}
+</style>
+
+<h1>Events</h1>
+
+<button onclick="myFunction()" class="dropbtn">Sort By</button>
+    <div id="myDropdown" class="dropdown-content">
+        <a href="?order_by=posted">Posted Date</a>
+        <a href="?order_by=deadline">Most recent event</a>
+    </div>
+
+<script>
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+</script>
+
+<table>
+    <tr>
+        <th>Created By</th>
+        <th>Event Name</th>
+        <th>Description</th>
+        <th>Posted</th>
+        <th>Day of Event</th>
+    </tr>
+    {% for event in events_listings%}
+    <tr>
+        <td>
+            <img style="width:128px;height:128px;" src="{{ event.image.url }}">
+        </td>
+        <td>
+            {{ event.title }}
+        </td>
+        <td>
+            {{ event.description }}
+        </td>
+        <td>
+            {{ event.posted }}
+        </td>
+        <td>
+            {{ event.deadline }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

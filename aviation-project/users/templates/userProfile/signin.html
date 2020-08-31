@@ -1,0 +1,22 @@
+{% extends "userProfile/base.html" %}
+{% block content %}
+	<form method = "POST">
+		{%csrf_token%}
+		<b>username:</b>
+		<input type="text" name="username">
+		<br><br>
+		<b>password:</b>
+		<input type="password" name="password">
+		<br><br>
+		<button type="submit">
+			<a href="http://127.0.0.1:8000/userprofile"><b>Sign in</b></a><br/>
+		</button>
+		<button type="button">
+			<a href="http://127.0.0.1:8000/signup"><b>Sign up</b></a><br/>
+		</button>
+	</form>
+	<br><br>
+	{%for message in messages%}
+	<b>{{message}}</b>
+	{%endfor%}
+{% endblock content %}

@@ -1,0 +1,73 @@
+body {
+  transition: 0.3s ease; }
+
+.navbar {
+  background-color: #f6f9ff; }
+
+#expandToggle.show-nav {
+  transition-property: width;
+  width: 200px; }
+
+.expandToggle {
+  margin-left: -16px;
+  position: fixed;
+  height: 100%;
+  background-color: #17a2b8;
+  transition: transform 0.3s ease; }
+  .expandToggle ul {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s ease;
+    transition-property: width;
+    width: 65px;
+    list-style-type: none;
+    margin-top: 17px; }
+    .expandToggle ul .icon {
+      color: white;
+      margin-right: 40px;
+      font-size: 23px; }
+      .expandToggle ul .icon span {
+        margin-left: 20px;
+        font-size: 17px !important;
+        font-family: 'Lato', sans-serif; }
+  .expandToggle ul li {
+    padding-top: 25px;
+    padding-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap; }
+    .expandToggle ul li a {
+      margin-left: 20px; }
+  .expandToggle ul li:hover {
+    background-color: #108EA2; }
+  .expandToggle ul li a {
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    align-items: center; }
+  .expandToggle ul li a:hover {
+    text-decoration: none; }
+
+.toggle {
+  background-color: #17a2b8;
+  color: white;
+  position: fixed;
+  padding: .6rem 1rem;
+  z-index: 1000;
+  font-size: 25px;
+  border: none;
+  top: 15px;
+  left: 5px;
+  border-radius: 2rem; }
+  .toggle :active {
+    text-decoration: none; }
+
+.container {
+  padding: 15px;
+  margin: 0 auto;
+  max-width: 100%;
+  width: 800px; }
+
+/*# sourceMappingURL=nav.css.map */

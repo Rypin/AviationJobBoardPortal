@@ -1,0 +1,95 @@
+#amount {
+    border:0; 
+    color:#f6931f; 
+    font-weight:bold
+}
+
+body { 
+    background-color: rgb(246,249,255)
+}
+
+.card-group a:hover{
+    border-left-width: 2px;
+    border-left-color: blue
+}
+
+.dropdown {
+  display: inline-block
+}
+
+.dropDownMenu {
+  background-color: white; 
+  color: black;
+  margin-right: 10px;
+  border: 3px solid rgb(234, 234, 234); 
+  border-radius: 10px; 
+  font-family: Helvetica;
+  padding-bottom: 0px;
+}
+
+.headerActive {
+  border-color: rgb(110, 70, 174);
+  font-weight: bold
+}
+
+.dropDownMenuHeader {
+  margin-bottom: 0px;
+}
+
+.dropdown4 {
+    padding: 20px;
+}
+
+.dropdown5 {
+    padding: 20px;
+    width: 290px
+}
+
+.dot {
+  height: 15px;
+  width: 15px;
+  left: 10px;
+  border: 2px solid rgb(234, 234, 234);
+  background-color: #bbb;
+  border-radius: 50%;
+  display: block;
+  margin-top: 0px;
+  margin-left: auto;
+  position: relative;
+}
+
+.dotActive {
+  background-color: rgb(110, 70, 174)
+}
+
+.clear-filter-btn {
+  color: rgb(110,70,174)
+}
+
+.jobTypeChk {
+  margin-left: 10px
+}
+
+.jobTypeChkLabel {
+  display: inline; 
+  margin-left: 15px
+}
+
+.otherOption {
+    margin-bottom: 5px
+}
+
+#secondOption {
+    margin-top: 5px; 
+    margin-bottom: 5px
+}
+
+#slider-range {
+    background-color: blueviolet;
+    margin: auto
+}
+
+#workAuthChkLabel {
+    display: inline; 
+    margin-left: 4px
+}

@@ -1,0 +1,475 @@
+{% extends "profilePortal.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
+{% block content %}
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<body style="background:#f8f9fa">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+{%for user in users%}
+
+<script>
+
+	var x = 0;
+
+	
+
+	function accordianString() {
+
+		x++;
+
+		
+
+		document.getElementById("header0").setAttribute("id", "header" + String(x));
+
+
+        document.getElementById("button0").setAttribute("aria-controls", "collapse" + String(x));
+        document.getElementById("button0").setAttribute("data-target", "#collapse" + String(x));
+        document.getElementById("button0").setAttribute("id", "button" + String(x));
+
+        document.getElementById("collapse0").setAttribute("aria-labelledby", "heading" + String(x));
+
+        document.getElementById("collapse0").setAttribute("id", "collapse" + String(x));
+	}
+	
+</script>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-3 ">
+			<br>
+			<div class = "offset-2 col-3">
+				<img src= "https://i.redd.it/s02r2226k9z21.jpg" border = "2" style = "border-radius:10%;" width = 120 height = 120/>
+				
+			</div>
+
+			<br>
+			<div class="offset-1 col-3">
+				<button type="button" class="btn btn-primary">
+					<a href="{% url 'resume' %}" style="text-decoration: none; color: white"><b>Upload Resume</b></a><br/>
+				</button>
+			</div>
+			<br>
+			<ul class="list-group ">
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><b>Basic Informations</b></a>
+				</li>
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link" id="edit-tab" data-toggle="tab" href="#education" role="tab" aria-controls="education" aria-selected="false"><b>Education Experiences</b></a>
+				</li>
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link" id="work-tab" data-toggle="tab" href="#work" role="tab" aria-controls="work" aria-selected="false"><b>Working Experiences</b></a>
+				</li>
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab" aria-controls="edit" aria-selected="false"><b>Update Profile</b></a>
+				</li>
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link" id="skill-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills" aria-selected="false"><b>Skills</b></a>
+				</li>
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link" id="app-tab" data-toggle="tab" href="#applications" role="tab" aria-controls="applications" aria-selected="false"><b>Current Applications</b></a>
+				</li>
+			</ul> 
+		</div>
+		<div class="col-md-9">
+			<div class="tab-content profile-tab" id="myTabContent">
+				<br>
+				<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Basic Information</h4>
+									<hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Username </b></label> 
+										<div class="col-8">
+											<p>{{user.Username}}</p>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Name </b></label> 
+										<div class="col-8">
+											<p>{{user.name}}</p>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Nickname </b></label> 
+										<div class="col-8">
+											<p>{{user.nickName}}</p>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Email Address </b></label> 
+										<div class="col-8">
+											<p>{{user.Email}}</p>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Phone Number </b></label> 
+										<div class="col-8">
+											<p>{{user.phoneNumber}}</p>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Address </b></label> 
+										<div class="col-8">
+											<p>{{user.Address}}</p>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="offset-9 col-8">
+											<button type="button" class="btn btn-primary">
+												<a href="{% url 'password_reset' %}" style="text-decoration: none; color: white"><b>Change Password</b></a><br/>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				
+				<div class="tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-tab">
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Education Experiences</h4>
+							<hr>
+						</div>
+					</div>
+					{%for education in educations%}
+					{%if education.Username == user.Username%}
+					<form method = 'post' id = 1>
+						{%csrf_token%}
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<h4>{{education.title}} In {{education.major}}</h4>
+										<input class="form-control here" type="hidden" name="title" value = "{{education.title}}">
+										<input class="form-control here" type="hidden" name="major" value = "{{education.major}}">
+										<hr>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>School </b></label> 
+											<div class="col-8">
+												<p>{{education.school}}</p>
+												<input class="form-control here" type="hidden" name="school" value = "{{education.school}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Duration </b></label> 
+											<div class="col-8">
+												<p>{{education.duration}}</p>
+												<input class="form-control here" type="hidden" name="duration" value = "{{education.duration}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<div class="offset-8 col-8">
+												<button type="submit" class="btn btn-primary", name = 'deleteEducation'>
+													<a style="text-decoration: none; color: white"><b>Delete Record</b></a><br/>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</form>
+					<br>
+					{%endif%}
+					{%endfor%}
+					<div class="offset-8 col-8">
+						<button type = "button" class="btn btn-primary">
+							<a href="{% url 'userProfile-addeducation' %}"  style="text-decoration: none; color: white"><b>Add Education Experience</b></a><br/>
+						</button>
+					</div>
+					<br><br>
+				</div>
+				
+				<div class="tab-pane fade" id="work" role="tabpanel" aria-labelledby="work-tab">
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Working Experiences</h4>
+							<hr>
+						</div>
+					</div>
+					{%for work in works%}
+					{%if work.Username == user.Username%}
+					<form method = 'post' id = 1>
+						{%csrf_token%}
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<h4>{{work.job}}</h4>
+										<input class="form-control here" type="hidden" name="job" value = "{{work.job}}">
+										<hr>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Time Wokred </b></label> 
+											<div class="col-8">
+												<p>{{work.years}}</p>
+												<input class="form-control here" type="hidden" name="years" value = "{{work.years}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Company </b></label> 
+											<div class="col-8">
+												<p>{{work.company}}</p>
+												<input class="form-control here" type="hidden" name="company" value = "{{work.company}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Additional Comments </b></label> 
+											<div class="col-8">
+												<p>{{work.comment}}</p>
+												<input class="form-control here" type="hidden" name="comments" value = "{{work.comment}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<div class="offset-8 col-8">
+												<button type="submit" class="btn btn-primary", name = 'deleteWork'>
+													<a style="text-decoration: none; color: white"><b>Delete Record</b></a><br/>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</form>
+					<br>
+					{%endif%}
+					{%endfor%}
+					<div class="offset-8 col-8">
+						<button type = "button" class="btn btn-primary">
+							<a href="{% url 'userProfile-addwork' %}"  style="text-decoration: none; color: white"><b>Add Working Experience</b></a><br/>
+						</button>
+					</div>
+					<br><br>
+				</div>
+
+				<div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skill-tab">
+					<div class ="row">
+						<div class="col-md-12">
+
+							<h4>Skills</h4>
+							<a onclick ="toggle_visibility('addField')"class="btn btn-primary" name = 'addSkill' style= "text-decoration: none; color: black"><b>Add Skill</b></a>
+							<div id="addField" style = "display:none">
+								<form method = 'POST'>
+									{% csrf_token %}
+									<label for="newSkill">Skill: </label>
+									<input type="text" id ="newSkill" name="newSkill">
+									<button type = "submit" class = "btn btn-secondary" name ='submitSkill'>Add</button>
+								</form>
+							</div>
+							<hr>
+						</div>
+					</div>
+					{%for skill in skills%}
+					<form method = 'POST' enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<h4>{{skill|safe}}</h4>
+									</div>
+								</div>
+								<div class = "row">
+										<div class="form-group row">
+											<div class="offset-8 col-8">
+												<button type="submit" class="btn btn-primary" name = 'deleteSkill' value='{{skill}}'>
+													<a style="text-decoration: none; color: white"><b>Delete</b></a><br/>
+												</button>
+											</div>
+										</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					{%endfor%}
+				</div>
+
+				<div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Update Profile</h4>
+									<hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<form method = 'post' id = 1>
+										{%csrf_token%}
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Name </b></label> 
+											<div class="col-8">
+												<input class="form-control here" type="text" name="name" value = "{{user.name}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Nickname </b></label> 
+											<div class="col-8">
+												<input class="form-control here" type="text" name="nickname" value = "{{user.nickName}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Email </b></label> 
+											<div class="col-8">
+												<input class="form-control here" type="text" name="email" value = "{{user.Email}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Phone Number </b></label> 
+											<div class="col-8">
+												<input class="form-control here" type="text" name="phone" value = "{{user.phoneNumber}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Address </b></label> 
+											<div class="col-8">
+												<input class="form-control here" type="text" name="address" value = "{{user.Address}}">
+											</div>
+										</div>
+										
+										<div class="form-group row">
+											<div class="offset-9 col-8">
+												<button type="button" class="btn btn-primary">
+													<a href="{% url 'userProfile-home' %}" style="text-decoration: none; color: white"><b>Go Back</b></a><br/>
+												</button>
+												<button type="submit" class="btn btn-primary", name = 'editProfile'>
+													<a href="{% url 'userProfile-home' %}" style="text-decoration: none; color: white"><b>Submit</b></a><br/>
+												</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+
+				<div class="tab-pane fade" id="applications" role="tabpanel" aria-labelledby="app-tab">
+					<div class="card" style="overflow-y:auto; max-height:700px;">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Active Applications</h4>
+									<hr>
+								</div>
+							</div>
+							
+							<div class="accordian" id="Accordian0" onload="accordianString()">
+								{%for application in applications%}
+								{%if application.username == user.Username%}
+
+
+
+								<div class="card app-status">
+									<div class="card-header" id="heading0">
+										<div class="row">
+											<div class="col-md-12">
+												<img src="https://pbs.twimg.com/profile_images/1067242179955896320/mKdx6PgL_400x400.jpg" style="height:40px; margin-right:10px;">
+												Application for <b>{{application.title}}</b> at <b>Company Name Here</b>
+												<button class="btn btn-warning" id="button0" style="float:right;" data-toggle="collapse" data-target="#collapse{getX()}" aria-controls="collapse{getX()}">In Review</button>
+											</div>
+										</div>
+									</div>
+									<div id="collapse0" class="collapse" aria-labelledby="heading" data-parent="#Accordian0">
+										<div class="card-body">
+											<div class="form-group row">
+												<label class="col-4 col-form-label"><b>Job Type</b></label>
+												<div class="col-8">
+													<p>{{application.jobtype}}</p>
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-4 col-form-label"><b>Description </b></label>
+												<div class="col-8">
+													<p>{{application.description}}</p>
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-4 col-form-label"><b>applier </b></label>
+												<div class="col-8">
+													<p>{{application.username}}</p>
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-4 col-form-label"><b>status </b></label>
+												<div class="col-8">
+													<p>{{application.status}}</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<br>
+
+								
+
+								<script>
+									x++;
+
+
+
+									document.getElementById("heading0").setAttribute("id", "header" + String(x));
+
+
+                                    document.getElementById("button0").setAttribute("aria-controls", "collapse" + String(x));  									
+									document.getElementById("button0").setAttribute("data-target", "#collapse" + String(x));
+									document.getElementById("button0").setAttribute("id", "button" + String(x));
+
+									document.getElementById("collapse0").setAttribute("aria-labelledby", "heading" + String(x));
+
+									document.getElementById("collapse0").setAttribute("id", "collapse" + String(x));
+								</script>
+
+								{%endif%}
+
+								{%endfor%}
+							</div>
+							
+							
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+function toggle_visibility(x) {
+  var x = document.getElementById(x);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
+{%endfor%}
+{% endblock content %}
+</body>

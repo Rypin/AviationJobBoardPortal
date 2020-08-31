@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .card {
+
+        margin-bottom:5px;
+    }
+
+    #HoverCard:hover {
+        background-color: #ff6d00;
+        transition: all 0.5s ease;
+    }
+
+</style>
+
+    <div class="container" style="position: relative;text-align: center;color: white;">
+        <img src="https://cdn.britannica.com/41/123141-050-E6229449/Air-New-Zealand-Boeing-747-400.jpg" alt="Banner" style="width:100%;">
+        <div class="container" style="background-color:lightgrey; border-style:none;  position:relative; z-index:200; height:110px; top:-70px;">
+            <div class="row">
+
+                <div>
+                    <img src="https://i.stack.imgur.com/YQu5k.png" style="height:100px; position:relative; top:5px; left:10px; border: solid grey 10px; border-radius: 10px;">
+                </div>
+                
+
+                <div style="position: relative;bottom: 1px;left: 30px;"><h1>{{company.name}}</h1> 
+                    <div class="row" style="position:relative;bottom: 1px;left: 18px;">{{company.address}}</div>
+                <div class="row" style="position:relative;bottom: 2px;left: 18px;">Some stuff about stuff.</div>
+                </div>
+
+
+                <div style="position: absolute;bottom: 8px;right: 30px;"><button type="button" class="btn btn-success btn-lg">+ Follow</button></div>
+
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+    <div class="container" style="position:relative; top:-60px;">
+        <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="feed-tab" data-toggle="tab" href="#feed" role="tab" aria-controls="feed" aria-selected="true">Feed</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="jobs-tab" data-toggle="tab" href="#jobs" role="tab" aria-controls="jobs" aria-selected="false">Jobs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="false">About</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="feed" role="tabpanel" aria-labelledby="nav-feed-tab">
+                <div class="card" id="HoverCard">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                    </div>
+                </div>
+                <div class="card" id="HoverCard">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                    </div>
+                </div>
+                <div class="card" id="HoverCard">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                    </div>
+                </div>
+                <div class="card" id="HoverCard">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="jobs" role="tabpanel" aria-labelledby="nav-jobs-tab">
+
+                {%for job in jobs%}
+                {%csrf_token%}
+
+                <div class="card" id="HoverCard">
+                    <div class="card-body">
+                        <form method='post' id=1>
+                            {%csrf_token%}
+                            
+                            <div class="row">
+                                <div class="col">
+                                    {{job.title}}
+
+                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{job.title}}"></h5>
+                                    {{job.jobtype}}
+
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="type" value="{{job.jobtype}}"></p>
+                                    {{job.description}}
+
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{job.description}}"></p>
+                                </div>
+
+                                <div class="col ml auto">
+                                    <button type="submit" style="margin-top:40px; float:right" class="btn btn-primary" , name='apply'>
+                                        <a><b>Apply</b></a>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+
+                    </div>
+                </div>
+
+                {%endfor%}
+
+                <div class="card" id="HoverCard">
+                    <div class="card-body">
+                        <h5 class="card-title">Yo Some Job</h5>
+                        <p class="card-text">Apply to this job dude.</p>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="nav-about-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">About COMPANY</h5>
+                        <p class="card-text">
+                            {{company.company_description}}
+						</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+{% endblock %}

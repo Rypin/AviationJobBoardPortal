@@ -1,0 +1,20 @@
+{%for job in jobs%}
+<form method = 'post' id = 1>
+	{%csrf_token%}
+	{{job.title}}
+	<input class="form-control here" type="hidden" name="name" value = "{{job.title}}">
+	<br><br>
+	{{job.jobtype}}
+	<input class="form-control here" type="hidden" name="type" value = "{{job.jobtype}}">
+	<br><br>
+	{{job.description}}
+	<input class="form-control here" type="hidden" name="description" value = "{{job.description}}">
+	<br><br>
+	<button type="submit" class="btn btn-primary", name = 'apply'>
+		<a style="text-decoration: none; color: white"><b>Apply</b></a><br/>
+	</button>
+	</button>
+</form>
+
+
+{%endfor%}

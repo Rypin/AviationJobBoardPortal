@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load sass_tags %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<head>
+<link href="{% sass_src '../static/front/scss/company/company.scss' %}" rel="stylesheet" type="text/css" />
+</head>
+<style>
+    .card {
+
+        margin-bottom:5px;
+    }
+
+    .HoverCard:hover {
+        background-color: #ff6d00;
+        transition: all 0.5s ease;
+        cursor:pointer;
+    }
+
+</style>
+
+    <div class="container" style="position: relative;text-align: center;color: white;">
+        <img src={{ company_profile.banner.url }} alt="Banner" width="770" height="320">
+        <div class="container" style="background-color:lightgrey; border-style:none;  position:relative; z-index:200; height:110px; top:-70px;">
+            <div class="row">
+
+                <div>
+                    <img src={{ company_profile.image.url }} style="height:100px; position:relative; bottom:10px; left:10px; border: solid grey 10px; border-radius: 10px;">
+                </div>
+
+
+                <div style="position: relative;bottom: 5px;left: 30px;"><h1>{{ company_profile.name }}</h1>
+                    <div class="row" style="position:relative;bottom: 1px;left: 18px; ">{{ user.username }}</div>
+                <div class="row" style="position:relative;bottom: 2px;left: 18px;">{{ company_profile.address }}.</div>
+                </div>
+
+
+                <div style="position: absolute;bottom: 8px;right: 30px;">
+                    <form method="" action="" >
+                        <button type="submit" class="btn btn-success btn-lg" style=" border-style: none; border-radius: 0.2rem; background-color: #ff6d00; color: white;">Add Event</button>
+                    </form>
+
+                    
+                </div>
+                <form method="GET" action="{% url 'posting' %}">
+                <div style="position: absolute;bottom: 8px;right: 170px;"><button name="company" value = {{company_profile.id}} type="submit" class="btn btn-success btn-lg" style="border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;">Add Job</button></div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="container" style="position: relative; top: -60px;">
+        <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" id="jobs-tab" data-toggle="tab" href="#jobs" role="tab" aria-controls="jobs" aria-selected="false">Jobs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="false">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="about-tab" data-toggle="tab" href="#update" role="tab" aria-controls="about" aria-selected="false">Update</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade" id="jobs" role="tabpanel" aria-labelledby="nav-jobs-tab">
+                {% for job in jobs%}
+                {%csrf_token%}
+
+                <div class="card" id="HoverCard">
+                    <div class="card-body">
+                        <form method='post' id=1>
+                            {%csrf_token%}
+
+                            <div class="row">
+                                <div class="col">
+                                    {{job.title}}
+
+                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{job.title}}"></h5>
+                                    {{job.jobtype}}
+
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="type" value="{{job.jobtype}}"></p>
+                                    {{job.description}}
+
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{job.description}}"></p>
+                                </div>
+
+                                <div class="col ml auto">
+                                    <button type="submit" style="margin-top:40px; float:right;  border-style: none; border-radius: 0.2rem; background-color: #ff6d00; color: white;" class="btn btn-primary">
+                                        <a><b>Delete</b></a>
+                                    </button>
+                                    <button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary">
+                                        <a><b>Edit</b></a>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="nav-about-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">About {{ company_profile.name }}</h5>
+                        <p class="card-text">
+                            {{ company_profile.company_description}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="update" role="tabpanel" aria-labelledby="nav-about-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Update Company Profile</h5>
+                        <p class="card-text">
+                            <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Account & Company Info</legend>
+                                {{ u_form|crispy }}
+                                {{ cp_Update_form|crispy }}
+                            </fieldset>
+                            <div class="form-group">
+                                <button class="btn btn-outline-info" type="submit">Update</button>
+                            </div>
+                            </form>
+                            <a href="{% url 'password_reset' %}" >Change Password?</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

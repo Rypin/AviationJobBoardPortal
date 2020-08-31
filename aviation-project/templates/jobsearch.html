@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+<h> JOB SEARCH </h>
+<form class="form-inline" method="GET" action="{%url 'jobsearch'%}" novalidate>
+   <div class="form-group">
+      <label for = "jobtitle"></label>
+      <input type="text" id="jobtitle" name="jobtitle" class="form-control" placeholder="Job">
+   </div>
+   <div class="form-group">
+      
+         <label for = "address"></label>
+         {{ PostingForm.address }}
+         <label for = "geolocation">{{ PostingForm.geolocation }}</label>
+         
+   </div>
+   <div class="form-group">
+      <label for="jobtype"></label>
+      <select id="jobtype" class="form-control" name="jobtype">
+         <option selected>Job Type</option>
+         
+         {% for jobtypes in jobtypes %}
+         <option value="{{ jobtypes}}" type="checkbox">{{ jobtypes }}</option>
+         {% endfor %}
+      </select>
+   </div>
+   <div class="form-group">
+        <label for="work_auth">US Work Authorization Required</label>
+        <input type="checkbox" id="work_auth" name="work_auth">
+   </div>
+   <div class="form-group">
+        <label for="min_sal">Minimum Salary</label>
+        <input type="number" id="min_sal" name="min_sal">
+   </div>
+   <div class="form-group">
+      <div>
+            <label for="posted_dur">AnyTime</label>
+            <input type="radio" id="posted_dur" name="posted_dur" checked>
+         </div>
+         <br>
+
+         <div>
+            <label for="posted_dur">1 week</label>
+            <input type="radio" id="posted_dur" name="posted_dur" value = 7>
+         </div>
+         <br>
+
+         <div>
+            <label for="posted_dur">5 days</label>
+            <input type="radio" id="posted_dur" name="posted_dur" value = 5>
+         </div>
+         <br>
+
+         <div>
+            <label for="posted_dur">24 hours or less</label>
+            <input type="radio" id="posted_dur" name="posted_dur" value = 1>
+         </div>
+
+         <div>
+            <label for="distance">Anywhere</label>
+            <input type="radio" id="distance" name="distance" checked>
+         </div>
+         <br>
+
+         <div>
+            <label for="distance">100</label>
+            <input type="radio" id="distance" name="distance" value = 100>
+         </div>
+         <br>
+
+         <div>
+            <label for="distance">50</label>
+            <input type="radio" id="distance" name="distance" value = 50>
+         </div>
+         <br>
+
+         <div>
+            <label for="distance">25</label>
+            <input type="radio" id="distance" name="distance" value = 25>
+         </div>
+
+   </div>
+   <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+</form>
+{{PostingForm.media.js}}
+{% for results in results %}
+{% if results.open %}
+<a href="{% url 'job_detail' results.id %}">
+   <h1>{{results.title}} - {{results.jobtype}}: {{results.salary_min}} - {{results.salary_max}}</h1>
+</a>
+{%endif%}
+{%endfor%}
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<p>this is the application</p>
+<form action="{% url 'post_job' %}" method="post">
+{% csrf_token %}
+{{form}}
+</form>
+{% endblock %}

@@ -1,0 +1,543 @@
+// @import 'bootstrap/bootstrap';
+// @import 'bootstrap/variables';
+$main-color: #2962ff;
+$button-greenish-color: #1de9b6;
+$shadow-green: #0bcebc;
+$button-orange: #ff6d00;
+$shadow-orange: #e5690c;
+$white: #fff;
+$black: #000000;
+// $darken: #3a4348;
+
+$primary: #6c63ff;
+$secondary: #ff6347;
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin transition($transition) {
+  -moz-transition: all $transition ease;
+  -o-transition: all $transition ease;
+  -webkit-transition: all $transition ease;
+  -ms-transition: all $transition ease;
+  transition: all $transition ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container-fluid {
+  background-color: #2962ff;
+  height: 700px;
+
+  .jobSearching {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 60px;
+    font-weight: 200;
+  }
+
+  .uploadResume {
+    display: block;
+    border-style: none;
+    margin: 40px 40px;
+    padding: 16px;
+    padding-left: 35px;
+    padding-right: 35px;
+    background-color: $button-greenish-color;
+    border-radius: 40px;
+    span {
+      // font: poppins;
+      color: white;
+      font-size: 25px;
+    }
+  }
+
+  [data-tab-content] {
+    display: none;
+  }
+
+  .active[data-tab-content] {
+    display: flex;
+  }
+
+  .row {
+    // margin-top: 60px;
+    // display: flex;
+    justify-content: center;
+    align-items: center;
+    // margin-top: 17px;
+    margin-top: -1.5px;
+    padding: 2.0em;
+    flex-direction: row;
+    background-color: white;
+    transition: opacity 0.15s linear;
+   
+    // .searchBtn2{
+    //   position: relative;
+    //   left: 80%;
+    //   top: -56px;
+    // }
+    // height:
+    // padding: 2em;
+    .form-control {
+      // padding: 1.4rem 1rem;
+      // padding: 1.5rem;
+      // border: none;
+      height: 3.5rem;
+      width: 10.5rem;
+      margin-right: 30px;
+      border: .5px inset #495057;
+      input {
+        position: relative;
+        left: -13px;
+        top: -6.5px;
+        height: 3.5rem;
+        width: 10.5rem;
+        // padding-left: 30px;
+        // margin-right: 10px;
+
+      }
+
+
+    }
+    .lines{
+      border: none;
+    }
+
+    .form-field {
+      .form-control {
+        input{
+          height: 3.5rem;
+          width: 10.5rem;
+        }
+      }
+      .searchBtn{
+        padding-left: 1rem;
+        justify-content: center;
+        align-items: center;
+      }
+      
+    }
+    .iconLocation {
+      position: absolute;
+      top: 29%;
+      left: 0.4rem;
+      padding-left: 20px;
+    }
+    .iconBriefCase{
+      position: absolute; 
+      top: 30%;
+      left: 1.4rem;
+      color: grey; 
+    }
+  }
+
+  .tab-content {
+    transition: opacity 0.15s linear;
+  }
+  .searchBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+  }
+
+  .jobs {
+    padding-left: 35px;
+    margin-left: 25px;
+    justify-content: center;
+    align-items: center;
+  }
+  .switchButtons {
+    // display: flex;
+    position: relative;
+    margin-left: -15px;
+    // top: 10%;
+    font-size: 18px;
+
+    .findJob {
+      padding: 10px 30px;
+      border-style: none;
+      border-radius: 0.2rem;
+      background-color: $button-greenish-color;
+      color: white;
+      margin-bottom: 0;
+      margin-right: 20px;
+
+      &:hover {
+        background: white;
+        background-color: #ffff;
+        transition: all 0.3s ease;
+        color: black;
+      }
+      &:focus {
+        border: none;
+        outline: none;
+        background: white;
+        color: black;
+      }
+
+      &:before {
+        position: absolute;
+        height: 100%;
+        left: 0;
+        top: 0;
+        line-height: 3;
+        font-size: 140%;
+        width: 60px;
+      }
+    }
+
+    .candidate {
+      padding: 10px 40px;
+      border-style: none;
+      border-radius: 0.2rem;
+      background-color: $button-orange;
+      color: white;
+      margin-bottom: 1.5px;
+
+      &:hover {
+        background: white;
+        transition: all 0.3s ease;
+        color: black;
+      }
+      &:focus {
+        background: $shadow-orange;
+        border: none;
+        outline: none;
+        background: white;
+        color: black;
+      }
+
+      &:before {
+        position: absolute;
+        height: 100%;
+        left: 0;
+        top: 0;
+        line-height: 3;
+        font-size: 140%;
+        width: 60px;
+      }
+
+      
+    }
+  }
+          .inputCandidate {
+            padding-left: 2rem;
+          }
+
+  .col-sm-1 {
+    // border-style: solid;
+  }
+
+  .searchIcon {
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;
+    color: #2962ff;
+  }
+}
+///////INDUSTRIES ////////
+
+.industries {
+  grid-column: center-start / center-end;
+  display: grid;
+  // margin: 1rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-gap: 0.5rem;
+
+  .industry {
+    background-color: grey;
+    padding: 7rem 1rem;
+  }
+}
+.ftco-section {
+  padding: 7em 0;
+  position: relative;
+
+  .container {
+    width: 70%;
+  }
+  // @include media-breakpoint-down(sm){
+  // 	padding: 6em 0;
+  // }
+  .col-md-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .subheading {
+    // color: $black;
+    color: lightgray;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: inline-block;
+    // color: $black;
+  }
+}
+.category {
+  padding: 0;
+  li {
+    list-style: none;
+    margin-bottom: 0px;
+    font-size: 18px;
+    font-weight: 400;
+    a {
+      display: block;
+      color: lighten($black, 10%);
+      // border: 1px solid lighten($black,92%);
+      border-bottom: 1px solid lighten($secondary, 30%);
+      padding: 10px 15px 10px 0;
+      position: relative;
+      transition: 0.3s all ease;
+      i {
+        position: absolute;
+        top: 50%;
+        right: 30px;
+        transform: translateY(-50%);
+        color: $secondary;
+        opacity: 0;
+        // @include transition(0.3s);
+        // transition: 0.3s ;
+      }
+      span {
+        color: rgba(0, 0, 0, 0.3);
+        font-size: 15px;
+      }
+      span.number {
+        font-size: 16px;
+        // color: lighten($black,70%);
+        // background: lighten($black,96%);
+        background: lighten($secondary, 35%);
+        color: $main-color;
+        padding: 2px 5px;
+        @include border-radius(5px);
+      }
+      &:hover,
+      &:focus {
+        color: $main-color;
+        padding-left: 15px;
+        background: lighten($main-color, 30%);
+        text-decoration: none;
+        i {
+          right: 15px;
+          opacity: 1;
+        }
+        span {
+          color: rgba(0, 0, 0, 0.8);
+        }
+        .number {
+          color: $main-color;
+        }
+      }
+    }
+  }
+}
+
+//////RECENT JOBS///////
+.recentJobs {
+  margin-top: 50px;
+  height: 920px;
+  background-color: #fafafa;
+  .h1Recent {
+    margin-left: 10%;
+  }
+  .postJob {
+
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin-left: 6rem;
+    padding-top: 3rem;
+    margin-bottom: 4rem;
+
+
+    form {
+      .jobPosting {
+        // margin-left: 30em;
+        padding: 10px 50px;
+        font-size: 1.5rem;
+        border-style: none;
+        border-radius: 0.2rem;
+        background-color: $button-greenish-color;
+        color: white;
+        margin-bottom: 0;
+        // margin-right: 20px;
+      }
+    }
+  }
+  .card {
+    margin: 0 auto;
+    outline: none;
+    border-style: none;
+    border: none;
+    padding-bottom: 1rem;
+    &:hover {
+      top: -5px; 
+      box-shadow: 0 0 40px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-body {
+      justify-content: center;
+      align-items: center;
+      margin-left: 1.5rem;
+
+    }
+    .btn-primary {
+      // display: flex;
+      // flex-wrap: wrap-reverse;
+    }
+  }
+}
+.job-post-item {
+  
+  border-bottom: 1px solid lighten($secondary, 30%);
+  @include transition(0.3s);
+  h2 {
+    font-size: 35px;
+    font-weight: 400;
+    a {
+      color: $black;
+    }
+  }
+  .badge {
+
+    @include border-radius(30px);
+    font-size: 20px;
+    font-weight: 400;
+  }
+  .one-third {
+    // width: calc(100% - 145px);
+    // @include media-breakpoint-down(md){
+    // 	width: 100%;
+    // 	.text-black{
+    // 		width: calc(100% - 100px);
+    // 	}
+    // 	.badge-wrap{
+    // 		width: 110px;
+    // 	}
+    // }
+  }
+  .one-forth {
+    // width: 145px;
+    // @include media-breakpoint-down(md){
+    // 	width: 100%;
+    // }
+
+    .applyIconBtn {
+      // margin-left: 20rem;
+      .icon {
+        width: 40px;
+        height: 40px;
+        @include border-radius(50%);
+        margin-left: 20px;
+      }
+    }
+  }
+
+  .icon {
+    border: none !important;
+    background: lighten($secondary, 30%) !important;
+    span {
+      color: $secondary;
+      font-size: 18px;
+    }
+  }
+  .job-post-item-body {
+    margin-top: .2rem;
+    span,
+    a {
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+  &:hover,
+  &:focus {
+    .icon {
+      background: $secondary !important;
+      span {
+        color: $white;
+      }
+    }
+    // margin-left: -30px;
+    // padding: 0 20px 0 30px;
+  }
+}
+.applyIconBtn {
+  display: flex;
+  margin-left: 15rem;
+  margin-bottom: 20px;
+}
+
+////////////BUTTON///////////////
+.btn {
+  
+	cursor: pointer;
+	@include border-radius(5px);
+  box-shadow: none!important;
+
+
+	&:hover, &:active, &:focus {
+		outline: none;
+	}
+	&.btn-primary {
+		background: $main-color !important;
+		border: 1px solid $main-color !important;
+    color: $white !important;
+    // margin-left: 20rem;
+
+		&:hover {
+			border: 1px solid $main-color;
+			background: transparent;
+			color :$main-color;
+		}
+		&.btn-outline-primary {
+			border: 1px solid $main-color;
+			background: transparent;
+			color :$main-color;
+			&:hover {
+				border: 1px solid transparent;
+				background: $main-color;
+				color :$white;
+			}
+		}
+	}
+	&.btn-secondary {
+		border: 1px solid $secondary !important;
+		color: $white !important;
+    background: $secondary !important;
+    height: 3.5rem; 
+    width: 10.5rem;
+		&:hover {
+			border: 1px solid $main-color;
+			background: transparent;
+			color :$main-color;
+		}
+	}
+	&.btn-outline-white {
+		border-color: rgba($white, .8);
+		background: none;
+		@include border-radius(5px);
+		border-width: 1px;
+		color: $white;
+		&:hover, &:focus, &:active {
+			background: $white;
+			border-color: $white;
+			color: $main-color;
+		}
+	}
+}
+////////FORM-CONTROL/////////

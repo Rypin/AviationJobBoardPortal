@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{%block content%}
+<h1> Job Postings </h1>
+{% comment %} <h2>{{ note }}</h2> {% endcomment %}
+
+<form action="{% url 'posting' %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+                    <label for = "jobtitle"></label>
+                    <input type="text" id="jobtitle" name="jobtitle" class="form-control" placeholder="Job">
+                </div>
+    {% comment %} {{ postingform.as_table }} {% endcomment %}
+    {% comment %} <label for= "{{postingform.jobtype.id_for_label }}"> Job Type: </label> {% endcomment %}
+    {{ postingform.jobtype }}
+    {% comment %} {{ postingform.jobtype.errors }} {% endcomment %}
+    
+    {% comment %} {{ postingform.title.label_tag }}
+    {{ postingform.title }}
+    {{ postingform.title.errors }}
+
+    
+
+    {{ postingform.title.label_tag }}
+    {{ postingform.title }}
+    {{ postingform.title.errors }}
+
+    {{ postingform.title.label_tag }}
+    {{ postingform.title }}
+    {{ postingform.title.errors }}
+
+    {{ postingform.title.label_tag }}
+    {{ postingform.title }}
+    {{ postingform.title.errors }}
+
+    {{ postingform.title.label_tag }}
+    {{ postingform.title }}
+    {{ postingform.title.errors }} {% endcomment %}
+    
+    {% comment %} <label for="title">Title: </label>
+    <input id="title" type="text" name="title">
+
+    <label for="desciption">Desciption: </label>
+    <input id="desciption" type="text" name="desciption">
+
+    <label for="jobtype">Jobtype: </label>
+    <select id="jobtype" name="jobtype">
+        <option value="Internship">Internship</option>
+        <option value="Part_time">Part Time</option>
+        <option value="Full_time">Full Time</option>
+    </select> {% endcomment %}
+
+    <input type="submit" value="Submit"/>
+</form>
+
+{%endblock%}
