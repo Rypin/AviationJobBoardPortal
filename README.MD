@@ -2,13 +2,9 @@
 
 Developed By: <br>
 + **Eric Bazan**<br>
-+ **Carlos Debasa**<br>
 + **Joel Echagarrua**<br>
 + **Dany Franco**<br>
 + **Ryan Pineyro**<br>
-+ **Sebastian Rodriguez**<br>
-+ **Malachi Williams**<br>
-+ **Tinghui Zhang**<br>
 
 Product Owner: Masoud Sadjadi<br>
 ---
