@@ -8,25 +8,59 @@ from users.models import CompanyProfile as cp
 # Create your views here.
 
 def posting(request):
-    
     if request.method == 'POST':
         filled_form = PostingForm(request.POST)
-        error = ''
+
         if filled_form.is_valid():
-            if filled_form.cleaned_data['postdate'] > filled_form.cleaned_data['deadlinedate']:
-                error = error + 'Error the date posted has to be before the deadline \n'
-            if filled_form.cleaned_data['salary_min'] > filled_form.cleaned_data['salary_max']:
-                error = error + 'Error the minimum salary has to be less than or equal to the maximum \n'
-            if error == '':
-                filled_form.save()
-                return redirect('company_profile')
-            else:
-                return render(request, 'post_job.html', {'postingform':filled_form, 'error':error,})
-    else: 
-        companyid = request.GET.get('company')
-        form = PostingForm()
-        form.fields["company"].initial=companyid
-        return render(request, 'post_job.html', {'postingform':form,})
+            obj = Jobform()
+            obj.title = filled_form.cleaned_data['title']
+            obj.description = filled_form.cleaned_data['description']
+            obj.postdate = filled_form.cleaned_data['postdate']
+            obj.jobtype = filled_form.cleaned_data['jobtype']
+            obj.deadlinedate = filled_form.cleaned_data['deadlinedate']
+            obj.posttime = filled_form.cleaned_data['posttime']
+            obj.deadlinetime = filled_form.cleaned_data['deadlinetime']
+            obj.address = filled_form.cleaned_data['address']
+            obj.geolocation = filled_form.cleaned_data['geolocation']
+            obj.salary_min = filled_form.cleaned_data['salary_min']
+            obj.salary_max = filled_form.cleaned_data['salary_max']
+
+
+            #done_job = filled_form.save()
+            companyid = request.GET.get('company')
+            id = cp.objects.get(id=companyid)
+            obj.company = id
+            #done_job.save()
+            # filled_form.save(company=companyid, title=title, description=description, postdate=postdate,
+            #                         jobtype=jobtype, deadlinedate=deadlinedate, posttime=posttime, deadlinetime=deadlinetime,
+            #                          address=address, geolocation=geolocation, salary_min=salary_min, salary_max=salary_max)
+            obj.save()
+
+            return redirect('company_profile')
+    else:
+        filled_form = PostingForm()
+    context = {
+        'postingform' : filled_form,
+    }
+
+    return render(request, 'post_job.html', context)
+
+def editJob(request, pk):
+    u_job = Jobform.objects.get(id=pk)
+    u_form = UpdateJobForm(instance=u_job)
+    if request.method == 'POST':
+        u_form = UpdateJobForm(request.POST, request.FILES, instance=u_job)
+        if u_form.is_valid():
+            u_form.save()
+            return redirect('company_profile')
+    else:
+        u_form = UpdateJobForm(instance=u_job)
+
+    context = {
+        'u_form' : u_form
+    }
+
+    return render(request, 'editJob.html', context)
 
 def calculate_miles(search_lat, search_lon, lat, lon):
     earth_radius = 6371
