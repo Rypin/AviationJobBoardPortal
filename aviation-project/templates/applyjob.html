@@ -1,8 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-<p>this is the application</p>
-<form action="{% url 'post_job' %}" method="post">
+<script>
+function toggle_visibility(x) {
+  var x = document.getElementById(x);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+function clear_file(x){
+    document.getElementById(x).value = '';
+}
+</script>
+<form method="POST" enctype="multipart/form-data">
+    <div class = "form-group"></div>
+        <legend>Attach files to apply.</legend>
+        <h2>(Resume, CV, Cover Letter, etc.)</h2>
+        <ul>
+                <label for="file_1">
+                    <input type="file" id="file_1" name ="file" value="1">
+                </label>
+                <a type="button" name="delFile" onclick="clear_file('file_1')" class="btn btn-danger">DEL</a>
+                <a type= "button" onclick ="toggle_visibility('addField'); this.style.display ='none';"class="btn btn-secondary" name = 'addFile' style= "text-decoration: none; color: black">Attach More</a>
+
+                <div id="addField" style = "display:none">
+                    <input type="file" id="file_2" name ="file" value="2">
+                     <a type="button" name="delFile" onclick="clear_file('file_2')" class="btn btn-danger">DEL</a>
+                    <a type= "button" onclick ="toggle_visibility('addField2'); this.style.display ='none';"class="btn btn-secondary" name = 'addFile' style= "text-decoration: none; color: black">Attach More</a>
+                </div>
+                 <br>
+                <div id="addField2" style = "display:none">
+                    <input type="file" id="file_3" name ="file" value="3">
+                    <a type="button" name="delFile" onclick="clear_file('file_3')" class="btn btn-danger">DEL</a>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary" name="submit" value="apply">Submit</button>
+        </ul>
+    </div>
+
 {% csrf_token %}
-{{form}}
 </form>
 {% endblock %}
+

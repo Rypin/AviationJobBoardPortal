@@ -134,13 +134,13 @@ def job_detail(request, job_id):
 
 
 def searchpage(request, *args, **kwargs):
-	results = Jobform.objects.all()
-	print('here')
-	if request.method == 'POST' and 'company' in request.POST:
-		request.session['companyUsername'] = request.POST['company']
-		print(request.POST['company'])
-	
-	return render(request, "search.html", {'results': results, "count":jobPostCount(results)})
+    results = Jobform.objects.all()
+    form = PostingForm()
+    if request.method == 'POST' and 'company' in request.POST:
+        request.session['companyUsername'] = request.POST['company']
+        print(request.POST['company'])
+
+    return render(request, "search.html", {'results': results, "count":jobPostCount(results), 'PostingForm':form})
 
 def userviewcompany(request, company_id):
     try:

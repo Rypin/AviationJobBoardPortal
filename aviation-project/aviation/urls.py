@@ -52,7 +52,7 @@ urlpatterns = [
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), name='password_reset_complete'),
     path('oauth/', include('social_django.urls', namespace='social')),
     path('postjob/', postjob_views.posting, name='posting'),
-    
+
     # JOB SEARCH PATHS
     # path('postjob/', postjob_view, name='posting'),
     path('jobsearch/', postjob_views.jobsearch, name='jobsearch'),
@@ -68,8 +68,7 @@ urlpatterns = [
     # path('changepassword/', user_views.changepassword, name = 'userProfile-changepassword'),
     # path('upload/', user_views.upload, name = 'userProfile-upload'),
     path('trysearch/', user_views.trysearch, name='trysearch'),
-    path('applyjob/', user_views.applyjob, name='applyjob'),
-    
+    path('applyjob/<int:job_id>', user_views.applyjob, name='applyjob'),
     path('userviewcompany/<int:company_id>',postjob_views.userviewcompany, name='userviewcompany'),
 ]
 

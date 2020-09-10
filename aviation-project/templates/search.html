@@ -7,7 +7,7 @@
 </script>
 
 <form method="GET" action="{%url 'search_page'%}" novalidate>
-{% comment %} <nav class="navbar navbar-light bg-white" style="margin-bottom: 40px">
+<nav class="navbar navbar-light bg-white" style="margin-bottom: 40px">
    <div class="form-inline mx-auto">
       <div class="input-group" style="margin-right: 70px">
          <div class="input-group-prepend"> 
@@ -24,8 +24,8 @@
                {{ PostingForm.media.js }}
       </div>
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-   </dic>
-</nav> {% endcomment %}
+   </div>
+</nav>
 <div class="container-fluid">
    <div class="row">
       {% comment %} <div class="col-md-2 ">
@@ -238,7 +238,7 @@
                      </h6>
                   </div>
                   <div class="col-md-8 my-auto" align="center">
-                     <a href = "{% url 'applyjob'%}" class="btn btn-info" style="margin: 10px">Apply Now</a>
+                     <a href = "{% url 'applyjob' job.id%}" class="btn btn-info" style="margin: 10px">Apply Now</a>
                      <button type="button" class="btn btn-info" style="margin: 10px">Favorite</button>
 
                      
