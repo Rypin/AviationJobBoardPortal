@@ -14,9 +14,8 @@ from django.contrib.auth.models import User, auth
 from .models import Users, CompanyProfile, Skill
 from .models import workExperience
 from .models import educationExperience
-from .models import applicationStatus
 from postjob.models import Jobform
-from apply.models import Application,ApplicationStatus
+from apply.models import *
 from django.shortcuts import get_object_or_404
 import datetime
 from .decorators import unauthenticated_user, allowed_users
@@ -349,7 +348,10 @@ def jobseeker_profile_view(request):
         ParseSkills(request, [request.POST['newSkill']])
         skills = getSkills(request)
         redirect('userProfile-home')
-    applications = applicationStatus.objects.filter(username=request.user.username)
+    applications = Application.objects.filter(applicant=users.first()).all()
+    print(applications)
+    #apptest =
+    #application_statuses = ApplicationStatus.objects.filter(application=applications.id)
     return render(request, 'userProfile/profile2.html',
                   {'users': users, 'works': works, 'educations': educations, 'applications': applications,
                    'skills': skills})
@@ -362,11 +364,13 @@ def trysearch(request):
         jobtype = request.POST['type']
         description = request.POST['description']
         username = request.user.username
-        application = applicationStatus(title=title, jobtype=jobtype, description=description, username=username)
-        application.save()
+        #application = ApplicationStatus(title=title, jobtype=jobtype, description=description, username=username)
+        #application.save()
     return render(request, 'trysearch.html', {'jobs': jobs})
 
-
+######FUNCTION FOR GETTING APPLICATIONSTATUSES OF USER FROM USERS OBJECT######
+def getStatuses(user):
+    applications = Application.objects.filter(applicant = user).all()
 @login_required()
 @allowed_users(allowed_roles=['jobseeker'])
 def applyjob(request, job_id):
@@ -375,28 +379,28 @@ def applyjob(request, job_id):
         users = Users.objects.filter(Username=request.user.username).first()
         job = Jobform.objects.filter(id=job_id).first()
         files=[]
-        if len(x)>1:
+        if len(x)>0:
+            if len(x)>1:
+                for i in x:
+                    files.append(i.name)
+                    print(i.name)
+            else:
+                print(x[0].name)
+                files.append(x[0].name)
+                print('no list')
+            app = Application(applicant=users, job=job, files=files)
+            app.save()
+            path = settings.MEDIA_ROOT +"\\"+ str(request.user.id) + "\\application_files\\" + str(app.id)
+            fs = FileSystemStorage(location = path)
             for i in x:
-                files.append(i.name)
-                print(i.name)
+                fs.save(i.name, i)
         else:
-            print(x[0].name)
-            files.append(x[0].name)
-            print('no list')
-        app = Application(applicant=users, job=job, files=files)
-        app.save()
-        path = settings.MEDIA_ROOT +"\\"+ str(request.user.id) + "\\application_files\\" + str(app.id)
-        fs = FileSystemStorage(location = path)
-        for i in x:
-            fs.save(i.name, i)
+            app = Application(applicant=users, job=job, files=files)
+            app.save()
         return redirect('userProfile-home')
         ##SOME ISSUES WITH FS IDK HOW TO FIX THE ISSUE OF HAVING DUPLICATE FILES IN SAME APPLICATION##
     return render(request, 'applyjob.html')
 
-# fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'resumes'))
-#           new_name = str(request.user.id) + uploaded_file.name
-#          fs.save(new_name, uploaded_file)
-#         path = os.path.join(settings.MEDIA_ROOT, 'resumes') + '/' + new_name
 
 ######################################################################################################################################################################################
 ######################################################################################################################################################################################

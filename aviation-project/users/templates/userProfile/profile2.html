@@ -381,7 +381,6 @@
 							
 							<div class="accordian" id="Accordian0" onload="accordianString()">
 								{%for application in applications%}
-								{%if application.username == user.Username%}
 
 
 
@@ -390,7 +389,7 @@
 										<div class="row">
 											<div class="col-md-12">
 												<img src="https://pbs.twimg.com/profile_images/1067242179955896320/mKdx6PgL_400x400.jpg" style="height:40px; margin-right:10px;">
-												Application for <b>{{application.title}}</b> at <b>Company Name Here</b>
+												Application for <b>{{application.job.title}}</b> at <b>{{application.job.company.name}}</b>
 												<button class="btn btn-warning" id="button0" style="float:right;" data-toggle="collapse" data-target="#collapse{getX()}" aria-controls="collapse{getX()}">In Review</button>
 											</div>
 										</div>
@@ -400,19 +399,19 @@
 											<div class="form-group row">
 												<label class="col-4 col-form-label"><b>Job Type</b></label>
 												<div class="col-8">
-													<p>{{application.jobtype}}</p>
+													<p>{{application.job.jobtype}}</p>
 												</div>
 											</div>
 											<div class="form-group row">
 												<label class="col-4 col-form-label"><b>Description </b></label>
 												<div class="col-8">
-													<p>{{application.description}}</p>
+													<p>{{application.job.description}}</p>
 												</div>
 											</div>
 											<div class="form-group row">
-												<label class="col-4 col-form-label"><b>applier </b></label>
+												<label class="col-4 col-form-label"><b>Company</b></label>
 												<div class="col-8">
-													<p>{{application.username}}</p>
+													<p>{{application.job.company.name}}</p>
 												</div>
 											</div>
 											<div class="form-group row">
@@ -445,14 +444,10 @@
 									document.getElementById("collapse0").setAttribute("id", "collapse" + String(x));
 								</script>
 
-								{%endif%}
 
 								{%endfor%}
 							</div>
-							
-							
 						</div>
-						
 					</div>
 				</div>
 			</div>
