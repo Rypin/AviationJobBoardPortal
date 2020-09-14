@@ -332,11 +332,17 @@ def jobseeker_profile_view(request):
         nickname = request.POST['nickname']
         email = request.POST['email']
         phone = request.POST['phone']
+<<<<<<< Updated upstream
         address = request.POST['address']
         thisuser = Users.objects.filter(Username=request.user.username).update(name=fullname, nickName=nickname,
                                                                                Email=email, phoneNumber=phone,
                                                                                address=address)
         thatuser = User.objects.get(username=request.user.username, password=request.user.password)
+=======
+        Address = request.POST['address']
+        thisuser = Users.objects.filter(Username = request.user.username).update(name = fullname, nickName = nickname, Email = email, phoneNumber = phone, address = Address)
+        thatuser = User.objects.get(username = request.user.username, password = request.user.password)
+>>>>>>> Stashed changes
         thatuser.email = email
         thatuser.save()
     if request.method == 'POST' and 'deleteWork' in request.POST:
