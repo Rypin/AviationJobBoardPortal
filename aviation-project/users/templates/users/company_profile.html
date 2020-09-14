@@ -76,8 +76,8 @@
 
                 <div class="card" id="HoverCard">
                     <div class="card-body">
-                        <form method='post' id=1>
-                            {%csrf_token%}
+
+
 
                             <div class="row">
                                 <div class="col">
@@ -93,15 +93,21 @@
                                 </div>
 
                                 <div class="col ml auto">
-                                    <button type="submit" style="margin-top:40px; float:right;  border-style: none; border-radius: 0.2rem; background-color: #ff6d00; color: white;" class="btn btn-primary">
-                                        <a><b>Delete</b></a>
-                                    </button>
-                                    <button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary">
+
+<!--                                    <button onclick="window.location'?d_job={{job.pk}}'" style="margin-top:40px; float:right;  border-style: none; border-radius: 0.2rem; background-color: #ff6d00; color: white;" class="btn btn-primary" name="delete_job" value="deletes_job">-->
+                                        <a href="?d_job={{ job.pk }}" style="
+                                        margin-top:40px; float:right;  border-style: none; border-radius: 0.2rem; background-color: #ff6d00; color: white;" class="btn btn-primary" name="delete_job" value="deletes_job"
+                                        ">Delete</a>
+
+
+                                    <form action="{% url 'editJob' job.pk %}">
+                                    <button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary" name="{{job.id}}" value="{{job.id}}">
                                         <a><b>Edit</b></a>
                                     </button>
+                                    </form>
                                 </div>
                             </div>
-                        </form>
+
 
 
                     </div>

@@ -155,11 +155,20 @@ def company_profile(request):
 
     company_profile = CompanyProfile.objects.get(user_id=request.user.id)
     jobs = Jobform.objects.filter(company=company_profile.id)
+
+    # if request.POST.get("delete_job"):
+    #     jobs.object.filter(id=request.GET.get('id')).delete()
+    #     return redirect('company_profile')
+
+    delete_job = request.GET.get('d_job')
+    Jobform.objects.filter(id=delete_job).delete()
+
     context = {
         'u_form': u_form,
         'cp_Update_form': cp_Update_form,
         'company_profile': company_profile,
         'jobs': jobs,
+        'delete_job': delete_job,
     }
 
     return render(request, 'users/company_profile.html', context)
