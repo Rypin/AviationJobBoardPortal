@@ -53,7 +53,6 @@ urlpatterns = [
     path('oauth/', include('social_django.urls', namespace='social')),
     path('postjob/', postjob_views.posting, name='posting'),
     path('editJob/<int:pk>', postjob_views.editJob, name='editJob'),
-    
     # JOB SEARCH PATHS
     # path('postjob/', postjob_view, name='posting'),
     path('jobsearch/', postjob_views.jobsearch, name='jobsearch'),
@@ -69,8 +68,7 @@ urlpatterns = [
     # path('changepassword/', user_views.changepassword, name = 'userProfile-changepassword'),
     # path('upload/', user_views.upload, name = 'userProfile-upload'),
     path('trysearch/', user_views.trysearch, name='trysearch'),
-    path('applyjob/', user_views.applyjob, name='applyjob'),
-    
+    path('applyjob/<int:job_id>', user_views.applyjob, name='applyjob'),
     path('userviewcompany/<int:company_id>',postjob_views.userviewcompany, name='userviewcompany'),
 ]
 

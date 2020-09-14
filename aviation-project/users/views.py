@@ -2,18 +2,20 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, CompanyRegisterForm, CompanyUpdateForm, CompanyProfileForm, ApplicationForm
+from .forms import UserRegisterForm, UserUpdateForm, CompanyRegisterForm, CompanyUpdateForm, CompanyProfileForm, \
+    ApplicationForm
 from django.core.files.storage import FileSystemStorage
 from pyresparser import ResumeParser
 from django.conf import settings
 import os
+from apply.models import Application
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
 from .models import Users, CompanyProfile, Skill
 from .models import workExperience
 from .models import educationExperience
-from .models import applicationStatus
 from postjob.models import Jobform
+from apply.models import *
 from django.shortcuts import get_object_or_404
 import datetime
 from .decorators import unauthenticated_user, allowed_users
@@ -23,10 +25,12 @@ from postjob.models import Jobform, Jobtype
 from django.http import HttpResponse, HttpResponseRedirect
 import psycopg2
 
+
 # Create your views here.
 
 def applicationStatus_view(request, *args, **kwargs):
     return render(request, "userprofile/applicationStatus.html", {})
+
 
 @unauthenticated_user
 def register(request):
@@ -36,7 +40,7 @@ def register(request):
             user = form.save()
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
-            #user = Users(Username = username, Email = email)
+            # user = Users(Username = username, Email = email)
 
             group = Group.objects.get(name='jobseeker')
             user.groups.add(group)
@@ -47,6 +51,7 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
+
 
 @unauthenticated_user
 def company_register(request):
@@ -59,7 +64,7 @@ def company_register(request):
             # first_name = form.cleaned_data.get('name')
             # phoneNumber = form.cleaned_data.get('phoneNumber')
             # address = form.cleaned_data.get('address')
-            #company_description = form.cleaned_data.get('company_description')
+            # company_description = form.cleaned_data.get('company_description')
             # user = User(name=name, PhoneNumber=phoneNumber
             #              , address=address, company_description=company_description)
 
@@ -67,16 +72,17 @@ def company_register(request):
             user.groups.add(group)
 
             user.save()
-            #cp.save()
+            # cp.save()
             messages.success(request, f'Account Successfully Created! You May Now Create Your Profile')
             user = authenticate(username=form.cleaned_data['username'],
-                                    password=form.cleaned_data['password1'],
-                                    )
+                                password=form.cleaned_data['password1'],
+                                )
             login(request, user)
             return redirect('company_profile_creator')
     else:
         form = CompanyRegisterForm()
     return render(request, 'users/company_register.html', {'form': form})
+
 
 def addCompanyProfile(request):
     cp_form = CompanyProfileForm(request.POST)
@@ -88,17 +94,18 @@ def addCompanyProfile(request):
             address = cp_form.cleaned_data['address']
             company_description = cp_form.cleaned_data['company_description']
             id = request.user.id
-            #user = request.user
-            #if user_id is not None:
+            # user = request.user
+            # if user_id is not None:
             #    request.session.delete('user_id')
             #    comp = CompanyProfile.objects.get(user_id=user_id)
-            #else:
+            # else:
             #    comp = Client.objects.create(user=user)
-            #company_profile = CompanyProfile.objects.get(name=name, phoneNumber=phoneNumber
+            # company_profile = CompanyProfile.objects.get(name=name, phoneNumber=phoneNumber
             #             , address=address, company_description=company_description)
-            #cp.save()
-            #company_profile.save()
-            CompanyProfile.objects.filter(user_id = id).update(name = name, phoneNumber=phoneNumber, address=address,company_description=company_description)
+            # cp.save()
+            # company_profile.save()
+            CompanyProfile.objects.filter(user_id=id).update(name=name, phoneNumber=phoneNumber, address=address,
+                                                             company_description=company_description)
             messages.success(request, f'Your account has been updated!')
             return redirect('company_profile')
         else:
@@ -110,6 +117,7 @@ def addCompanyProfile(request):
 
     return render(request, 'users/company_profile_creator.html', context)
 
+
 @login_required()
 @allowed_users(allowed_roles=['company_owner'])
 def company_profile(request):
@@ -119,14 +127,14 @@ def company_profile(request):
         u_form = UserUpdateForm(request.POST, instance=request.user)
         cp_Update_form = CompanyUpdateForm(request.POST, request.FILES, instance=request.user.companyprofile)
         if u_form.is_valid() and cp_Update_form.is_valid():
-            #username = u_form.cleaned_data.get('username')
-            #email = u_form.cleaned_data.get('email')
+            # username = u_form.cleaned_data.get('username')
+            # email = u_form.cleaned_data.get('email')
             # first_name = form.cleaned_data.get('name')
             # phoneNumber = form.cleaned_data.get('phoneNumber')
             # address = form.cleaned_data.get('address')
             # company_description = form.cleaned_data.get('company_description')
-            #user = CompanyProfile(Username=username, Email=email)
-            #user.save()
+            # user = CompanyProfile(Username=username, Email=email)
+            # user.save()
             u_form.save()
             cp_Update_form.save()
             messages.success(request, f'Your account has been updated!')
@@ -134,7 +142,6 @@ def company_profile(request):
     else:
         u_form = UserUpdateForm(instance=request.user)
         cp_Update_form = CompanyUpdateForm(instance=request.user.companyprofile)
-
 
     # if request.method == 'POST':
     #     cp_Update_form = CompanyUpdateForm(request.POST, instance=request.CompanyProfile)
@@ -145,8 +152,6 @@ def company_profile(request):
     #         company_description = cp_form.cleaned_data['company_description']
     #         company_profile = CompanyProfile(name=name, phoneNumber=phoneNumber
     #                     , address=address, company_description=company_description)
-
-
 
     company_profile = CompanyProfile.objects.get(user_id=request.user.id)
     jobs = Jobform.objects.filter(company=company_profile.id)
@@ -167,6 +172,7 @@ def company_profile(request):
     }
 
     return render(request, 'users/company_profile.html', context)
+
 
 @login_required()
 def resume(request):
@@ -189,6 +195,7 @@ def resume(request):
             print("Invalid Request")
     return render(request, 'users/resume.html', parsed_info)
 
+
 def ParseSkills(request, skills):
     skill_len = len(skills)
     count = 0
@@ -197,7 +204,7 @@ def ParseSkills(request, skills):
                                   host=settings.DATABASES['default']['HOST'],
                                   port=settings.DATABASES['default']['PORT'],
                                   database=settings.DATABASES['default']['NAME'])
-    user = Users.objects.get(Username = request.user.username)
+    user = Users.objects.get(Username=request.user.username)
     try:
         cursor = connection.cursor()
         postgres_relational_query = """INSERT INTO users_users_skills (USERS_ID, SKILL_ID) VALUES (%s,%s)"""
@@ -223,12 +230,14 @@ def ParseSkills(request, skills):
         if connection:
             print("Failed to insert", error)
     finally:
-        if(connection):
+        if (connection):
             connection.commit()
             cursor.close()
             connection.close()
             print(count, "Record inserted")
     return
+
+
 def getSkills(request):
     postgres_select_query = """SELECT skill_id FROM users_users_skills WHERE users_id = (%s)"""
     connection = psycopg2.connect(user=settings.DATABASES['default']['USER'],
@@ -240,20 +249,21 @@ def getSkills(request):
     skills = []
     try:
         cursor = connection.cursor()
-        cursor.execute(postgres_select_query,(user.id,))
+        cursor.execute(postgres_select_query, (user.id,))
         skill_ids = cursor.fetchall()
         skill_len = len(skill_ids)
         for i in range(skill_len):
-            skills.append((Skill.objects.get(id = skill_ids[i][0])).skill_name)
+            skills.append((Skill.objects.get(id=skill_ids[i][0])).skill_name)
     except (Exception, psycopg2.Error)as error:
         if connection:
             print("Connection failed", error)
     finally:
-        if(connection):
-
+        if (connection):
             cursor.close()
             connection.close()
     return skills
+
+
 def removeSkill(users_id, skill):
     postgres_delete_query = """DELETE FROM users_users_skills WHERE users_id = %s AND skill_id = %s"""
     postgres_select_query = """SELECT id FROM users_skill WHERE skill_name = (%s)"""
@@ -268,14 +278,14 @@ def removeSkill(users_id, skill):
         in_table = cursor.fetchone()
         delete = (users_id, in_table[0],)
         print(delete)
-        cursor.execute(postgres_delete_query,(users_id, in_table[0]))
+        cursor.execute(postgres_delete_query, (users_id, in_table[0]))
         print(cursor.statusmessage)
 
     except (Exception, psycopg2.Error)as error:
         if connection:
             print("Connection failed", error)
     finally:
-        if(connection):
+        if (connection):
             connection.commit()
             cursor.close()
             connection.close()
@@ -283,7 +293,7 @@ def removeSkill(users_id, skill):
 
 def review(request):
     if request.method == 'GET':
-        return render(request, 'users/review.html',context={'name': request.session.get('parsed_name'),
+        return render(request, 'users/review.html', context={'name': request.session.get('parsed_name'),
                                                              'email': request.session.get('parsed_email'),
                                                              'mobile_number': request.session.get('parsed_number'),
                                                              'parsed_skills': request.session.get('parsed_skills')})
@@ -297,27 +307,26 @@ def review(request):
         skills.remove(remove_skill)
         request.session['parsed_skills'] = skills
         return redirect('review')
-    return render(request, 'users/review.html',  context={'name': request.session.get('parsed_name'),
-                                                             'email': request.session.get('parsed_email'),
-                                                             'mobile_number': request.session.get('parsed_number'),
-                                                             'parsed_skills': request.session.get('parsed_skills')})
-
+    return render(request, 'users/review.html', context={'name': request.session.get('parsed_name'),
+                                                         'email': request.session.get('parsed_email'),
+                                                         'mobile_number': request.session.get('parsed_number'),
+                                                         'parsed_skills': request.session.get('parsed_skills')})
 
 
 @login_required()
 @allowed_users(allowed_roles=['jobseeker'])
 def jobseeker_profile_view(request):
-    users = Users.objects.filter(Username = request.user.username)
+    users = Users.objects.filter(Username=request.user.username)
     print(request.user.username)
     print(request.user.email)
     if not users.exists():
         print(request.user.username)
         print('111')
-        user = Users(Username = request.user.username, Email = request.user.email)
+        user = Users(Username=request.user.username, Email=request.user.email)
         user.save()
-    users = Users.objects.filter(Username = request.user.username)
-    works = workExperience.objects.filter(Username = request.user.username)
-    educations = educationExperience.objects.filter(Username = request.user.username)
+    users = Users.objects.filter(Username=request.user.username)
+    works = workExperience.objects.filter(Username=request.user.username)
+    educations = educationExperience.objects.filter(Username=request.user.username)
     skills = getSkills(request)
     if request.method == 'POST' and 'editProfile' in request.POST:
         fullname = request.POST['name']
@@ -325,28 +334,36 @@ def jobseeker_profile_view(request):
         email = request.POST['email']
         phone = request.POST['phone']
         address = request.POST['address']
-        thisuser = Users.objects.filter(Username = request.user.username).update(name = fullname, nickName = nickname, Email = email, phoneNumber = phone, address = address)
-        thatuser = User.objects.get(username = request.user.username, password = request.user.password)
+        thisuser = Users.objects.filter(Username=request.user.username).update(name=fullname, nickName=nickname,
+                                                                               Email=email, phoneNumber=phone,
+                                                                               address=address)
+        thatuser = User.objects.get(username=request.user.username, password=request.user.password)
         thatuser.email = email
         thatuser.save()
     if request.method == 'POST' and 'deleteWork' in request.POST:
-        obj= works.get(comment = request.POST['comments'], job = request.POST['job'], company = request.POST['company'], Username = request.user.username).delete()
+        obj = works.get(comment=request.POST['comments'], job=request.POST['job'], company=request.POST['company'],
+                        Username=request.user.username).delete()
     if request.method == 'POST' and 'deleteEducation' in request.POST:
-        obj= educations.get(duration = request.POST['duration'], title = request.POST['title'], school = request.POST['school'], Username = request.user.username).delete()
+        obj = educations.get(duration=request.POST['duration'], title=request.POST['title'],
+                             school=request.POST['school'], Username=request.user.username).delete()
     if request.method == 'POST' and 'deleteSkill' in request.POST:
-        id = (Users.objects.get(Username = request.user.username)).id
+        id = (Users.objects.get(Username=request.user.username)).id
         print(id)
         print(request.POST.get('deleteSkill'))
-        removeSkill(id,request.POST.get('deleteSkill'))
+        removeSkill(id, request.POST.get('deleteSkill'))
         skills = getSkills(request)
         redirect('userProfile-home')
     if request.method == 'POST' and 'submitSkill' in request.POST:
         ParseSkills(request, [request.POST['newSkill']])
         skills = getSkills(request)
         redirect('userProfile-home')
-    applications = applicationStatus.objects.filter(username = request.user.username)
-    return render (request, 'userProfile/profile2.html', {'users': users, 'works': works, 'educations': educations, 'applications': applications, 'skills': skills})
-
+    applications = Application.objects.filter(applicant=users.first()).all()
+    print(applications)
+    #apptest =
+    #application_statuses = ApplicationStatus.objects.filter(application=applications.id)
+    return render(request, 'userProfile/profile2.html',
+                  {'users': users, 'works': works, 'educations': educations, 'applications': applications,
+                   'skills': skills})
 
 
 def trysearch(request):
@@ -356,17 +373,42 @@ def trysearch(request):
         jobtype = request.POST['type']
         description = request.POST['description']
         username = request.user.username
-        application = applicationStatus(title = title, jobtype = jobtype, description = description, username = username)
-        application.save()
+        #application = ApplicationStatus(title=title, jobtype=jobtype, description=description, username=username)
+        #application.save()
     return render(request, 'trysearch.html', {'jobs': jobs})
 
+######FUNCTION FOR GETTING APPLICATIONSTATUSES OF USER FROM USERS OBJECT######
+def getStatuses(user):
+    applications = Application.objects.filter(applicant = user).all()
 @login_required()
 @allowed_users(allowed_roles=['jobseeker'])
-def applyjob(request):
-    new_form = ApplicationForm
-    new_form.save()
-    new_form = ApplicationForm
-    return render(request, 'applyjob.html', {'form': new_form} )
+def applyjob(request, job_id):
+    if request.method == 'POST' and 'submit' in request.POST:
+        x = (request.FILES).getlist('file')
+        users = Users.objects.filter(Username=request.user.username).first()
+        job = Jobform.objects.filter(id=job_id).first()
+        files=[]
+        if len(x)>0:
+            if len(x)>1:
+                for i in x:
+                    files.append(i.name)
+                    print(i.name)
+            else:
+                print(x[0].name)
+                files.append(x[0].name)
+                print('no list')
+            app = Application(applicant=users, job=job, files=files)
+            app.save()
+            path = settings.MEDIA_ROOT +"\\"+ str(request.user.id) + "\\application_files\\" + str(app.id)
+            fs = FileSystemStorage(location = path)
+            for i in x:
+                fs.save(i.name, i)
+        else:
+            app = Application(applicant=users, job=job, files=files)
+            app.save()
+        return redirect('userProfile-home')
+        ##SOME ISSUES WITH FS IDK HOW TO FIX THE ISSUE OF HAVING DUPLICATE FILES IN SAME APPLICATION##
+    return render(request, 'applyjob.html')
 
 
 ######################################################################################################################################################################################
@@ -422,10 +464,9 @@ def addEducationExperience(request):
     else:
         return render(request, 'userProfile/addeducation.html')
 
+
 def about(request):
-    return render (request, 'userProfile/profile2.html')
-
-
+    return render(request, 'userProfile/profile2.html')
 
 #
 # def redirect(request):

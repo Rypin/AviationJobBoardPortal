@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'social_django',
     'postjob',
     'events_app',
+    'apply'
 ]
 
 MIDDLEWARE = [
