@@ -11,115 +11,16 @@
 
     <hr style="border: none; background-color: #333; color: #333; margin-bottom: 30px; height: 2px;">
 
-    <form action="{% url 'posting' %}" method="post">
+    <form method="POST">
     {% csrf_token %}
-    {% comment %} {{ postingform }} {% endcomment %}
-        <h2>{{ note }}</h2>
-        <pre style="color:red;"><h3>{{ error }}</h3></pre>
-        <div class="form-group">
-            <label for="JobTitle">Job Title</label>
-            {{ postingform.title }}
-        </div>
-
-        <div class="form-group">
-            <label for="JobType">Job Type</label>
-            {{ postingform.jobtype }}
-        </div>
-
-         <div class="form-group">
-            <label for="JobType">company</label>
-            {{ postingform.company }}
-        </div>
-
-        <div class="form-group">
-            <label for="JobDescription">Job Description</label>
-            {{ postingform.description }}
-        </div>
-
-        <div class="form-group">
-        
-            <label for="Location"></label>
-            {{ postingform.address }}
-            {{ postingform.geolocation }}
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label for="StartDate">Start Date</label>
-                    <br>
-                    {{ postingform.postdate }}
-                </div>
-            </div>
-            
-            <div class="col">
-                <div class="form-group">
-                    <label for="EndDate">End Date</label>
-                    <br>
-                    {{ postingform.deadlinedate }}
-                </div>
-            </div>  
-        </div>
-
-
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label for="StartTime">Start Time</label>
-                    <br>
-                    {{ postingform.posttime }}
-                </div>
-            </div>
-            
-
-            <div class="col">
-                <div class="form-group">
-                    <label for="EndTime">End Time</label>
-                    <br>
-                    {{ postingform.deadlinetime }}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label for="minsalary">Minimum Salary</label>
-                    <br>
-                    {{ postingform.salary_min }}
-                </div>
-            </div>
-            
-
-            <div class="col">
-                <div class="form-group">
-                    <label for="maxsalary">Maximum Salary</label>
-                    <br>
-                    {{ postingform.salary_max }}
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="workauthorized">US Authorization Required</label>
-            {{ postingform.US_author_required }}
-        </div>
-
-       
-
-        {% comment %} <div class="form-group">
-            <label for="Attachment">Attach File (optional)</label>
-            <input type="file" class="Attachment" id="Attachment">
-        </div> {% endcomment %}
-
-
+        {{ postingform|crispy }}
 
         <button type="submit" class="btn btn-success btn-lg float-right ">Submit</button>
 
     </form>
 {{ postingform.media.js }}
 
-
+</div>
 
 <!--    <div class = "col-md-8">-->
 <!--<div class="content-section">-->

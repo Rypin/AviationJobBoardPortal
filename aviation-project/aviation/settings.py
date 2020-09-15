@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'social_django',
     'postjob',
     'events_app',
+    'apply'
 ]
 
 MIDDLEWARE = [
@@ -140,7 +141,7 @@ WSGI_APPLICATION = 'aviation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
+        'NAME': 'fall2020',
         'USER': 'postgres',
         'PASSWORD': 'pgbazerpass', #Put the password that you used for PostrgeSQL
         'HOST': 'localhost',

@@ -48,6 +48,8 @@ class Users (models.Model):
 	password = models.CharField(max_length = 40, blank = True)
 	image = models.ImageField(upload_to = 'profile_image', default = 'default.png')
 	skills = models.ManyToManyField(Skill)
+	def __str__(self):
+		return f'{self.Username} Profile'
 	
 class workExperience (models.Model):
 	job = models.CharField(max_length = 40)
