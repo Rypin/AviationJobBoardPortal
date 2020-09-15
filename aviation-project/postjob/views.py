@@ -108,10 +108,10 @@ def jobsearch(request):
     
     if fulltime == 'on' or parttime == 'on' or internship == 'on' or contract == 'on' or temporary == 'on':
         if fulltime is None :
-            results = results.exclude(jobtype__name = 'FullTime')
+            results = results.exclude(jobtype__name = 'Full Time')
 
         if parttime is None:
-            results = results.exclude(jobtype__name = 'PartTime')
+            results = results.exclude(jobtype__name = 'Part Time')
 
         if internship is None:
             results = results.exclude(jobtype__name = 'Internship')
@@ -147,17 +147,21 @@ def jobsearch(request):
         listjobs = [r.id for r in results if calculate_miles(searchlat, searchlon, float(str(r.geolocation).split(",")[0]), float(str(r.geolocation).split(",")[1])) <= float(distance)]
         results = results.filter(id__in=listjobs)
 
+    job_exists = request.GET.get('jobexists') 
+
+    job_exists = True   
+
     if not results.exists():
-        raise Http404('There are no Open jobs that match this search')
+        job_exists = False
+        return render(request, 'search.html')
+        #raise Http404('There are no Open jobs that match this search')
     else:
         if job_id is not None:
             job = Jobform.objects.get(id = job_id)
         else:
             job = results.order_by("id")[0]
     
-    
-    
-    return render(request, 'search.html', {'results': results, 'jobtypes':jobtypes, 'PostingForm':form, "count":jobPostCount(results),'job': job,})
+    return render(request, 'search.html', {'results': results, 'jobtypes':jobtypes, 'PostingForm':form, "count":jobPostCount(results),'job': job})
 
 def job_detail(request, job_id):
     try:

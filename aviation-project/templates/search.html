@@ -7,7 +7,7 @@
 </script>
 
 <form method="GET" action="{%url 'search_page'%}" novalidate>
-<nav class="navbar navbar-light bg-white" style="margin-bottom: 40px">
+   <nav class="navbar navbar-light bg-white" style="margin-bottom: 40px; z-index:0">
    <div class="form-inline mx-auto">
       <div class="input-group" style="margin-right: 70px">
          <div class="input-group-prepend"> 
@@ -25,7 +25,7 @@
       </div>
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
    </div>
-</nav>
+</nav>  
 <div class="container-fluid">
    <div class="row">
       {% comment %} <div class="col-md-2 ">
@@ -242,8 +242,12 @@
                      <button type="button" class="btn btn-info" style="margin: 10px">Favorite</button>
 
                      
-					 
+					   {% if jobexists %}
                      <a href = "{%url 'userviewcompany' job.company.id%}" class="btn btn-info" style="margin: 10px; text-decoration: none; color: white">Company Page</a><br/>
+                  {% else %}
+
+                  {% endif %}
+
                   </div>
                </div>
                <div class="row">
