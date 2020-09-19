@@ -23,12 +23,30 @@ from django.contrib.auth import authenticate, login
 from postjob.models import Jobform, Jobtype
 from django.http import HttpResponse, HttpResponseRedirect
 import psycopg2
-
+from django.core.mail import send_mail
 
 # Create your views here.
 
 def applicationStatus_view(request, *args, **kwargs):
     return render(request, "userprofile/applicationStatus.html", {})
+
+
+@login_required()
+@allowed_users(allowed_roles=['company_owner'])
+def user_search_page(request):
+    all_users = Users.objects.all().order_by('name')
+
+    #send email
+    send_mail(
+
+
+    )
+
+    context = {
+        'all_users': all_users
+    }
+
+    return render(request, "users/user_search.html", context)
 
 
 @unauthenticated_user

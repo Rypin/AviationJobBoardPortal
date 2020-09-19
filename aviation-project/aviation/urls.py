@@ -38,6 +38,7 @@ urlpatterns = [
     path('company_register', user_views.company_register, name='company_register'),
     path('company_profile_creator/', user_views.addCompanyProfile, name='company_profile_creator'),
     path('company_profile', user_views.company_profile, name='company_profile'),
+    path('user_search_page', user_views.user_search_page, name='user_search_page'),
     path('choose_register/', chooseRegister_view, name='choose_register'),
     path('appStatus/', user_views.applicationStatus_view, name='application_status'),
     path('resume/', user_views.resume, name='resume'),

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+{% load crispy_forms_tags %}
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+    border: 2px solid #dddddd;
+    padding: 8px;
+    text-align: center;
+}
+
+td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+
+tr:nth-child(even) {
+  background-color: rgba(223, 223, 223, .5);
+}
+
+.dropbtn {
+        background-color: rgb(29, 63, 85);
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        }
+
+        .dropbtn:hover, .dropbtn:focus {
+        background-color: rgb(38, 91, 126);
+        }
+
+
+        .dropdown {
+        position: relative;
+        display: inline-block;
+        }
+
+        .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        }
+
+        .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        }
+
+        .dropdown a:hover {background-color: #ddd;}
+
+        .show {display: block;}
+</style>
+
+
+<h1>User Search Page</h1>
+<table>
+    <th style="width : 90px;">Profile Pic</th>
+    <th>Name</th>
+    <th>Skills</th>
+    <th>Email</th>
+    {% for user in all_users %}
+    <tr>
+        <td><img src={{ user.image.url }} alt="user profile pic" width="100" height="100"></td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.skills }}</td>
+        <td>{{ user.Email }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock content %}
