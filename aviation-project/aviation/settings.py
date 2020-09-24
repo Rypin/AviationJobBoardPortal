@@ -144,7 +144,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'fall2020',
         'USER': 'postgres',
-        'PASSWORD': 'danydb1270', #Put the password that you used for PostrgeSQL
+        'PASSWORD': '', #Put the password that you used for PostrgeSQL
         'HOST': 'localhost',
         'PORT': '5432',
     }
