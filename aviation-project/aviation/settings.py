@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'social_django',
     'postjob',
     'events_app',
-    'apply'
+    'apply',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -143,7 +144,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'fall2020',
         'USER': 'postgres',
-        'PASSWORD': 'pgbazerpass', #Put the password that you used for PostrgeSQL
+        'PASSWORD': 'danydb1270', #Put the password that you used for PostrgeSQL
         'HOST': 'localhost',
         'PORT': '5432',
     }
