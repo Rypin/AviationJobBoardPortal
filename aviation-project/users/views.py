@@ -24,6 +24,7 @@ from postjob.models import Jobform, Jobtype
 from django.http import HttpResponse, HttpResponseRedirect
 import psycopg2
 from django.core.mail import send_mail
+from .filters import UsersFilter
 
 # Create your views here.
 
@@ -36,14 +37,18 @@ def applicationStatus_view(request, *args, **kwargs):
 def user_search_page(request):
     all_users = Users.objects.all().order_by('name')
 
+    myFilter = UsersFilter(request.GET, queryset=all_users)
+    all_users = myFilter.qs
+
     #send email
-    send_mail(
-
-
-    )
+    # send_mail(
+    #
+    #
+    # )
 
     context = {
-        'all_users': all_users
+        'all_users': all_users,
+        'myFilter': myFilter,
     }
 
     return render(request, "users/user_search.html", context)

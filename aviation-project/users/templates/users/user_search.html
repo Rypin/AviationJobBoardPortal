@@ -69,6 +69,10 @@ tr:nth-child(even) {
 
 
 <h1>User Search Page</h1>
+<form method="get">
+    {{ myFilter.form }}
+    <button class="btn btn-primary" type="submit">Filter</button>
+</form>
 <table>
     <th style="width : 90px;">Profile Pic</th>
     <th>Name</th>
@@ -78,7 +82,11 @@ tr:nth-child(even) {
     <tr>
         <td><img src={{ user.image.url }} alt="user profile pic" width="100" height="100"></td>
         <td>{{ user.name }}</td>
-        <td>{{ user.skills }}</td>
+
+        <td>{% for skill in user.skills.all %}
+            {{ skill }} <br>
+            {% endfor %}
+        </td>
         <td>{{ user.Email }}</td>
     </tr>
     {% endfor %}
