@@ -60,6 +60,7 @@ urlpatterns = [
     
     
     path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'),
+    path('uploadProfilePic/', user_views.uploadProfilePic_view, name='uploadProfilePic'),
     path('about/', user_views.about, name = 'userProfile-about'),
     # path('signup/', user_views.signup, name = 'userProfile-signup'),
     path('addwork/', user_views.addWorkingExperience, name = 'userProfile-addwork'),

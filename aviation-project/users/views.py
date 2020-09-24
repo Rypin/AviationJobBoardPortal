@@ -364,6 +364,18 @@ def jobseeker_profile_view(request):
                   {'users': users, 'works': works, 'educations': educations, 'applications': applications,
                    'skills': skills})
 
+def uploadProfilePic_view(request):
+    users = Users.objects.filter(Username=request.user.username)
+    if request.method == 'GET':
+        return render(request, 'users/uploadProfilePic.html')
+    if request.method == 'POST' and 'upload' in request.POST:
+            profilePic = request.FILES['image']
+            thisuser = Users.objects.get(Username=request.user.username)
+            thisuser.image = profilePic
+            thisuser.save()
+            return redirect('userProfile-home')
+    return render(request, 'userProfile/profile2.html')
+                    
 
 def trysearch(request):
     jobs = Jobform.objects.all()
