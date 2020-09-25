@@ -87,7 +87,11 @@ tr:nth-child(even) {
             {{ skill }} <br>
             {% endfor %}
         </td>
-        <td>{{ user.Email }}</td>
+        <form action="{% url 'sendEmailToJobseeker' user.pk %}">
+        <td><button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary" name="{{user.id}}" value="{{user.id}}">
+            <a><b>{{ user.Email }}</b></a>
+            </button></td>
+        </form>
     </tr>
     {% endfor %}
 </table>
