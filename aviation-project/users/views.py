@@ -23,14 +23,42 @@ from django.contrib.auth import authenticate, login
 from postjob.models import Jobform, Jobtype
 from django.http import HttpResponse, HttpResponseRedirect
 import psycopg2
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from .filters import UsersFilter
+
 
 # Create your views here.
 
 def applicationStatus_view(request, *args, **kwargs):
     return render(request, "userprofile/applicationStatus.html", {})
 
+
+@login_required()
+@allowed_users(allowed_roles=['company_owner'])
+def sendEmailToJobseeker(request, pk):
+    jobseeker = Users.objects.get(id=pk)
+    company_profile = CompanyProfile.objects.get(user_id=request.user.id)
+
+    if request.method == "POST":
+        message = request.POST['message']
+
+        #send email
+        send_mail(
+            'From ' + company_profile.name + ' at Aviation Job Board', #subject
+            message + '\n\n To reply to this message please use the ' + company_profile.name + ' personal email: ' + request.user.email, #message
+            settings.EMAIL_HOST_USER, #from email
+            [jobseeker.Email], #to email
+        )
+        #Alternate way of sending an email that also works
+        # message = request.POST['message']
+        # msg = EmailMessage('From ' + company_profile.name,
+        #                    message, to=[jobseeker.Email])
+        # msg.send()
+
+        messages.success(request, f'Message was sent')
+        return redirect('user_search_page')
+
+    return render(request, "users/sendEmailToJobseeker.html", {'jobseeker': jobseeker})
 
 @login_required()
 @allowed_users(allowed_roles=['company_owner'])
