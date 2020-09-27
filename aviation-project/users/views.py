@@ -1,34 +1,33 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render , redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, CompanyRegisterForm, CompanyUpdateForm, CompanyProfileForm, \
-    ApplicationForm
+from .forms import UserRegisterForm , UserUpdateForm , CompanyRegisterForm , CompanyUpdateForm , CompanyProfileForm
 from django.core.files.storage import FileSystemStorage
 from pyresparser import ResumeParser
 from django.conf import settings
 import os
 from django.http import HttpResponse
-from django.contrib.auth.models import User, auth
-from .models import Users, CompanyProfile, Skill
+from django.contrib.auth.models import User , auth
+from .models import Users , CompanyProfile , Skill
 from .models import workExperience
 from .models import educationExperience
 from postjob.models import Jobform
 from apply.models import *
 from django.shortcuts import get_object_or_404
 import datetime
-from .decorators import unauthenticated_user, allowed_users
+from .decorators import unauthenticated_user , allowed_users
 from django.contrib.auth.models import Group
-from django.contrib.auth import authenticate, login
-from postjob.models import Jobform, Jobtype
-from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import authenticate , login
+from postjob.models import Jobform , Jobtype
+from django.http import HttpResponse , HttpResponseRedirect
 import psycopg2
 
 
 # Create your views here.
 
-def applicationStatus_view(request, *args, **kwargs):
-    return render(request, "userprofile/applicationStatus.html", {})
+def applicationStatus_view(request , *args , **kwargs):
+    return render(request , "userprofile/applicationStatus.html" , {})
 
 
 @unauthenticated_user
@@ -45,11 +44,11 @@ def register(request):
             user.groups.add(group)
 
             user.save()
-            messages.success(request, f'Account Successfully Created! You May Now Log In')
+            messages.success(request , f'Account Successfully Created! You May Now Log In')
             return redirect('login')
     else:
         form = UserRegisterForm()
-    return render(request, 'users/register.html', {'form': form})
+    return render(request , 'users/register.html' , {'form': form})
 
 
 @unauthenticated_user
@@ -72,15 +71,15 @@ def company_register(request):
 
             user.save()
             # cp.save()
-            messages.success(request, f'Account Successfully Created! You May Now Create Your Profile')
-            user = authenticate(username=form.cleaned_data['username'],
-                                password=form.cleaned_data['password1'],
+            messages.success(request , f'Account Successfully Created! You May Now Create Your Profile')
+            user = authenticate(username=form.cleaned_data['username'] ,
+                                password=form.cleaned_data['password1'] ,
                                 )
-            login(request, user)
+            login(request , user)
             return redirect('company_profile_creator')
     else:
         form = CompanyRegisterForm()
-    return render(request, 'users/company_register.html', {'form': form})
+    return render(request , 'users/company_register.html' , {'form': form})
 
 
 def addCompanyProfile(request):
@@ -103,18 +102,18 @@ def addCompanyProfile(request):
             #             , address=address, company_description=company_description)
             # cp.save()
             # company_profile.save()
-            CompanyProfile.objects.filter(user_id=id).update(name=name, phoneNumber=phoneNumber, address=address,
+            CompanyProfile.objects.filter(user_id=id).update(name=name , phoneNumber=phoneNumber , address=address ,
                                                              company_description=company_description)
-            messages.success(request, f'Your account has been updated!')
+            messages.success(request , f'Your account has been updated!')
             return redirect('company_profile')
         else:
             cp_form = CompanyProfileForm(request.POST)
 
     context = {
-        'cp_form': cp_form,
+        'cp_form': cp_form ,
     }
 
-    return render(request, 'users/company_profile_creator.html', context)
+    return render(request , 'users/company_profile_creator.html' , context)
 
 
 @login_required()
@@ -123,8 +122,8 @@ def company_profile(request):
     u_form = UserUpdateForm(instance=request.user)
     cp_Update_form = CompanyUpdateForm(instance=request.user.companyprofile)
     if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        cp_Update_form = CompanyUpdateForm(request.POST, request.FILES, instance=request.user.companyprofile)
+        u_form = UserUpdateForm(request.POST , instance=request.user)
+        cp_Update_form = CompanyUpdateForm(request.POST , request.FILES , instance=request.user.companyprofile)
         if u_form.is_valid() and cp_Update_form.is_valid():
             # username = u_form.cleaned_data.get('username')
             # email = u_form.cleaned_data.get('email')
@@ -136,7 +135,7 @@ def company_profile(request):
             # user.save()
             u_form.save()
             cp_Update_form.save()
-            messages.success(request, f'Your account has been updated!')
+            messages.success(request , f'Your account has been updated!')
             return redirect('company_profile')
     else:
         u_form = UserUpdateForm(instance=request.user)
@@ -163,14 +162,14 @@ def company_profile(request):
     Jobform.objects.filter(id=delete_job).delete()
 
     context = {
-        'u_form': u_form,
-        'cp_Update_form': cp_Update_form,
-        'company_profile': company_profile,
-        'jobs': jobs,
-        'delete_job': delete_job,
+        'u_form': u_form ,
+        'cp_Update_form': cp_Update_form ,
+        'company_profile': company_profile ,
+        'jobs': jobs ,
+        'delete_job': delete_job ,
     }
 
-    return render(request, 'users/company_profile.html', context)
+    return render(request , 'users/company_profile.html' , context)
 
 
 @login_required()
@@ -179,10 +178,10 @@ def resume(request):
     if request.method == 'POST' and 'upload' in request.POST:
         uploaded_file = request.FILES['resume']
         if uploaded_file.name.endswith(".pdf") or uploaded_file.name.endswith(".docx"):
-            fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'resumes'))
+            fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT , 'resumes'))
             new_name = str(request.user.id) + uploaded_file.name
-            fs.save(new_name, uploaded_file)
-            path = os.path.join(settings.MEDIA_ROOT, 'resumes') + '/' + new_name
+            fs.save(new_name , uploaded_file)
+            path = os.path.join(settings.MEDIA_ROOT , 'resumes') + '/' + new_name
             parsed_info = ResumeParser(path).get_extracted_data()
             request.session['parsed_name'] = parsed_info.pop('name')
             request.session['parsed_email'] = parsed_info.pop('email')
@@ -192,16 +191,16 @@ def resume(request):
             return redirect('review')
         else:
             print("Invalid Request")
-    return render(request, 'users/resume.html', parsed_info)
+    return render(request , 'users/resume.html' , parsed_info)
 
 
-def ParseSkills(request, skills):
+def ParseSkills(request , skills):
     skill_len = len(skills)
     count = 0
-    connection = psycopg2.connect(user=settings.DATABASES['default']['USER'],
-                                  password=settings.DATABASES['default']['PASSWORD'],
-                                  host=settings.DATABASES['default']['HOST'],
-                                  port=settings.DATABASES['default']['PORT'],
+    connection = psycopg2.connect(user=settings.DATABASES['default']['USER'] ,
+                                  password=settings.DATABASES['default']['PASSWORD'] ,
+                                  host=settings.DATABASES['default']['HOST'] ,
+                                  port=settings.DATABASES['default']['PORT'] ,
                                   database=settings.DATABASES['default']['NAME'])
     user = Users.objects.get(Username=request.user.username)
     try:
@@ -210,52 +209,52 @@ def ParseSkills(request, skills):
         postgres_insert_query = """INSERT INTO users_skill (SKILL_NAME) VALUES (%s)"""
         postgres_select_query = """SELECT id FROM users_skill WHERE skill_name = (%s)"""
         for i in range(skill_len):
-            cursor.execute(postgres_select_query, (skills[i],))
+            cursor.execute(postgres_select_query , (skills[i] ,))
             in_table = cursor.fetchone()
             if (in_table is not None):
-                skill_insert = (user.id, (in_table[0]))
-                cursor.execute(postgres_relational_query, skill_insert)
+                skill_insert = (user.id , (in_table[0]))
+                cursor.execute(postgres_relational_query , skill_insert)
                 count = count + 1
             else:
-                cursor.execute(postgres_insert_query, (skills[i],))
+                cursor.execute(postgres_insert_query , (skills[i] ,))
                 connection.commit()
-                cursor.execute(postgres_select_query, (skills[i],))
+                cursor.execute(postgres_select_query , (skills[i] ,))
                 in_table = cursor.fetchone()
-                skill_insert = (user.id, (in_table[0]))
-                cursor.execute(postgres_relational_query, skill_insert)
+                skill_insert = (user.id , (in_table[0]))
+                cursor.execute(postgres_relational_query , skill_insert)
                 count = count + 1
             connection.commit()
-    except (Exception, psycopg2.Error)as error:
+    except (Exception , psycopg2.Error)as error:
         if connection:
-            print("Failed to insert", error)
+            print("Failed to insert" , error)
     finally:
         if (connection):
             connection.commit()
             cursor.close()
             connection.close()
-            print(count, "Record inserted")
+            print(count , "Record inserted")
     return
 
 
 def getSkills(request):
     postgres_select_query = """SELECT skill_id FROM users_users_skills WHERE users_id = (%s)"""
-    connection = psycopg2.connect(user=settings.DATABASES['default']['USER'],
-                                  password=settings.DATABASES['default']['PASSWORD'],
-                                  host=settings.DATABASES['default']['HOST'],
-                                  port=settings.DATABASES['default']['PORT'],
+    connection = psycopg2.connect(user=settings.DATABASES['default']['USER'] ,
+                                  password=settings.DATABASES['default']['PASSWORD'] ,
+                                  host=settings.DATABASES['default']['HOST'] ,
+                                  port=settings.DATABASES['default']['PORT'] ,
                                   database=settings.DATABASES['default']['NAME'])
     user = Users.objects.get(Username=request.user.username)
     skills = []
     try:
         cursor = connection.cursor()
-        cursor.execute(postgres_select_query, (user.id,))
+        cursor.execute(postgres_select_query , (user.id ,))
         skill_ids = cursor.fetchall()
         skill_len = len(skill_ids)
         for i in range(skill_len):
             skills.append((Skill.objects.get(id=skill_ids[i][0])).skill_name)
-    except (Exception, psycopg2.Error)as error:
+    except (Exception , psycopg2.Error)as error:
         if connection:
-            print("Connection failed", error)
+            print("Connection failed" , error)
     finally:
         if (connection):
             cursor.close()
@@ -263,26 +262,26 @@ def getSkills(request):
     return skills
 
 
-def removeSkill(users_id, skill):
+def removeSkill(users_id , skill):
     postgres_delete_query = """DELETE FROM users_users_skills WHERE users_id = %s AND skill_id = %s"""
     postgres_select_query = """SELECT id FROM users_skill WHERE skill_name = (%s)"""
-    connection = psycopg2.connect(user=settings.DATABASES['default']['USER'],
-                                  password=settings.DATABASES['default']['PASSWORD'],
-                                  host=settings.DATABASES['default']['HOST'],
-                                  port=settings.DATABASES['default']['PORT'],
+    connection = psycopg2.connect(user=settings.DATABASES['default']['USER'] ,
+                                  password=settings.DATABASES['default']['PASSWORD'] ,
+                                  host=settings.DATABASES['default']['HOST'] ,
+                                  port=settings.DATABASES['default']['PORT'] ,
                                   database=settings.DATABASES['default']['NAME'])
     try:
         cursor = connection.cursor()
-        cursor.execute(postgres_select_query, (skill,))
+        cursor.execute(postgres_select_query , (skill ,))
         in_table = cursor.fetchone()
-        delete = (users_id, in_table[0],)
+        delete = (users_id , in_table[0] ,)
         print(delete)
-        cursor.execute(postgres_delete_query, (users_id, in_table[0]))
+        cursor.execute(postgres_delete_query , (users_id , in_table[0]))
         print(cursor.statusmessage)
 
-    except (Exception, psycopg2.Error)as error:
+    except (Exception , psycopg2.Error)as error:
         if connection:
-            print("Connection failed", error)
+            print("Connection failed" , error)
     finally:
         if (connection):
             connection.commit()
@@ -292,12 +291,12 @@ def removeSkill(users_id, skill):
 
 def review(request):
     if request.method == 'GET':
-        return render(request, 'users/review.html', context={'name': request.session.get('parsed_name'),
-                                                             'email': request.session.get('parsed_email'),
-                                                             'mobile_number': request.session.get('parsed_number'),
-                                                             'parsed_skills': request.session.get('parsed_skills')})
+        return render(request , 'users/review.html' , context={'name': request.session.get('parsed_name') ,
+                                                               'email': request.session.get('parsed_email') ,
+                                                               'mobile_number': request.session.get('parsed_number') ,
+                                                               'parsed_skills': request.session.get('parsed_skills')})
     if request.method == 'POST' and 'save' in request.POST:
-        ParseSkills(request, request.session['parsed_skills'])
+        ParseSkills(request , request.session['parsed_skills'])
         return redirect('userProfile-home')
     elif request.method == 'POST' and 'delete' in request.POST:
         skills = request.session.get('parsed_skills')
@@ -306,22 +305,19 @@ def review(request):
         skills.remove(remove_skill)
         request.session['parsed_skills'] = skills
         return redirect('review')
-    return render(request, 'users/review.html', context={'name': request.session.get('parsed_name'),
-                                                         'email': request.session.get('parsed_email'),
-                                                         'mobile_number': request.session.get('parsed_number'),
-                                                         'parsed_skills': request.session.get('parsed_skills')})
+    return render(request , 'users/review.html' , context={'name': request.session.get('parsed_name') ,
+                                                           'email': request.session.get('parsed_email') ,
+                                                           'mobile_number': request.session.get('parsed_number') ,
+                                                           'parsed_skills': request.session.get('parsed_skills')})
 
 
 @login_required()
 @allowed_users(allowed_roles=['jobseeker'])
 def jobseeker_profile_view(request):
     users = Users.objects.filter(Username=request.user.username)
-    print(request.user.username)
-    print(request.user.email)
     if not users.exists():
         print(request.user.username)
-        print('111')
-        user = Users(Username=request.user.username, Email=request.user.email)
+        user = Users(Username=request.user.username , Email=request.user.email)
         user.save()
     users = Users.objects.filter(Username=request.user.username)
     works = workExperience.objects.filter(Username=request.user.username)
@@ -333,35 +329,32 @@ def jobseeker_profile_view(request):
         email = request.POST['email']
         phone = request.POST['phone']
         address = request.POST['address']
-        thisuser = Users.objects.filter(Username=request.user.username).update(name=fullname, nickName=nickname,
-                                                                               Email=email, phoneNumber=phone,
+        thisuser = Users.objects.filter(Username=request.user.username).update(name=fullname , nickName=nickname ,
+                                                                               Email=email , phoneNumber=phone ,
                                                                                address=address)
-        thatuser = User.objects.get(username=request.user.username, password=request.user.password)
+        thatuser = User.objects.get(username=request.user.username , password=request.user.password)
         thatuser.email = email
         thatuser.save()
     if request.method == 'POST' and 'deleteWork' in request.POST:
-        obj = works.get(comment=request.POST['comments'], job=request.POST['job'], company=request.POST['company'],
+        obj = works.get(comment=request.POST['comments'] , job=request.POST['job'] , company=request.POST['company'] ,
                         Username=request.user.username).delete()
     if request.method == 'POST' and 'deleteEducation' in request.POST:
-        obj = educations.get(duration=request.POST['duration'], title=request.POST['title'],
-                             school=request.POST['school'], Username=request.user.username).delete()
+        obj = educations.get(duration=request.POST['duration'] , title=request.POST['title'] ,
+                             school=request.POST['school'] , Username=request.user.username).delete()
     if request.method == 'POST' and 'deleteSkill' in request.POST:
         id = (Users.objects.get(Username=request.user.username)).id
-        print(id)
-        print(request.POST.get('deleteSkill'))
-        removeSkill(id, request.POST.get('deleteSkill'))
+        removeSkill(id , request.POST.get('deleteSkill'))
         skills = getSkills(request)
         redirect('userProfile-home')
     if request.method == 'POST' and 'submitSkill' in request.POST:
-        ParseSkills(request, [request.POST['newSkill']])
+        ParseSkills(request , [request.POST['newSkill']])
         skills = getSkills(request)
         redirect('userProfile-home')
     applications = Application.objects.filter(applicant=users.first()).all()
-    print(applications)
-    #apptest =
-    #application_statuses = ApplicationStatus.objects.filter(application=applications.id)
-    return render(request, 'userProfile/profile2.html',
-                  {'users': users, 'works': works, 'educations': educations, 'applications': applications,
+    # apptest =
+    # application_statuses = ApplicationStatus.objects.filter(application=applications.id)
+    return render(request , 'userProfile/profile2.html' ,
+                  {'users': users , 'works': works , 'educations': educations , 'applications': applications ,
                    'skills': skills})
 
 
@@ -372,42 +365,85 @@ def trysearch(request):
         jobtype = request.POST['type']
         description = request.POST['description']
         username = request.user.username
-        #application = ApplicationStatus(title=title, jobtype=jobtype, description=description, username=username)
-        #application.save()
-    return render(request, 'trysearch.html', {'jobs': jobs})
+        # application = ApplicationStatus(title=title, jobtype=jobtype, description=description, username=username)
+        # application.save()
+    return render(request , 'trysearch.html' , {'jobs': jobs})
 
-######FUNCTION FOR GETTING APPLICATIONSTATUSES OF USER FROM USERS OBJECT######
-def getStatuses(user):
-    applications = Application.objects.filter(applicant = user).all()
+
 @login_required()
 @allowed_users(allowed_roles=['jobseeker'])
-def applyjob(request, job_id):
+def applyjob(request , job_id):
     if request.method == 'POST' and 'submit' in request.POST:
         x = (request.FILES).getlist('file')
         users = Users.objects.filter(Username=request.user.username).first()
+
+        if users is None:
+            return redirect('userProfile-home')
         job = Jobform.objects.filter(id=job_id).first()
-        files=[]
-        if len(x)>0:
-            if len(x)>1:
+        company = CompanyProfile.objects.filter(id=job.company.id).first()
+        files = []
+        if len(x) > 0:
+            if len(x) > 1:
                 for i in x:
                     files.append(i.name)
-                    print(i.name)
             else:
-                print(x[0].name)
                 files.append(x[0].name)
-                print('no list')
-            app = Application(applicant=users, job=job, files=files)
+            app = Application(applicant=users , job=job , company=company , files=files)
+            print(app)
             app.save()
-            path = settings.MEDIA_ROOT +"\\"+ str(request.user.id) + "\\application_files\\" + str(app.id)
-            fs = FileSystemStorage(location = path)
+            path = settings.MEDIA_ROOT + "\\" + str(request.user.id) + "\\application_files\\" + str(app.id)
+            fs = FileSystemStorage(location=path)
             for i in x:
-                fs.save(i.name, i)
+                fs.save(i.name , i)
         else:
-            app = Application(applicant=users, job=job, files=files)
+            app = Application(applicant=users , job=job , company=company , files=files)
+            print(app)
             app.save()
         return redirect('userProfile-home')
         ##SOME ISSUES WITH FS IDK HOW TO FIX THE ISSUE OF HAVING DUPLICATE FILES IN SAME APPLICATION##
-    return render(request, 'applyjob.html')
+    return render(request , 'applyjob.html')
+
+
+def getFiles(applications):
+    app_files = dict()
+    for x in applications:
+        user = User.objects.get(username=x.applicant.Username)
+        for y in x.files:
+            path = "/media/" + str(user.id) + "/application_files/" + str(x.id) + "/" + y
+            test = {
+                y:path
+            }
+            if x.id in app_files:
+                app_files[x.id].append(test)
+            else:
+                app_files[x.id] = [test]
+    return app_files
+
+
+def viewApplications(request):
+    company = CompanyProfile.objects.get(id=request.user.id)
+    jobs = Jobform.objects.filter(company=company.id)
+    applications = Application.objects.filter(company=company)
+    applicationStatus = {
+        "Unread": len(Application.objects.filter(status='SB')) ,
+        "Rejected": len(Application.objects.filter(status='RJ')) ,
+        "Reviewed": len(Application.objects.filter(status='PR')) ,
+        "Accepted": len(Application.objects.filter(status='AC'))
+    }
+    context = {
+        'jobs': jobs ,
+        'applications': applications ,
+        'app_count': applicationStatus ,
+        'files': getFiles(applications)
+    }
+    if request.method == 'POST':
+        app_id = request.POST.get('app')
+        status = request.POST.get('status')
+        app = Application.objects.get(id=app_id)
+        app.status = status
+        app.save()
+        return redirect('company_applications')
+    return render(request , 'viewApplications.html' , context)
 
 
 ######################################################################################################################################################################################
@@ -429,17 +465,17 @@ def addWorkingExperience(request):
         comment = request.POST['comment']
         if request.user.is_authenticated:
             name = request.user.username
-            findwork = workExperience.objects.filter(job=job, years=years, company=company, comment=comment,
+            findwork = workExperience.objects.filter(job=job , years=years , company=company , comment=comment ,
                                                      Username=name)
             if not findwork.exists():
-                works = workExperience(job=job, years=years, company=company, comment=comment, Username=name)
+                works = workExperience(job=job , years=years , company=company , comment=comment , Username=name)
                 works.save()
             else:
-                messages.info(request, 'Already have a same record.')
+                messages.info(request , 'Already have a same record.')
                 return redirect('/addwork')
             return redirect('/userprofile')
     else:
-        return render(request, 'userProfile/addwork.html')
+        return render(request , 'userProfile/addwork.html')
 
 
 def addEducationExperience(request):
@@ -450,22 +486,22 @@ def addEducationExperience(request):
         major = request.POST['major']
         if request.user.is_authenticated:
             name = request.user.username
-            findEducation = educationExperience.objects.filter(title=title, duration=duration, school=school,
-                                                               major=major, Username=name)
+            findEducation = educationExperience.objects.filter(title=title , duration=duration , school=school ,
+                                                               major=major , Username=name)
             if not findEducation.exists():
-                education = educationExperience(title=title, duration=duration, school=school, major=major,
+                education = educationExperience(title=title , duration=duration , school=school , major=major ,
                                                 Username=name)
                 education.save()
             else:
-                messages.info(request, 'Already have a same record.')
+                messages.info(request , 'Already have a same record.')
                 return redirect('/addeducation')
             return redirect('/userprofile')
     else:
-        return render(request, 'userProfile/addeducation.html')
+        return render(request , 'userProfile/addeducation.html')
 
 
 def about(request):
-    return render(request, 'userProfile/profile2.html')
+    return render(request , 'userProfile/profile2.html')
 
 #
 # def redirect(request):
