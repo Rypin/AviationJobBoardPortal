@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card md-6" style="width: 18rem;">
+    <div class="card-header">
+        Applications
+    </div>
+    {% for status,values in app_count.items %}
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{status}} {{values}}</li>
+    </ul>
+    {% endfor %}
+</div>
+<div class="col md-8">
+   {% for job in jobs %}
+    <br>
+    <h1>{{job.title}}</h1>
+        {% for app in applications %}
+            <form method="POST">
+                <ul>
+                    {% if app.job.id == job.id %}
+                    <br>
+                    <div class="row">
+                        <div class="col-sm">
+                        <h2>{{app.applicant.Username}}</h2>
+                            Files:
+                         {% for status,values in files.items %}
+                            {% if status == app.id %}
+                                {% for file in values %}
+                                    {% for name,path in file.items %}
+                                        <a href="{{path}}" download>
+                                            <h8>{{name}}</h8>
+                                        </a>,
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                        {%csrf_token%}
+                        <div class="col-sm">
+                        <select name = "status" id="{{app.id}}" class = "form-control">
+                            <option value="SB" >Unread</option>
+                            <option value="PR" {%if app.status == 'PR' %}selected{% endif %}>Under Review</option>
+                            <option value="RJ"{%if app.status == 'RJ' %}selected{% endif %}>Rejected</option>
+                            <option value="AC"{%if app.status == 'AC' %}selected{% endif %}>Accepted</option>
+                        </select>
+                        </div>
+                        <div class="col-sm">
+                       <button class="btn btn-primary" style="float:right" type="submit" name = "app" value="{{app.id}}"><b>Submit</b></button>
+                        </div>
+                    </div>
+                    <br>
+                    {% endif %}
+                </ul>
+            </form>
+        {% endfor %}
+    <br>
+    {% endfor %}
+</div>
+{% endblock %}

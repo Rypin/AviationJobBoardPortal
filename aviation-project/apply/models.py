@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.db.models import signals
+from datetime import *
 
 class Application(models.Model):
     applicant = models.ForeignKey('users.Users', on_delete=models.CASCADE)
     job = models.ForeignKey('postjob.Jobform', on_delete=models.CASCADE)
+    company = models.ForeignKey('users.CompanyProfile' , on_delete=models.CASCADE)
     files = ArrayField(models.CharField(max_length=25, blank=True), null=True)
     STATUS_CHOICES = (
         ('PR', 'Pending Review'),
@@ -13,6 +15,7 @@ class Application(models.Model):
         ('SB', 'Submitted')
     )
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='SB')
+    submission_date = models.DateField(default=date.today)
     def __str__(self):
         return f'{self.applicant.Username}\'s Application for job ID:{self.job.id}'
 

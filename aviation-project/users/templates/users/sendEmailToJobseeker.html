@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<h1>Send Email to Jobseeker {{ jobseeker.name }}</h1>
+<form method="POST">
+    {% csrf_token %}
+    <div class="col-12">
+        <textarea name="message" class="form-control mb-30" placeholder="Your Message" style="height:200px"></textarea>
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn-primary">Send Email</button>
+    </div>
+</form>
+
+
+
+
+{% endblock content %}
