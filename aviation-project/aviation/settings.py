@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'social_django',
     'postjob',
     'events_app',
-    'apply'
+    'apply',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -143,7 +144,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ajb_sprint2',
         'USER': 'postgres',
-        'PASSWORD': '123miles', #Put the password that you used for PostrgeSQL
+        'PASSWORD': '', #Put the password that you used for PostrgeSQL
         'HOST': 'localhost',
         'PORT': '5432',
     }
