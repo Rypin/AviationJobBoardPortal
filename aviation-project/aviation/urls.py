@@ -38,6 +38,7 @@ urlpatterns = [
     path('company_register', user_views.company_register, name='company_register'),
     path('company_profile_creator/', user_views.addCompanyProfile, name='company_profile_creator'),
     path('company_profile', user_views.company_profile, name='company_profile'),
+    path('user_search_page', user_views.user_search_page, name='user_search_page'),
     path('choose_register/', chooseRegister_view, name='choose_register'),
     path('appStatus/', user_views.applicationStatus_view, name='application_status'),
     path('resume/', user_views.resume, name='resume'),
@@ -53,11 +54,12 @@ urlpatterns = [
     path('oauth/', include('social_django.urls', namespace='social')),
     path('postjob/', postjob_views.posting, name='posting'),
     path('editJob/<int:pk>', postjob_views.editJob, name='editJob'),
+    path('sendEmailToJobseeker/<int:pk>', user_views.sendEmailToJobseeker, name='sendEmailToJobseeker'),
     # JOB SEARCH PATHS
     # path('postjob/', postjob_view, name='posting'),
     path('jobsearch/', postjob_views.jobsearch, name='jobsearch'),
     path('jobsearch/<int:job_id>/', postjob_views.job_detail, name='job_detail'),
-    
+    path('view-applications/', user_views.viewApplications, name ='company_applications'),
     
     path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'),
     path('about/', user_views.about, name = 'userProfile-about'),
