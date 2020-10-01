@@ -6,7 +6,7 @@ from datetime import *
 class Application(models.Model):
     applicant = models.ForeignKey('users.Users', on_delete=models.CASCADE)
     job = models.ForeignKey('postjob.Jobform', on_delete=models.CASCADE)
-    company = models.ForeignKey('users.CompanyProfile' , on_delete=models.CASCADE)
+    company = models.ForeignKey('users.CompanyProfile' , on_delete=models.CASCADE, null=True)
     files = ArrayField(models.CharField(max_length=25, blank=True), null=True)
     STATUS_CHOICES = (
         ('PR', 'Pending Review'),
