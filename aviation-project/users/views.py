@@ -21,6 +21,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate , login
 from postjob.models import Jobform , Jobtype
 from django.http import HttpResponse , HttpResponseRedirect
+from datetime import datetime
 import pytz
 import psycopg2
 from django.core.mail import send_mail, EmailMessage
