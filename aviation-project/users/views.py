@@ -21,6 +21,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate , login
 from postjob.models import Jobform , Jobtype
 from django.http import HttpResponse , HttpResponseRedirect
+import pytz
 import psycopg2
 from django.core.mail import send_mail, EmailMessage
 from .filters import UsersFilter
@@ -417,6 +418,15 @@ def uploadProfilePic_view(request):
             thisuser = Users.objects.get(Username=request.user.username)
             thisuser.image = profilePic
             thisuser.save()
+            tz_NY = pytz.timezone('America/New_York') 
+            datetime_NY = datetime.now(tz_NY)
+            send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have successfully updated your profile picture in your Aviation Job Portal Profile at '+datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
             return redirect('userProfile-home')
     return render(request, 'userProfile/profile2.html')
                     
