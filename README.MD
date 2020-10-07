@@ -46,7 +46,7 @@ PostgreSQL needs to also be installed with pgAdmin in order to handle the databa
 
 ## Installation:
 ```bash
-pip install wheel libsass django-sass-processor django-google-maps django-crispy-forms social-auth-app-django psycopg2-binary pyresparser Pillow nltk
+pip install wheel libsass django-sass-processor django-google-maps django-crispy-forms social-auth-app-django psycopg2-binary pyresparser Pillow nltk django-filter
 ```
 
 ## Usage:
