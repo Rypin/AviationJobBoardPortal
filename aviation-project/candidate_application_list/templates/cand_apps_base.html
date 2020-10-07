@@ -14,8 +14,12 @@
   <!-- Bootstrap core CSS -->
   
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
   <link href="{% sass_src 'front/scss/nav/nav.scss' %}" rel="stylesheet" type="text/css" /> 
+
+
+  <!-- Custom CSS -->
+  <link href="{% static 'custom/css/candAppsCustom.css' %}" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -126,6 +130,9 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'user_search_page' %}">Search Users</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'candidate_applications_page' %}">Applications</a>
+                </li>
               {% endif %}
               <li class="nav-item">
                   <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -182,8 +189,10 @@
   <!-- Bootstrap core JavaScript -->
   <script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
   <script src='../static/front/js/nav.js'defer ></script>
-
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Custom JavaScript -->
+  <script src="{% static 'custom/js/candAppsCustom.js' %}"></script>
 
   {% if messages %}
     {% for message in messages %}

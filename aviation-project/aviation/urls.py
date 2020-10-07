@@ -22,6 +22,7 @@ from postjob import views as postjob_views
 from aviation_job_board.views import home_view, companypage_view, postjob_view, chooseRegister_view, chatRoom_view, postjob_view
 from users import views as user_views
 from events_app.views import events_view
+from candidate_application_list import views as appList_view
 urlpatterns = [
     path('', home_view, name='home'),
     path('company/',companypage_view, name='company_page'),
@@ -32,6 +33,8 @@ urlpatterns = [
     # JOB SEARCH PATH
     path('search/', postjob_views.jobsearch, name='search_page'),
     
+    # Candate APPLICATION PATH
+    path('candidate_applications_page/', appList_view.applicationList, name='candidate_applications_page'),
     
     path('events/', events_view, name='event_list'),
     path('register/', user_views.register, name='register'),
