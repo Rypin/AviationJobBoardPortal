@@ -1,0 +1,180 @@
+{% extends "cand_apps_base.html" %}
+{% block content %}
+
+<div class="container-flex" id="mainContainer">
+    <div class="row">
+       <div class="col-3 align-self-start" id="sideMenu">
+          <div id="test">
+             <h1 id="applicationCount">32</h1>
+             <h5 id="applicationType">All Applications</h5>
+             <div id="jobPostMenuHeader">
+                <span id="jobPostMenuLabel">Job Postings</span>
+                <button id="jobPostMenuButton" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> Button with data-target </button>
+             </div>
+             <div class="collapse" id="collapseExample">
+                <div class="card card-body" id="cardBody">
+                   <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
+                      <label class="btn btn-secondary active">
+                      <input type="radio" name="options" id="option1" checked> Job Post (#1) 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option2"> Job Post (#2) 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option3"> Job Post (#3) 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option4"> Job Post (#4) 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option5"> Job Post (#5) 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option6"> Job Post (#6) 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option3"> Job Post (#7) 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option3"> Job Post (#8) 
+                      </label>
+                   </div>
+                </div>
+             </div>
+             <div id="jobPostMenuHeader">
+                <span id="jobPostMenuLabel">Job Postings</span>
+                <button id="jobPostMenuButton" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample"> Button with data-target </button>
+             </div>
+             <div class="collapse" id="collapseExample2">
+                <div class="card card-body" id="cardBody">
+                   <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
+                      <label class="btn btn-secondary active">
+                      <input type="radio" name="options" id="option1" checked> All Applications 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option2"> Unread 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option3"> Rejected 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option4"> Reviewed 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option5"> Selected 
+                      </label>
+                      <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option6"> Hired 
+                      </label>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+       <div class="col" id="applicationListBox">
+          <h3>
+          Applications
+          <h3>
+          <div id="filterBar">
+             <input class="form-control" id="myInput" type="text" placeholder="Search..">
+          </div>
+          <table class="table table-striped">
+             <thead class="thead-dark">
+                <tr>
+                   <th scope="col">ID</th>
+                   <th scope="col">First Name</th>
+                   <th scope="col">Last Name</th>
+                   <th scope="col">Status</th>
+                   <th scope="col">Date Submitted</th>
+                   <th scope="col">Attachments</th>
+                   <th scope="col">Actions</th>
+                </tr>
+             </thead>
+             <tbody id="myTable">
+                <tr>
+                   <th scope="row">1</th>
+                   <td>Mark</td>
+                   <td>Otto</td>
+                   <td>Unread</td>
+                   <td>8/19/20</td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Docs</button>
+                      <button type="button" class="btn btn-secondary">Profile</button>
+                   </td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Reject</button>
+                      <button type="button" class="btn btn-secondary">Select</button>
+                      <button type="button" class="btn btn-secondary">Hire</button>
+                   </td>
+                </tr>
+                <tr>
+                   <th scope="row">2</th>
+                   <td>Jacob</td>
+                   <td>Thornton</td>
+                   <td>Unread</td>
+                   <td>8/20/20</td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Docs</button>
+                      <button type="button" class="btn btn-secondary">Profile</button>
+                   </td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Reject</button>
+                      <button type="button" class="btn btn-secondary">Select</button>
+                      <button type="button" class="btn btn-secondary">Hire</button>
+                   </td>
+                </tr>
+                <tr>
+                   <th scope="row">3</th>
+                   <td>Larry</td>
+                   <td>Milton</td>
+                   <td>Rejected</td>
+                   <td>7/21/20</td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Docs</button>
+                      <button type="button" class="btn btn-secondary">Profile</button>
+                   </td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Reject</button>
+                      <button type="button" class="btn btn-secondary">Select</button>
+                      <button type="button" class="btn btn-secondary">Hire</button>
+                   </td>
+                </tr>
+                <tr>
+                   <th scope="row">3</th>
+                   <td>Jerry</td>
+                   <td>Prichard</td>
+                   <td>Selected</td>
+                   <td>8/24/20</td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Docs</button>
+                      <button type="button" class="btn btn-secondary">Profile</button>
+                   </td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Reject</button>
+                      <button type="button" class="btn btn-secondary">Select</button>
+                      <button type="button" class="btn btn-secondary">Hire</button>
+                   </td>
+                </tr>
+                <tr>
+                   <th scope="row">3</th>
+                   <td>Sam</td>
+                   <td>Dodger</td>
+                   <td>Rejected</td>
+                   <td>8/21/20</td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Docs</button>
+                      <button type="button" class="btn btn-secondary">Profile</button>
+                   </td>
+                   <td>
+                      <button type="button" class="btn btn-secondary">Reject</button>
+                      <button type="button" class="btn btn-secondary">Select</button>
+                      <button type="button" class="btn btn-secondary">Hire</button>
+                   </td>
+                </tr>
+             </tbody>
+          </table>
+       </div>
+    </div>
+ </div>
+
+ {% endblock content %}

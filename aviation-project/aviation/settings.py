@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'postjob',
     'events_app',
     'apply',
-    'django_filters'
+    'django_filters',
+    'candidate_application_list'
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,7 @@ DATABASES = {
         'NAME': 'fall2020sprint3',
         'USER': 'postgres',
         'PASSWORD': '123miles', #Put the password that you used for PostrgeSQL
+
 
         'HOST': 'localhost',
         'PORT': '5432',

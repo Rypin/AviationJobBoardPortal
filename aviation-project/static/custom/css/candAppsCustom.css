@@ -1,0 +1,78 @@
+/*|| MAIN CONTAINER DIV || */
+
+#mainContainer {
+    /* border: solid 5px green; */
+ } 
+ 
+ #test {
+   /* border: solid 5px green; */
+ }
+ 
+ /*|| SIDEBAR DIV ||*/
+ #sideMenu {
+   background-color: #FCFCFC;
+   border: solid 1px;
+   width: 500px;
+   padding-bottom: 20px;
+   margin: 40px
+ }
+ 
+ /*|| SIDEBAR ELEMENTS ||*/
+ 
+ /* Counter for number of applications*/
+ #applicationCount {
+   margin-left: 20px;
+ }
+ 
+ /* Label for application type selected*/
+ #applicationType {
+   margin-left: 20px;
+ }
+ 
+ /* */
+ #jobPostMenuHeader {
+   overflow: auto;
+   /* border: solid 2px; */
+   padding-bottom: 5px;
+ }
+ 
+ /* */
+ #jobPostMenuLabel {
+   position: relative;
+   /* border: solid 2px; */
+   left: 20px;
+   top: 7px;
+ }
+ 
+ /* */
+ #jobPostMenuButton {
+   position: relative;
+   float: right;
+   right: 20px;
+ }
+ 
+ #cardBody {
+   overflow: auto;
+   height: 200px;
+ }
+ 
+ 
+ /*|| APPLICATION LIST DIV || */
+ 
+ #applicationListBox {
+   /* border: solid 2px red; */
+   margin-top: 40px;
+   margin-right: 40px;
+ } 
+ 
+ /*|| APPLICATION LIST ELEMENTS || */
+ 
+ #filterBar {
+   /* border: solid 2px black; */
+   margin-top: 15px;
+ }
+ 
+ table {
+   margin-top: 15px;
+   font-size: 17px;
+ }
