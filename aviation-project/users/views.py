@@ -455,6 +455,15 @@ def applyjob(request , job_id):
             return redirect('userProfile-home')
         job = Jobform.objects.filter(id=job_id).first()
         company = CompanyProfile.objects.filter(id=job.company.id).first()
+        tz_NY = pytz.timezone('America/New_York') 
+        datetime_NY = datetime.now(tz_NY)
+        send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have successfully applied to ' + str(job.title) + ' at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
         files = []
         if len(x) > 0:
             if len(x) > 1:
