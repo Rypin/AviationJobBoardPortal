@@ -143,7 +143,7 @@ WSGI_APPLICATION = 'aviation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ajb_sprint3',
+        'NAME': 'fall2020sprint3',
         'USER': 'postgres',
         'PASSWORD': '123miles', #Put the password that you used for PostrgeSQL
         'HOST': 'localhost',
@@ -206,8 +206,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 # this is a gmail account I temporarily created for this project
-EMAIL_HOST_USER = 'aviationjobboard@gmail.com'
-EMAIL_HOST_PASSWORD = '' #I temporarily removed the password
+EMAIL_HOST_USER = 'donotreply.ajp@gmail.com'
+EMAIL_HOST_PASSWORD = 'VelocityPoints1!' #I temporarily removed the password
 
 
 SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '86598zr5xlzp1g'

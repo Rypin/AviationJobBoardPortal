@@ -4,6 +4,7 @@ from users.models import *
 from postjob.models import *
 from django.contrib.auth.models import User
 from .filters import *
+from django.core.mail import send_mail, EmailMessage
 # Create your views here.
 
 def applicationList(request):
@@ -36,6 +37,13 @@ def applicationList(request):
         app_id = request.POST.get('reject')
         app = Application.objects.get(id=app_id)
         app.status = 'RJ'
+        send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'Your job application for ' + str(app.job.title) + ' at ' + str(app.company.name) + ' has been updated to ' + 'Rejected'+ '. Please visit the Aviation Job Portal to find out more information about this status update, or if any of this information appears to be incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [User.objects.get(username=app.applicant.email)],
+                fail_silently=False,
+            )
         app.save()
         return redirect('candidate_applications_page')
     elif request.method == 'POST' and 'filters' in request.POST:
