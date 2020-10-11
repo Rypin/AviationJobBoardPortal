@@ -61,8 +61,7 @@ def applicationList(request):
             elif status_filter == 'Accepted':
                 status = 'AC'
             applications = applications.filter(status=status)
-        print(job_filter)
-        print(status_filter)
+
     elif request.method == 'POST' and 'notes' in request.POST:
         text = request.POST.get('noteText')
         app = Application.objects.get(id=request.POST.get('notes'))
@@ -72,7 +71,6 @@ def applicationList(request):
         job_filter = 'All Applications'
     if status_filter == 'on':
         status_filter = 'All'
-
     filterInfo = {
         "count": len(applications),
         "jobFilter": job_filter,
@@ -85,8 +83,6 @@ def applicationList(request):
         'files': getFiles(applications),
         'info': filterInfo
     }
-    print(job_filter)
-    print(status_filter)
     return render(request, "candidateApplications.html", context)
 def getFiles(applications):
     app_files = dict()
