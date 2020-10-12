@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
 
 <style>
 table {
@@ -63,6 +64,7 @@ tr:nth-child(even) {
 
 <button onclick="myFunction()" class="dropbtn">Sort By</button>
     <div id="myDropdown" class="dropdown-content">
+        <a href="?order_by=title">Title</a>
         <a href="?order_by=posted">Posted Date</a>
         <a href="?order_by=deadline">Most recent event</a>
     </div>
@@ -82,9 +84,10 @@ tr:nth-child(even) {
         <th>Day of Event</th>
     </tr>
     {% for event in events_listings%}
+
     <tr>
         <td>
-            <img style="width:128px;height:128px;" src="{{ event.image.url }}">
+            <img style="width:128px;height:128px;" src="{{ event.company.image.url }}">
         </td>
         <td>
             {{ event.title }}
@@ -100,6 +103,7 @@ tr:nth-child(even) {
         </td>
     </tr>
     {% endfor %}
+
 </table>
 
 {% endblock %}
