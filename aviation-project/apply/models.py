@@ -16,18 +16,15 @@ class Application(models.Model):
     )
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='SB')
     submission_date = models.DateField(default=date.today)
+    notes = models.TextField(default='')
     def __str__(self):
         return f'{self.applicant.Username}\'s Application for job ID:{self.job.id}'
 
-
-class ApplicationNotes(models.Model):
-    application = models.OneToOneField(Application, on_delete=models.CASCADE)
-    notes = models.TextField(null=True)
-    def __str__(self):
-        return f'Application_Status ID-{self.id} NOTES'
-
 ##SIGNAL FOR CREATING STATUS WITH EVERY APPLICATION##
-def create_status(sender, instance, created, **kwargs):
-    if created:
-        ApplicationNotes.objects.create(application = instance)
-signals.post_save.connect(create_status, sender=Application, weak=False, dispatch_uid='models.create_status')
+#def create_status(sender, instance, created, **kwargs):
+#    if created:
+#        ApplicationNotes.objects.create(application = instance)
+#signals.post_save.connect(create_status, sender=Application, weak=False, dispatch_uid='models.create_status')
+#not used anymore but keeping here for reference
+#ApplicationNotes had Application as a one to one field
+#this would create and link an ApplicationNotes as an application was created

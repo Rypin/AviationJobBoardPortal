@@ -434,7 +434,6 @@ def applyjob(request , job_id):
     if request.method == 'POST' and 'submit' in request.POST:
         x = (request.FILES).getlist('file')
         users = Users.objects.filter(Username=request.user.username).first()
-
         if users is None:
             return redirect('userProfile-home')
         job = Jobform.objects.filter(id=job_id).first()
