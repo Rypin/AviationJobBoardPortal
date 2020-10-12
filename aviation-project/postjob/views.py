@@ -27,7 +27,7 @@ def posting(request):
 
 
             #done_job = filled_form.save()
-            companyid = request.GET.get('company')
+            companyid = request.GET.get('company') #Till this day I don't know how I was able to make this line work it, request.user.id will work just as fine
             id = cp.objects.get(id=companyid)
             obj.company = id
             #done_job.save()

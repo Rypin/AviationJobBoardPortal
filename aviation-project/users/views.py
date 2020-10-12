@@ -1,4 +1,4 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -24,6 +24,7 @@ from django.http import HttpResponse , HttpResponseRedirect
 import psycopg2
 from django.core.mail import send_mail, EmailMessage
 from .filters import UsersFilter
+from events_app.models import EventListing
 
 
 # Create your views here.
@@ -204,20 +205,26 @@ def company_profile(request):
 
     company_profile = CompanyProfile.objects.get(user_id=request.user.id)
     jobs = Jobform.objects.filter(company=company_profile.id)
+    events = EventListing.objects.filter(company=company_profile.id)
 
     # if request.POST.get("delete_job"):
     #     jobs.object.filter(id=request.GET.get('id')).delete()
     #     return redirect('company_profile')
 
     delete_job = request.GET.get('d_job')
+    delete_event = request.GET.get('d_event')
+
     Jobform.objects.filter(id=delete_job).delete()
+    EventListing.objects.filter(id=delete_event).delete()
 
     context = {
         'u_form': u_form ,
         'cp_Update_form': cp_Update_form ,
         'company_profile': company_profile ,
         'jobs': jobs ,
+        'events': events,
         'delete_job': delete_job ,
+        'delete_event': delete_event,
     }
 
     return render(request , 'users/company_profile.html' , context)
