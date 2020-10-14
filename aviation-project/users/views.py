@@ -294,14 +294,14 @@ def ParseSkills(request , skills):
     return
 
 
-def getSkills(request):
+def getSkills(username):
     postgres_select_query = """SELECT skill_id FROM users_users_skills WHERE users_id = (%s)"""
     connection = psycopg2.connect(user=settings.DATABASES['default']['USER'] ,
                                   password=settings.DATABASES['default']['PASSWORD'] ,
                                   host=settings.DATABASES['default']['HOST'] ,
                                   port=settings.DATABASES['default']['PORT'] ,
                                   database=settings.DATABASES['default']['NAME'])
-    user = Users.objects.get(Username=request.user.username)
+    user = Users.objects.get(Username=username)
     skills = []
     try:
         cursor = connection.cursor()
@@ -380,7 +380,7 @@ def jobseeker_profile_view(request):
     users = Users.objects.filter(Username=request.user.username)
     works = workExperience.objects.filter(Username=request.user.username)
     educations = educationExperience.objects.filter(Username=request.user.username)
-    skills = getSkills(request)
+    skills = getSkills(request.user.username)
     if request.method == 'POST' and 'editProfile' in request.POST:
         fullname = request.POST['name']
         nickname = request.POST['nickname']
@@ -402,11 +402,11 @@ def jobseeker_profile_view(request):
     if request.method == 'POST' and 'deleteSkill' in request.POST:
         id = (Users.objects.get(Username=request.user.username)).id
         removeSkill(id , request.POST.get('deleteSkill'))
-        skills = getSkills(request)
+        skills = getSkills(request.user.username)
         redirect('userProfile-home')
     if request.method == 'POST' and 'submitSkill' in request.POST:
         ParseSkills(request , [request.POST['newSkill']])
-        skills = getSkills(request)
+        skills = getSkills(request.user.username)
         redirect('userProfile-home')
     applications = Application.objects.filter(applicant=users.first()).all()
     # apptest =
@@ -415,7 +415,20 @@ def jobseeker_profile_view(request):
                   {'users': users , 'works': works , 'educations': educations , 'applications': applications ,
                    'skills': skills})
 
-
+def view_jobseeker_profile(request, user_id):
+    x = user_id
+    user = Users.objects.filter(id=x)
+    username = user.first().Username
+    skills = getSkills(username)
+    works = workExperience.objects.filter(Username=username)
+    educations = educationExperience.objects.filter(Username=username)
+    context={
+        'users':user,
+        'works':works,
+        'educations':educations,
+        'skills':skills
+    }
+    return render(request, 'userProfile/profileViewer.html', context)
 def trysearch(request):
     jobs = Jobform.objects.all()
     if request.method == 'POST' and 'apply' in request.POST:

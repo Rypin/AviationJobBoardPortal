@@ -61,6 +61,8 @@ urlpatterns = [
     path('postEvent/', events_app_views.addEvent, name='postEvent'),
     path('editJob/<int:pk>', postjob_views.editJob, name='editJob'),
     path('sendEmailToJobseeker/<int:pk>', user_views.sendEmailToJobseeker, name='sendEmailToJobseeker'),
+    path('viewUser/<int:user_id>', user_views.view_jobseeker_profile, name='viewJobseeker'),
+
     # JOB SEARCH PATHS
     # path('postjob/', postjob_view, name='posting'),
     path('jobsearch/', postjob_views.jobsearch, name='jobsearch'),
