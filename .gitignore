@@ -6,6 +6,7 @@
 #aviation-project/events_app/migrations/
 #aviation-project/users/migrations/
 
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
