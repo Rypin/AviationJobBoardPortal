@@ -1,89 +1,71 @@
 {% extends "cand_apps_base.html" %}
 {% block content %}
-
 <div class="container-flex" id="mainContainer">
     <div class="row">
        <div class="col-3 align-self-start" id="sideMenu">
-          <div id="test">
-             <h1 id="applicationCount">32</h1>
-             <h5 id="applicationType">All Applications</h5>
+
+             <h1 id="applicationCount">{{info.count}}</h1>
+             <h5 id="applicationType">{{info.jobFilter}}</h5>
+             <form method="POST">
              <div id="jobPostMenuHeader">
-                <span id="jobPostMenuLabel">Job Postings</span>
-                <button id="jobPostMenuButton" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> Button with data-target </button>
+                <span id="jobPostMenuLabel">Filter by Job:</span>
+                <button id="jobPostMenuButton" class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> Show </button>
              </div>
              <div class="collapse" id="collapseExample">
                 <div class="card card-body" id="cardBody">
                    <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
                       <label class="btn btn-secondary active">
-                      <input type="radio" name="options" id="option1" checked> Job Post (#1) 
+                      <input type="radio" name="job_filter" id="0" checked> All Jobs
                       </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option2"> Job Post (#2) 
+                      {% for job in jobs %}
+                      <label class ="btn btn-secondary">
+                         <input type="radio" name="job_filter" id="{{job.id}}" value="{{job.id}}">{{job.title}}
                       </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option3"> Job Post (#3) 
-                      </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option4"> Job Post (#4) 
-                      </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option5"> Job Post (#5) 
-                      </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option6"> Job Post (#6) 
-                      </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option3"> Job Post (#7) 
-                      </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option3"> Job Post (#8) 
-                      </label>
+                      {% endfor %}
                    </div>
                 </div>
              </div>
              <div id="jobPostMenuHeader">
-                <span id="jobPostMenuLabel">Job Postings</span>
-                <button id="jobPostMenuButton" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample"> Button with data-target </button>
+                <span id="jobPostMenuLabel">Filter by Status:</span>
+                <button id="jobPostMenuButton" class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample"> Show </button>
              </div>
              <div class="collapse" id="collapseExample2">
                 <div class="card card-body" id="cardBody">
                    <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
                       <label class="btn btn-secondary active">
-                      <input type="radio" name="options" id="option1" checked> All Applications 
+                      <input type="radio" name="status_filter" id="0" checked> All Applications
                       </label>
+                      {% for status,values in app_count.items %}
                       <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option2"> Unread 
+                      <input type="radio" name="status_filter" id="{{status}}" value ="{{status}}"> {{status}} - {{values}}
                       </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option3"> Rejected 
-                      </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option4"> Reviewed 
-                      </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option5"> Selected 
-                      </label>
-                      <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option6"> Hired 
-                      </label>
+                      {% endfor %}
                    </div>
                 </div>
              </div>
-          </div>
+             {% csrf_token %}
+                <br>
+             <button class="btn btn-success float-right" name="filters" type="submit">submit</button>
+              </form>
        </div>
        <div class="col" id="applicationListBox">
           <h3>
           Applications
           <h3>
+          <form method = get>
+
           <div id="filterBar">
-             <input class="form-control" id="myInput" type="text" placeholder="Search..">
+              <form METHOD="POST">
+                  {%csrf_token%}
+                    <input class="form-control" id="myInput" type="text" name="Name" placeholder="Search by name...">
+              </form>
           </div>
+          </form>
           <table class="table table-striped">
              <thead class="thead-dark">
                 <tr>
-                   <th scope="col">ID</th>
-                   <th scope="col">First Name</th>
-                   <th scope="col">Last Name</th>
+                   <th scope="col">Job</th>
+                   <th scope="col">Name</th>
                    <th scope="col">Status</th>
                    <th scope="col">Date Submitted</th>
                    <th scope="col">Attachments</th>
@@ -91,90 +73,120 @@
                 </tr>
              </thead>
              <tbody id="myTable">
+               {% for app in applications %}
                 <tr>
-                   <th scope="row">1</th>
-                   <td>Mark</td>
-                   <td>Otto</td>
-                   <td>Unread</td>
-                   <td>8/19/20</td>
+                    <form id="appForm{{app.id}}" method="POST">
+                        {%csrf_token%}
+                   <th scope="row">{{app.job.title}}</th>
+                   <td class="appName">{{app.applicant.name}}</td>
                    <td>
-                      <button type="button" class="btn btn-secondary">Docs</button>
+                      {% if app.status == 'SB' %}
+                           Unread
+                      {% elif app.status == 'PR'%}
+                           Under Review
+                      {% elif app.status == 'AC'%}
+                           Accepted
+                      {% elif app.status == 'RJ'%}
+                           Rejected
+                      {% endif %}
+                   </td>
+                   <td>{{app.submission_date}}</td>
+                   <td>
+                      <button type="button" data-toggle="modal" data-target="#files{{app.id}}"  class="btn btn-secondary">Docs</button>
                       <button type="button" class="btn btn-secondary">Profile</button>
+                       <button type="button" onclick="" class="btn btn-secondary" data-toggle="modal" data-target="#notePanel{{app.id}}" name = "notes" value = "{{app.id}}">Notes</button>
                    </td>
                    <td>
-                      <button type="button" class="btn btn-secondary">Reject</button>
-                      <button type="button" class="btn btn-secondary">Select</button>
-                      <button type="button" class="btn btn-secondary">Hire</button>
+
+                       <button type="submit" id="review{{app.id}}" onclick="return confirmSelection('review{{app.id}}')" class="btn btn-primary" name = "review" value = "{{app.id}}">Mark for Review</button>
+                       <button type="submit" class="btn btn-success" id="hire{{app.id}}" onclick="return confirmSelection('hire{{app.id}}')" name = "hire" value = "{{app.id}}">Hire</button>
+                       <button type="submit" class="btn btn-danger" id="reject{{app.id}}" onclick="return confirmSelection('reject{{app.id}}')" name = "reject" value = "{{app.id}}">Reject</button>
                    </td>
+                    </form>
+                    <div class="modal fade" id="notePanel{{app.id}}" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Notes for {{app.applicant.name}}'s {{app.job.title}} application:</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method ="POST">
+                                        <div class="modal-body">
+                                              <div class="form-group">
+                                                  <textarea class="form-control" rows="8" name="noteText">{% if app.notes != 'None' %}{{app.notes}}{% endif %}</textarea>
+                                              </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" id="noteButton{{app.id}}" onclick="return confirmSelection('noteButton{{app.id}}')" name="notes" class="btn btn-primary" value="{{app.id}}">Save changes</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                        {% csrf_token %}
+                                    </form>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal fade" id="files{{app.id}}" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Files for {{app.applicant.name}}'s {{app.job.title}} application:</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% for status,values in files.items %}
+                                            {% if status == app.id %}
+                                                {% for file in values %}
+                                                    {% for name,path in file.items %}
+                                                        <a href="{{path}}" download>
+                                                            <p>{{name}}</p>
+                                                        </a>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
                 </tr>
-                <tr>
-                   <th scope="row">2</th>
-                   <td>Jacob</td>
-                   <td>Thornton</td>
-                   <td>Unread</td>
-                   <td>8/20/20</td>
-                   <td>
-                      <button type="button" class="btn btn-secondary">Docs</button>
-                      <button type="button" class="btn btn-secondary">Profile</button>
-                   </td>
-                   <td>
-                      <button type="button" class="btn btn-secondary">Reject</button>
-                      <button type="button" class="btn btn-secondary">Select</button>
-                      <button type="button" class="btn btn-secondary">Hire</button>
-                   </td>
-                </tr>
-                <tr>
-                   <th scope="row">3</th>
-                   <td>Larry</td>
-                   <td>Milton</td>
-                   <td>Rejected</td>
-                   <td>7/21/20</td>
-                   <td>
-                      <button type="button" class="btn btn-secondary">Docs</button>
-                      <button type="button" class="btn btn-secondary">Profile</button>
-                   </td>
-                   <td>
-                      <button type="button" class="btn btn-secondary">Reject</button>
-                      <button type="button" class="btn btn-secondary">Select</button>
-                      <button type="button" class="btn btn-secondary">Hire</button>
-                   </td>
-                </tr>
-                <tr>
-                   <th scope="row">3</th>
-                   <td>Jerry</td>
-                   <td>Prichard</td>
-                   <td>Selected</td>
-                   <td>8/24/20</td>
-                   <td>
-                      <button type="button" class="btn btn-secondary">Docs</button>
-                      <button type="button" class="btn btn-secondary">Profile</button>
-                   </td>
-                   <td>
-                      <button type="button" class="btn btn-secondary">Reject</button>
-                      <button type="button" class="btn btn-secondary">Select</button>
-                      <button type="button" class="btn btn-secondary">Hire</button>
-                   </td>
-                </tr>
-                <tr>
-                   <th scope="row">3</th>
-                   <td>Sam</td>
-                   <td>Dodger</td>
-                   <td>Rejected</td>
-                   <td>8/21/20</td>
-                   <td>
-                      <button type="button" class="btn btn-secondary">Docs</button>
-                      <button type="button" class="btn btn-secondary">Profile</button>
-                   </td>
-                   <td>
-                      <button type="button" class="btn btn-secondary">Reject</button>
-                      <button type="button" class="btn btn-secondary">Select</button>
-                      <button type="button" class="btn btn-secondary">Hire</button>
-                   </td>
-                </tr>
+               {% endfor %}
              </tbody>
           </table>
        </div>
     </div>
  </div>
-
+<script>
+    function confirmSelection(id){
+        var x = document.getElementById(id).name;
+        var text = "";
+        if(x == "review"){
+            text = "Are you sure you'd like to mark this application for review? Doing so will notify the applicant.";
+        }
+        else if(x == "hire"){
+            text = "Are you sure you'd like to mark this application as accepted? Doing so will notify the applicant.";
+        }
+        else if(x == "reject"){
+            text = "Are you sure you'd like to reject application? Doing so will notify the applicant.";
+        }
+        else{
+            text = "Confirm changes to notes?"
+        }
+        if(confirm(text)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    function getNotes(appid){
+    }
+</script>
  {% endblock content %}
