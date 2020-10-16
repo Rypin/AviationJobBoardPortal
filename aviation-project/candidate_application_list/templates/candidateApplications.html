@@ -93,6 +93,7 @@
                    <td>{{app.submission_date}}</td>
                    <td>
                       <button type="button" data-toggle="modal" data-target="#files{{app.id}}"  class="btn btn-secondary">Docs</button>
+                       <a href="{% url 'viewJobseeker' user_id=app.applicant.id %}" type="button"  class="btn btn-secondary">Profile</a>
                       <button type="button" onclick="" class="btn btn-secondary" data-toggle="modal" data-target="#notePanel{{app.id}}" name = "notes" value = "{{app.id}}">Notes</button>
                    </td>
                    <td>

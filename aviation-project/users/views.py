@@ -16,12 +16,13 @@ from postjob.models import Jobform
 from apply.models import *
 from django.shortcuts import get_object_or_404
 import datetime
+from datetime import datetime
 from .decorators import unauthenticated_user , allowed_users
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate , login
 from postjob.models import Jobform , Jobtype
 from django.http import HttpResponse , HttpResponseRedirect
-import psycopg2
+import psycopg2,pytz
 from django.core.mail import send_mail, EmailMessage
 from .filters import UsersFilter
 from events_app.models import EventListing
@@ -355,6 +356,7 @@ def review(request):
                                                                'parsed_skills': request.session.get('parsed_skills')})
     if request.method == 'POST' and 'save' in request.POST:
         ParseSkills(request , request.session['parsed_skills'])
+        
         return redirect('userProfile-home')
     elif request.method == 'POST' and 'delete' in request.POST:
         skills = request.session.get('parsed_skills')
@@ -515,6 +517,26 @@ def viewApplications(request):
         return redirect('company_applications')
     return render(request , 'viewApplications.html' , context)
 
+def uploadProfilePic_view(request):
+    users = Users.objects.filter(Username=request.user.username)
+    if request.method == 'GET':
+        return render(request, 'users/uploadProfilePic.html')
+    if request.method == 'POST' and 'upload' in request.POST:
+            profilePic = request.FILES['image']
+            thisuser = Users.objects.get(Username=request.user.username)
+            thisuser.image = profilePic
+            thisuser.save()
+            tz_NY = pytz.timezone('America/New_York')
+            datetime_NY = datetime.now(tz_NY)
+            #send_mail(
+            #    'You have received a notification from Aviation Job Portal',
+            #    'You have successfully updated your profile picture in your Aviation Job Portal Profile at '+datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+            #    'DoNotReply.AJP@gmail.com',
+            #    [request.user.email],
+            #    fail_silently=False,
+            #)
+            return redirect('userProfile-home')
+    return render(request, 'userProfile/profile2.html')
 
 ######################################################################################################################################################################################
 ######################################################################################################################################################################################
