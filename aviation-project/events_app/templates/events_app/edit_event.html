@@ -2,20 +2,19 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<div class = "col-md-8">
-<div class="content-section">
+{% if user.is_authenticated %}
+{% if request.user.groups.all.0.name == "company_owner" %}
+
+<h1 >Edit Event Post</h1>
     <form method="POST">
-        {% csrf_token %}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Edit Event</legend>
-            {{ eu_form|crispy }}
-        </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Done</button>
-        </div>
+    {% csrf_token %}
+    {{ eu_form|crispy }}
+    <button type="submit" class="btn btn-success btn-lg float-right ">Submit</button>
     </form>
-</div>
-</div>
 
 
-{% endblock content %}
+
+
+{% endif %}
+{% endif %}
+{% endblock %}

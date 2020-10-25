@@ -58,12 +58,14 @@ def editEvent(request, pk):
     u_event = EventListing.objects.get(id=pk)
     eu_form = UpdateEventForm(instance=u_event)
     if request.method == 'POST':
+        u_event = EventListing.objects.get(id=pk)
         eu_form = UpdateEventForm(request.POST, request.FILES, instance=u_event)
         if eu_form.is_valid():
             eu_form.save()
             messages.success(request, f'Event Edited')
             return redirect('company_profile')
     else:
+        u_event = EventListing.objects.get(id=pk)
         eu_form = UpdateEventForm(instance=u_event)
 
     context = {

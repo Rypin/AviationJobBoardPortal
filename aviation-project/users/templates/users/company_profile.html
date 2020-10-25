@@ -162,10 +162,11 @@
                                         margin-top:40px; float:right;  border-style: none; border-radius: 0.2rem; background-color: #ff6d00; color: white;" class="btn btn-primary" name="delete_event" value="deletes_event"
                                         ">Delete</a>
 
-                                <form action="{% url 'editEvent' event.pk %}">
-                                    <button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary" name="{{event.id}}" value="{{event.id}}">
-                                        <a><b>Edit</b></a>
+                                 <form action="{% url 'editEvent' event.pk %}">
+                                    <button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary" name="{{ event.pk }}" value="{{ event.pk }}">
+                                        <a><b>Edit {{event.pk}}</b></a>
                                     </button>
+                                 </form>
                                 </div>
 
                             </div>
