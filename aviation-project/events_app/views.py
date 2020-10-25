@@ -3,7 +3,7 @@ from django.contrib import messages
 from .models import EventListing
 from datetime import datetime, timedelta, timezone
 from django.db.models.functions import Lower
-from .forms import EventForm
+from .forms import EventForm, UpdateEventForm
 from users.models import CompanyProfile as cp
 
 # Create your views here.
@@ -53,3 +53,21 @@ def addEvent(request):
     }
 
     return render(request, 'events_app/post_event.html', context)
+
+def editEvent(request, pk):
+    u_event = EventListing.objects.get(id=pk)
+    eu_form = UpdateEventForm(instance=u_event)
+    if request.method == 'POST':
+        eu_form = UpdateEventForm(request.POST, request.FILES, instance=u_event)
+        if eu_form.is_valid():
+            eu_form.save()
+            messages.success(request, f'Event Edited')
+            return redirect('company_profile')
+    else:
+        eu_form = UpdateEventForm(instance=u_event)
+
+    context = {
+        'eu_form': eu_form
+    }
+
+    return render(request, 'events_app/edit_event.html', context)

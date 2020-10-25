@@ -12,3 +12,10 @@ class EventForm(forms.ModelForm):
         fields = "__all__"
         exclude = ['company', 'now']
 
+class UpdateEventForm(forms.ModelForm):
+
+    class Meta:
+        model = EventListing
+        fields = "__all__"
+        exclude = ['company', 'now']
+
