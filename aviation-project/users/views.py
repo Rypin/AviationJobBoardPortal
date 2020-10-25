@@ -97,8 +97,12 @@ def register(request):
             user.groups.add(group)
 
             user.save()
-            messages.success(request , f'Account Successfully Created! You May Now Log In')
-            return redirect('login')
+            messages.success(request , f'Account Successfully Created! You May Now Create Your Profile')
+            user = authenticate(username=form.cleaned_data['username'] ,
+                                password=form.cleaned_data['password1'] ,
+                                )
+            login(request , user)
+            return redirect('review')
     else:
         form = UserRegisterForm()
     return render(request , 'users/register.html' , {'form': form})
@@ -246,6 +250,7 @@ def resume(request):
             request.session['parsed_email'] = parsed_info.pop('email')
             request.session['parsed_number'] = parsed_info.pop('mobile_number')
             request.session['parsed_skills'] = parsed_info.pop('skills')
+            request.session['parsed_status'] = True
             os.remove(path)
             return redirect('review')
         else:
@@ -350,26 +355,82 @@ def removeSkill(users_id , skill):
 
 def review(request):
     if request.method == 'GET':
-        return render(request , 'users/review.html' , context={'name': request.session.get('parsed_name') ,
-                                                               'email': request.session.get('parsed_email') ,
-                                                               'mobile_number': request.session.get('parsed_number') ,
-                                                               'parsed_skills': request.session.get('parsed_skills')})
-    if request.method == 'POST' and 'save' in request.POST:
-        ParseSkills(request , request.session['parsed_skills'])
-        
-        return redirect('userProfile-home')
-    elif request.method == 'POST' and 'delete' in request.POST:
-        skills = request.session.get('parsed_skills')
-        print(skills)
-        remove_skill = request.POST.get('delete')
-        skills.remove(remove_skill)
-        request.session['parsed_skills'] = skills
-        return redirect('review')
-    return render(request , 'users/review.html' , context={'name': request.session.get('parsed_name') ,
-                                                           'email': request.session.get('parsed_email') ,
-                                                           'mobile_number': request.session.get('parsed_number') ,
-                                                           'parsed_skills': request.session.get('parsed_skills')})
-
+        using_resume = request.GET.get('using_resume')
+        if 'parsed_status' in request.session:
+            using_resume = True
+        else:
+            using_resume = False
+        if 'parsed_skills' in request.session:
+            context = {'name': request.session.get('parsed_name') ,
+                       'email': request.session.get('parsed_email') ,
+                       'mobile_number': request.session.get('parsed_number') ,
+                       'parsed_skills': request.session.get('parsed_skills'),
+                        'nickname': request.session.get('parsed_nickName'),
+                        'address': request.session.get('parsed_address'),
+                        'using_resume': using_resume}
+        else:
+            context = {
+                'name': "",
+                'email': "",
+                'mobile_number': "",
+                'parsed_skills': [],
+                'nickname':"",
+                'address': "",
+                'using_resume': using_resume
+            }
+        return render(request , 'users/review.html' , context)
+    if request.method == 'POST':
+        request.session['parsed_name'] = request.POST.get('name')
+        request.session['parsed_email'] = request.POST.get('email')
+        request.session['parsed_number'] = request.POST.get('phone')
+        request.session['parsed_nickName'] = request.POST.get('nickname')
+        request.session['parsed_address'] = request.POST.get('address')
+        request.session['parsed_status'] = True
+        if 'save' in request.POST:
+            ParseSkills(request , request.session['parsed_skills'])
+            user = Users.objects.filter(Username=request.user.username)
+            if not user.exists():
+                user = Users(Username=request.user.username, Email=request.user.email)
+                user.save()
+                user = Users.objects.filter(Username=request.user.username)
+            user.update(
+                name=request.session.get('parsed_name'), nickName=request.session.get('parsed_nickName'),
+                Email=request.session.get('parsed_email') , phoneNumber=request.session.get('parsed_number') ,
+                address=request.session.get('parsed_address')
+            )
+            if 'parsed_skills' in request.session:
+                del request.session['parsed_name']
+                del request.session['parsed_email']
+                del request.session['parsed_number']
+                del request.session['parsed_nickName']
+                del request.session['parsed_address']
+                del request.session['parsed_status']
+                del request.session['parsed_skills']
+            #Flush parsed data
+            return redirect('userProfile-home')
+        elif 'add' in request.POST:
+            if 'parsed_skills' in request.session:
+                skills = request.session.get('parsed_skills')
+            else:
+                skills = []
+            add_skill = request.POST.get('addSkill')
+            if add_skill != '':
+                skills.append(add_skill)
+            request.session['parsed_skills'] = skills
+            print(request.session['parsed_skills'])
+            return redirect('review')
+        elif 'delete' in request.POST:
+            skills = request.session.get('parsed_skills')
+            remove_skill = request.POST.get('delete')
+            skills.remove(remove_skill)
+            request.session['parsed_skills'] = skills
+            return redirect('review')
+    return render(request , 'users/review.html' , context = {'name': request.session.get('parsed_name') ,
+                       'email': request.session.get('parsed_email') ,
+                       'mobile_number': request.session.get('parsed_number') ,
+                       'parsed_skills': request.session.get('parsed_skills'),
+                        'nickname': request.session.get('parsed_nickName'),
+                        'address': request.session.get('parsed_address')})
 
 @login_required()
 @allowed_users(allowed_roles=['jobseeker'])
