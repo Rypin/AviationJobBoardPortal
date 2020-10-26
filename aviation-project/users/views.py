@@ -102,6 +102,8 @@ def register(request):
                                 password=form.cleaned_data['password1'] ,
                                 )
             login(request , user)
+            user = Users(Username=username , Email=email)
+            user.save()
             return redirect('review')
     else:
         form = UserRegisterForm()
