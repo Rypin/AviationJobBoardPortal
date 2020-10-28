@@ -5,6 +5,7 @@ from postjob.models import Jobform, Jobtype
 from datetime import timedelta, date, datetime
 import math
 from users.models import CompanyProfile as cp
+from events_app.models import *
 # Create your views here.
 
 def posting(request):
@@ -183,10 +184,15 @@ def searchpage(request, *args, **kwargs):
 def userviewcompany(request, company_id):
     try:
         company = cp.objects.get(id=company_id)
+        events = EventListing.objects.filter(company=company_id)
+        jobs = Jobform.objects.filter(company=company_id)
+        print(company)
+        print(events)
+        print(jobs)
     except company.DoesNotExist:
         raise Http404('There are no Open jobs that match this search')
-    
-    return render(request, "userViewCompany.html", {'company': company})
+
+    return render(request, "userViewCompany.html", {'company': company, 'events': events, 'jobs': jobs})
 
 
 

@@ -214,6 +214,8 @@ def company_profile(request):
     jobs = Jobform.objects.filter(company=company_profile.id)
     events = EventListing.objects.filter(company=company_profile.id)
 
+    company_profile = CompanyProfile.objects.get(user_id=request.user.id)
+    print(company_profile.user.email)
     # if request.POST.get("delete_job"):
     #     jobs.object.filter(id=request.GET.get('id')).delete()
     #     return redirect('company_profile')
@@ -354,7 +356,8 @@ def removeSkill(users_id , skill):
             cursor.close()
             connection.close()
 
-
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
 def review(request):
     if request.method == 'GET':
         using_resume = request.GET.get('using_resume')
@@ -480,6 +483,8 @@ def jobseeker_profile_view(request):
                   {'users': users , 'works': works , 'educations': educations , 'applications': applications ,
                    'skills': skills})
 
+@login_required()
+@allowed_users(allowed_roles=['company_owner'])
 def view_jobseeker_profile(request, user_id):
     x = user_id
     user = Users.objects.filter(id=x)
@@ -657,11 +662,3 @@ def addEducationExperience(request):
 
 def about(request):
     return render(request , 'userProfile/profile2.html')
-
-#
-# def redirect(request):
-#     if(request.user.groups.filter(name= 'jobseeker').exists()):
-#         return HttpResponseRedirect('jobsearch')
-#     elif(request.user.groups.filter(name= 'company_owner').exists()):
-#         return HttpResponseRedirect('company_profile')
-#     return HttpResponseRedirect('home')
