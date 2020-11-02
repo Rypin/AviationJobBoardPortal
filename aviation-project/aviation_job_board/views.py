@@ -43,14 +43,14 @@ def base_view(request):
     return render(request, "base.html", context=context)
 
 def home_view(request):
-    if (request.user.groups.filter(name='jobseeker').exists()):
-        return redirect('search_page')
-    elif (request.user.groups.filter(name='company_owner').exists()):
-        return redirect('company_profile')
+    # if (request.user.groups.filter(name='jobseeker').exists()):
+    #     return redirect('search_page')
+    # elif (request.user.groups.filter(name='company_owner').exists()):
+    #     return redirect('company_profile') 
 
     jobtypes = Jobtype.objects.all()
     form = PostingForm()
-    return render(request, "index.html", {'jobtypes':jobtypes, 'PostingForm':form})
+    return render(request, "index.html", {'jobtypes':jobtypes, 'PostingForm':form,})
 
     context = {
         'jobtypes' : jobtypes,
