@@ -14,10 +14,23 @@ def events_view(request):
     order_by = request.GET.get('order_by')
     ordering = order_by
 
-    if order_by == None:
-        ordering = 'posted'
+    # if order_by == None:
+    #     ordering = 'posted'
 
-    events_listings = EventListing.objects.all().filter(deadline__gte=now).order_by(ordering) #change to ordering maybe
+    ob = 'title'
+    if request.GET.get('order_by') is None:
+        if 'order_by' in request.session:
+            if request.session.get('order_by') is not None:
+                ob = request.session.get('order_by')
+            else:
+                request.session['order_by'] = 'title'
+    else:
+        request.session['order_by'] = order_by
+        ob = request.session.get('order_by')
+
+
+
+    events_listings = EventListing.objects.all().filter(deadline__gte=now).order_by(ob) #change to ordering maybe
 
     eventsPerPage = request.GET.get('eventsPerPage')
 
