@@ -1,3 +1,12 @@
+#Django Migrations
+#taken out while we consider our options
+#aviation-project/apply/migrations/
+#aviation-project/candidate_application_list/migrations/
+#aviation-project/postjob/migrations/
+#aviation-project/events_app/migrations/
+#aviation-project/users/migrations/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

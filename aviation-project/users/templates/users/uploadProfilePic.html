@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+	<form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Upload New Profile Picture Below</legend>
+            <input type = "file" name = "image">
+			<button class= "btn btn-secondary" type="submit" name ="upload">Upload</button>
+        </fieldset>
+
+{% endblock content %}
