@@ -4,7 +4,7 @@ from django.contrib import messages
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from postjob.models import Jobtype, Jobform
+from postjob.models import Jobtype, Jobform, Category
 from postjob.forms import PostingForm
 from users.decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import Group

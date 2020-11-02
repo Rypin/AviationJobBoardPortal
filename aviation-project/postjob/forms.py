@@ -16,11 +16,12 @@ class DateTimeInput(forms.DateTimeInput):
 class PostingForm(forms.ModelForm):
     class Meta:
         model = Jobform
-        fields = ['title', 'description', 'jobtype', 'postdate', 'deadlinedate', 'posttime', 'deadlinetime', 'address',
+        fields = ['title', 'description', 'category', 'jobtype', 'postdate', 'deadlinedate', 'posttime', 'deadlinetime', 'address',
                   'geolocation', 'salary_min', 'salary_max']
         labels = {
             'title': 'Title',
             'decription': 'Description',
+            'category': 'Category',
             'jobtype': 'Job Type',
             'postdate': 'Post Date',
             'deadlinedate': 'Deadline Date',

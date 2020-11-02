@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from django.db.models.functions import Lower
 from .forms import EventForm
 from users.models import CompanyProfile as cp
-
+from postjob.models import *
 # Create your views here.
 def events_view(request):
     now = datetime.now(timezone.utc)

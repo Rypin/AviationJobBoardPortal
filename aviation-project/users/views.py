@@ -20,7 +20,7 @@ from datetime import datetime
 from .decorators import unauthenticated_user , allowed_users
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate , login
-from postjob.models import Jobform , Jobtype
+from postjob.models import Jobform , Jobtype, Category
 from django.http import HttpResponse , HttpResponseRedirect
 import psycopg2,pytz
 from django.core.mail import send_mail, EmailMessage
@@ -222,7 +222,10 @@ def company_profile(request):
 
     delete_job = request.GET.get('d_job')
     delete_event = request.GET.get('d_event')
-
+    if delete_job is not None:
+        job = Jobform.objects.filter(id=delete_job).first()
+        count = job.category.count - 1
+        Category.objects.filter(name=job.category.name).update(count=count)
     Jobform.objects.filter(id=delete_job).delete()
     EventListing.objects.filter(id=delete_event).delete()
 
