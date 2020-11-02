@@ -5,6 +5,8 @@ from datetime import datetime, timedelta, timezone
 from django.db.models.functions import Lower
 from .forms import EventForm, UpdateEventForm
 from users.models import CompanyProfile as cp
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.sessions import  *
 
 # Create your views here.
 def events_view(request):
@@ -17,12 +19,49 @@ def events_view(request):
 
     events_listings = EventListing.objects.all().filter(deadline__gte=now).order_by(ordering) #change to ordering maybe
 
+    eventsPerPage = request.GET.get('eventsPerPage')
+
+
+    if eventsPerPage == '1':
+        request.session['eventsPerPage'] = 1
+    if eventsPerPage == '2':
+        request.session['eventsPerPage'] = 2
+
+
+    epp = 10
+
+    if request.GET.get('eventsPerPage') is None:
+        if 'eventsPerPage' in request.session:
+            if request.session.get('eventsPerPage') is not None:
+                epp = request.session.get('eventsPerPage')
+            else:
+                request.session['eventsPerPage'] = 10
+    else:
+        if eventsPerPage == '1':
+            request.session['eventsPerPage'] = 1
+        if eventsPerPage == '2':
+            request.session['eventsPerPage'] = 2
+        epp = request.session.get('eventsPerPage')
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(events_listings, epp) # num of how many events per page
+
+    try:
+        events = paginator.page(page)
+    except PageNotAnInteger:
+        events = paginator.page(1)
+    except EmptyPage:
+        events = paginator.page(paginator.num_pages)
+
 
     context = {
         'now' : now,
         'order_by' : order_by,
         'ordering' : ordering,
         'events_listings' : events_listings,
+        'eventsPerPage' : eventsPerPage,
+        'events' : events,
+        'epp' : epp
     }
 
     return render(request, "events_app/events.html", context=context)
