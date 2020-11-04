@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from django.db.models.functions import Lower
 from .forms import EventForm, UpdateEventForm
 from users.models import CompanyProfile as cp
+from postjob.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions import  *
 
