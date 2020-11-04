@@ -15,12 +15,19 @@ expandToggle.classList.toggle('show-nav')
 
 navBar.addEventListener('mouseenter', () => {
     expandToggle.classList.toggle('show-nav')
-    document.getElementById("animatable").className = "materialize"
+    x = document.getElementById("animatable")
+    x.className = "materialize"
+    x.style.display = "block" 
 });
 
 navBar.addEventListener('mouseleave', () => {
     expandToggle.classList.toggle('show-nav')
-    document.getElementById("animatable").className = "dissolve"
+    x = document.getElementById("animatable")
+    x.className = "dissolve" 
+    setTimeout(function(){
+        x.style.display = "none"
+        console.log("Fired2")
+    },750)
 });
 
 

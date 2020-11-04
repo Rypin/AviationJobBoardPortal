@@ -41,12 +41,12 @@
 		<div class="col-md-3 ">
 			<br>
 			<div class = "offset-2 col-3">
-				<img src= "https://assets.change.org/photos/7/jh/po/FWjhpOhFKhmZWEh-800x450-noPad.jpg?1527432034" border = "2" style = "border-radius:10%;" width = 120 height = 120/>
+				<img src= "{{user.image.url}}" border = "2" style = "border-radius:10%;" width = 120 height = 120/>
 				
 			</div>
 			<div class="offset-0 col-3">
 				<button type="button" class="btn btn-primary">
-					<a href="{% url 'resume' %}" style="text-decoration: none; color: white"><b>Update Profile Picture</b></a><br/>
+					<a href="{% url 'uploadProfilePic' %}" style="text-decoration: none; color: white"><b>Update Profile Picture</b></a><br/>
 				</button>
 			</div>
 
