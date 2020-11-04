@@ -4,7 +4,7 @@ from django.contrib import messages
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from postjob.models import Jobtype, Jobform
+from postjob.models import Jobtype, Jobform, Category
 from postjob.forms import PostingForm
 from users.decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import Group
@@ -46,17 +46,18 @@ def home_view(request):
     # if (request.user.groups.filter(name='jobseeker').exists()):
     #     return redirect('search_page')
     # elif (request.user.groups.filter(name='company_owner').exists()):
-    #     return redirect('company_profile') 
-
+    #     return redirect('company_profile')
+    categories = Category.objects.all().order_by('-count')
+    last_jobs = Jobform.objects.all().order_by('-id')[:4]
     jobtypes = Jobtype.objects.all()
     form = PostingForm()
-    return render(request, "index.html", {'jobtypes':jobtypes, 'PostingForm':form,})
-
     context = {
-        'jobtypes' : jobtypes,
+        'new_jobs': last_jobs,
+        'categories': categories,
+        'jobtypes': jobtypes,
+        'PostingForm': form,
     }
-
-    return render(request, "index.html", context=context)
+    return render(request, "index.html", context)
 
 def portal_view(request, *args, **kwargs):
     return render(request, "profilePortal.html", {})
