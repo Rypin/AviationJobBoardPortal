@@ -40,7 +40,7 @@ body {
     white-space: nowrap; }
     .expandToggle ul li a {
       margin-left: 20px; }
-  .expandToggle ul .linkItem:hover {
+  .expandToggle ul li:hover {
     background-color: #108EA2; }
   .expandToggle ul li a {
     color: #fff;
@@ -69,25 +69,5 @@ body {
   margin: 0 auto;
   max-width: 100%;
   width: 800px; }
-
-.materialize {
-  animation-name: matAnimation;
-  animation-duration: 0.75s;
-}
-
-@keyframes matAnimation {
-  from {opacity: 0%;}
-  to {opacity: 100%;}
-}
-
-.dissolve {
-  animation-name: dissAnimation;
-  animation-duration: 0.75s;
-}
-
-@keyframes dissAnimation {
-  from {opacity: 100%;}
-  to {opacity: 0%;}
-}
 
 /*# sourceMappingURL=nav.css.map */
