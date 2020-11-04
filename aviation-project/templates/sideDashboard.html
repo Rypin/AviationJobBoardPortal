@@ -1,4 +1,4 @@
-﻿{% load static %} 
+{% load static %}
 {% load sass_tags %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,21 +9,23 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 	
-	<title>Aviation Job Board</title>
+	<!-- Bootstrap Core CSS -->
+	<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
 	
-	<!-- Bootstrap core CSS -->
-	<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
-  <link href="{% sass_src 'front/scss/nav/nav.scss' %}" rel="stylesheet" type="text/css" /> </head>
-  
-  {% block other_css %}
-
-  {% endblock %}
+	<!-- Font-Awesome CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+	
+	<!-- Side-Dashboard SASS -->
+	<link href="{% sass_src '../static/front/scss/nav/nav.scss' %}" rel="stylesheet" type="text/css" />
+	
+	{% block other_css %}
+	
+	{% endblock %}
 </head>
 
 <body>
-  {% if user.is_authenticated %}
-  <!-- Side Dashboard -->
+
+	<!-- Side Dashboard -->
 	<div class="container-fluid" style="height: 100%">
 		<div id="toggleNavBar" class="sideNav">
 			<section class='expandToggle' style="z-index:1">
@@ -44,7 +46,7 @@
 					</li>
 					
 					<!-- Favorited Job Post Section -->
-					<li id="animatable" style="display: none">
+					<li id="animatable">
 						<hr>
 						<div style="margin-left: 5px; margin-right: 5px; margin-bottom: 4px"> 
 							<span style="margin-right: 1px;padding-left: 0px;font-weight: 500;">Favorited Job Posts</span>
@@ -82,51 +84,18 @@
 				</ul>
 			</section>
 		</div>
-  </div>
-  {% endif %}
-  
-  <!-- Navigation Bar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
-    <div class="container"> 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"> 
-                    <a class="nav-link" href="{% url 'home' %}">Home
-                        <span class="sr-only">(current)</span>
-                    </a> 
-                </li>
-                <li class="nav-item"> <a class="nav-link" href="{% url 'event_list' %}">Events</a> </li> 
-                {% if user.is_authenticated %}
-                    <li class="nav-item"> <a class="nav-link" href="{% url 'userProfile-home' %}">Profile</a> </li>
-                    <li class="nav-item"> <a class="nav-link" href="{% url 'user_search_page' %}">Search Users</a> </li>
-                    <li class="nav-item"> <a class="nav-link" href="{% url 'logout' %}">Logout</a> </li> 
-                {% else %}
-                    <li class="nav-item"> 
-                        <a class="nav-link" href="{% url 'login' %}" style="padding: .5rem 2rem; color: white; background-color: #1de9b6; border-radius: 2px; font-size: 18px; display: flex; justify-content: center; align-content: center; align-items: center">Login</a>
-                    </li>
-                    <li class="nav-item" style="margin-top: -1.1px"> 
-                        <a class="nav-link" href="{% url 'choose_register' %}" style="padding: 0.5rem 2rem; background-color: #ff6d00; color: white; font-size: 18px; border-radius: 2px; margin-left: 20px; ">Register</a> 
-                    </li> 
-                {% endif %} 
-            </ul>  
-        </div>
-    </div>
-  </nav>
-  
-
-	{% block content %} 
-	
-	{% endblock %} 
-	
-	<!-- Bootstrap core JavaScript -->
-	<script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
-	<script src='../static/front/js/nav.js' defer></script>
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  
-  {% block other_js %} 
-	
-	{% endblock %}
+		
+		<!-- Bootstrap core JavaScript -->
+		<script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
+		<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script> 
+		
+		<!-- Side-Dashboard Custom JavaScript -->
+		<script src='../static/front/js/nav.js' defer></script>
+		
+		{% block content %}
+		
+    {% endblock content %}
+  </div> 
 </body>
 
 </html>

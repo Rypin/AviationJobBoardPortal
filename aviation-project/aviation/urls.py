@@ -59,6 +59,7 @@ urlpatterns = [
     path('oauth/', include('social_django.urls', namespace='social')),
     path('postjob/', postjob_views.posting, name='posting'),
     path('postEvent/', events_app_views.addEvent, name='postEvent'),
+    path('editEvent/<int:pk>', events_app_views.editEvent, name='editEvent'),
     path('editJob/<int:pk>', postjob_views.editJob, name='editJob'),
     path('sendEmailToJobseeker/<int:pk>', user_views.sendEmailToJobseeker, name='sendEmailToJobseeker'),
     path('viewUser/<int:user_id>', user_views.view_jobseeker_profile, name='viewJobseeker'),

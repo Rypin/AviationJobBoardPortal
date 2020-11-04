@@ -3,19 +3,69 @@ from django.contrib import messages
 from .models import EventListing
 from datetime import datetime, timedelta, timezone
 from django.db.models.functions import Lower
-from .forms import EventForm
+from .forms import EventForm, UpdateEventForm
 from users.models import CompanyProfile as cp
 from postjob.models import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.sessions import  *
+
 # Create your views here.
 def events_view(request):
     now = datetime.now(timezone.utc)
     order_by = request.GET.get('order_by')
     ordering = order_by
 
-    if order_by == None:
-        ordering = 'posted'
+    # if order_by == None:
+    #     ordering = 'posted'
 
-    events_listings = EventListing.objects.all().filter(deadline__gte=now).order_by(ordering) #change to ordering maybe
+    ob = 'title'
+    if request.GET.get('order_by') is None:
+        if 'order_by' in request.session:
+            if request.session.get('order_by') is not None:
+                ob = request.session.get('order_by')
+            else:
+                request.session['order_by'] = 'title'
+    else:
+        request.session['order_by'] = order_by
+        ob = request.session.get('order_by')
+
+
+
+    events_listings = EventListing.objects.all().filter(deadline__gte=now).order_by(ob) #change to ordering maybe
+
+    eventsPerPage = request.GET.get('eventsPerPage')
+
+
+    if eventsPerPage == '1':
+        request.session['eventsPerPage'] = 1
+    if eventsPerPage == '2':
+        request.session['eventsPerPage'] = 2
+
+
+    epp = 10
+
+    if request.GET.get('eventsPerPage') is None:
+        if 'eventsPerPage' in request.session:
+            if request.session.get('eventsPerPage') is not None:
+                epp = request.session.get('eventsPerPage')
+            else:
+                request.session['eventsPerPage'] = 10
+    else:
+        if eventsPerPage == '1':
+            request.session['eventsPerPage'] = 1
+        if eventsPerPage == '2':
+            request.session['eventsPerPage'] = 2
+        epp = request.session.get('eventsPerPage')
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(events_listings, epp) # num of how many events per page
+
+    try:
+        events = paginator.page(page)
+    except PageNotAnInteger:
+        events = paginator.page(1)
+    except EmptyPage:
+        events = paginator.page(paginator.num_pages)
 
 
     context = {
@@ -23,6 +73,9 @@ def events_view(request):
         'order_by' : order_by,
         'ordering' : ordering,
         'events_listings' : events_listings,
+        'eventsPerPage' : eventsPerPage,
+        'events' : events,
+        'epp' : epp
     }
 
     return render(request, "events_app/events.html", context=context)
@@ -53,3 +106,23 @@ def addEvent(request):
     }
 
     return render(request, 'events_app/post_event.html', context)
+
+def editEvent(request, pk):
+    u_event = EventListing.objects.get(id=pk)
+    eu_form = UpdateEventForm(instance=u_event)
+    if request.method == 'POST':
+        u_event = EventListing.objects.get(id=pk)
+        eu_form = UpdateEventForm(request.POST, request.FILES, instance=u_event)
+        if eu_form.is_valid():
+            eu_form.save()
+            messages.success(request, f'Event Edited')
+            return redirect('company_profile')
+    else:
+        u_event = EventListing.objects.get(id=pk)
+        eu_form = UpdateEventForm(instance=u_event)
+
+    context = {
+        'eu_form': eu_form
+    }
+
+    return render(request, 'events_app/edit_event.html', context)
