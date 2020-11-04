@@ -143,7 +143,7 @@ WSGI_APPLICATION = 'aviation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ajb_sprint4',
+        'NAME': 'ajb_sprint3',
         'USER': 'postgres',
         'PASSWORD': '123miles', #Put the password that you used for PostrgeSQL
         'HOST': 'localhost',

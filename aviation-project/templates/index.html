@@ -152,17 +152,17 @@
       </div>
    </div>
 </div>
-{% comment %} <section class="industries">
-   <div class="industry">
-      <h5 class="home__name">positions</h5>
-      <h5 class="home__name">positions</h5>
-   </div>
-   <div class="industry">industry card </div>
-   <div class="industry">industry card</div>
-   <div class="industry">industry card</div>
-   <div class="industry">industry card</div>
-   <div class="industry">industry card</div>
-</section> {% endcomment %}
+<!--<section class="industries">-->
+<!--   <div class="industry">-->
+<!--      <h5 class="home__name">positions</h5>-->
+<!--      <h5 class="home__name">positions</h5>-->
+<!--   </div>-->
+<!--   <div class="industry">industry card </div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--</section>-->
 <section class="ftco-section">
     	<div class="container">
     		<div class="row justify-content-center mb-5 pb-3">
@@ -173,7 +173,7 @@
         </div>
         <div class="row">
                {% for category in categories %}
-           <div class="col-md-3 ftco-animate">
+           <div class="col-lg-3 ftco-animate">
         		<ul class="category">
         			<li><a href="#">{{category.name}}<br><span class="number">{{category.count}}</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
         		</ul>
@@ -236,7 +236,7 @@
                   <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
                      <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
                   </a>
-               <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a>
+               <a href="{% url 'applyjob' job.id%}" class="btn btn-primary py-2">Apply Job</a>
                </div>
             </div>
          </div>
