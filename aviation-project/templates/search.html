@@ -1,32 +1,26 @@
-{% extends "sideDashboard.html"%} 
+{% extends "base.html"%} 
 {% load static %} 
 
 {% block other_css %}
-    <!-- Custom Search Content CSS -->
-    <link href="{% static 'custom/css/custom.css' %}" rel="stylesheet">
-    
-    <!-- JQuery-UI CSS -->
-    <link rel="stylesheet" href="{% static 'vendor/jquery-ui/css/jquery-ui.css' %}"> 
+<!-- Custom Search Content CSS -->
+<link href="{% static 'custom/css/custom.css' %}" rel="stylesheet">
+
+<!-- JQuery-UI CSS -->
+<link rel="stylesheet" href="{% static 'vendor/jquery-ui/css/jquery-ui.css' %}"> 
 {% endblock %} 
 
 {% block content %} 
 {% csrf_token %}
 <form method="GET" action="{%url 'search_page'%}" novalidate>
     
-    <!-- Position & Location Input Fields -->
+	<!-- Position & Location Input Fields -->
 	<nav class="navbar navbar-light bg-white" style="margin-bottom: 40px; z-index:0">
 		<div class="form-inline mx-auto">
 			<div class="input-group" style="margin-right: 70px">
-				<div class="input-group-prepend"> 
-				    <span class="input-group-text" id="basic-addon1">Position</span> 
-				</div> 
-				{{PostingForm.title}} 
-			</div>
+				<div class="input-group-prepend"> <span class="input-group-text" id="basic-addon1">Position</span> </div> {{PostingForm.title}} </div>
 			<div class="input-group">
-				<div class="input-group-prepend"> 
-				    <span class="input-group-text" id="basic-addon1">Where</span> 
-				</div> 
-				    {{ PostingForm.address }}
+				<div class="input-group-prepend"> <span class="input-group-text" id="basic-addon1">Where</span> </div> 
+				    {{ PostingForm.address }} 
 				    {{ PostingForm.geolocation }} 
 				    {{ PostingForm.media.js }} 
 				</div>
@@ -41,113 +35,76 @@
 				<div class="row" style="margin-bottom: 5px; margin-top:50px">
 					<div class="col-md-12 " style="padding: 0">
 						<ul class="nav bg-white" style="padding: 5px; border-radius: 10px; margin-bottom:15px">
-						    
-						    <!-- Position Type Filter -->
+							<!-- Position Type Filter -->
 							<div class="dropdown">
 								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="dropDownMenuHeader menuHeader1">Job Type</div> 
-									<span class="dot dot1"></span> 
-								</button>
+									<div class="dropDownMenuHeader menuHeader1">Job Type</div> <span class="dot dot1"></span> </button>
 								<div class="dropdown-menu dropdown1" aria-labelledby="dropdownMenuButton">
 									<div>
-										<input class="jobTypeChk" id="fullTimeChk" type="checkbox" aria-label="Checkbox for following text input" name="Full-Time"> 
-										<a class="jobTypeChkLabel">Full-Time</a> 
-									</div>
+										<input class="jobTypeChk" id="fullTimeChk" type="checkbox" aria-label="Checkbox for following text input" name="Full-Time"> <a class="jobTypeChkLabel">Full-Time</a> </div>
 									<div id="secondOption">
-										<input class="jobTypeChk" id="partTimeChk" type="checkbox" aria-label="Checkbox for following text input" name="Part-Time"> 
-										<a class="jobTypeChkLabel">Part-Time</a> 
-									</div>
+										<input class="jobTypeChk" id="partTimeChk" type="checkbox" aria-label="Checkbox for following text input" name="Part-Time"> <a class="jobTypeChkLabel">Part-Time</a> </div>
 									<div class="otherOption">
-										<input class="jobTypeChk" id="internChk" type="checkbox" aria-label="Checkbox for following text input" name="Internship"> 
-										<a class="jobTypeChkLabel">Internship</a> 
-									</div>
+										<input class="jobTypeChk" id="internChk" type="checkbox" aria-label="Checkbox for following text input" name="Internship"> <a class="jobTypeChkLabel">Internship</a> </div>
 									<div class="otherOption">
-										<input class="jobTypeChk" id="contractChk" type="checkbox" aria-label="Checkbox for following text input" name="Contract"> 
-										<a class="jobTypeChkLabel">Contract</a> 
-									</div>
+										<input class="jobTypeChk" id="contractChk" type="checkbox" aria-label="Checkbox for following text input" name="Contract"> <a class="jobTypeChkLabel">Contract</a> </div>
 									<div>
-										<input class="jobTypeChk" id="tempChk" type="checkbox" aria-label="Checkbox for following text input" name="Temporary"> 
-										<a class="jobTypeChkLabel">Temporary</a> 
-									</div>
-									<input type="submit" value="Submit" onclick="saveFilters();" /> 
-								</div>
+										<input class="jobTypeChk" id="tempChk" type="checkbox" aria-label="Checkbox for following text input" name="Temporary"> <a class="jobTypeChkLabel">Temporary</a> </div>
+									<input type="submit" value="Submit" onclick="saveFilters();" /> </div>
 							</div>
 							
 							<!-- Distance Filter -->
 							<div class="dropdown">
 								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="dropDownMenuHeader menuHeader2">Distance</div> 
-									<span class="dot dot2"></span> 
-								</button>
+									<div class="dropDownMenuHeader menuHeader2">Distance</div> <span class="dot dot2"></span> </button>
 								<div class="dropdown-menu dropdown2" aria-labelledby="dropdownMenuButton">
 									<div>
-										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=5> <a class="jobTypeChkLabel">5 miles</a> 
-									</div>
+										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=5> <a class="jobTypeChkLabel">5 miles</a> </div>
 									<div>
-										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=1 0> <a class="jobTypeChkLabel">10 miles</a> 
-									</div>
+										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=1 0> <a class="jobTypeChkLabel">10 miles</a> </div>
 									<div>
-										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=1 5> <a class="jobTypeChkLabel">15 miles</a> 
-									</div>
+										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=1 5> <a class="jobTypeChkLabel">15 miles</a> </div>
 									<div>
-										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=2 0> <a class="jobTypeChkLabel">20 miles</a> 
-									</div>
+										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=2 0> <a class="jobTypeChkLabel">20 miles</a> </div>
 									<div>
-										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=2 5> <a class="jobTypeChkLabel">25 miles</a> 
-									</div>
+										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=2 5> <a class="jobTypeChkLabel">25 miles</a> </div>
 									<div>
-										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=5 0> <a class="jobTypeChkLabel">50 miles</a> 
-									</div>
+										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=5 0> <a class="jobTypeChkLabel">50 miles</a> </div>
 									<div>
-										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=1 00> <a class="jobTypeChkLabel">100 miles</a> 
-									</div>
-									<input type="submit" value="Submit"> 
-								</div>
+										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=1 00> <a class="jobTypeChkLabel">100 miles</a> </div>
+									<input type="submit" value="Submit"> </div>
 							</div>
 							
 							<!-- Date Filter -->
 							<div class="dropdown">
 								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="dropDownMenuHeader menuHeader3">Date Posted</div> 
-									<span class="dot dot3"></span> 
-								</button>
+									<div class="dropDownMenuHeader menuHeader3">Date Posted</div> <span class="dot dot3"></span> </button>
 								<div class="dropdown-menu dropdown3" aria-labelledby="dropdownMenuButton">
 									<div>
-										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" checked> <a class="jobTypeChkLabel">Any date</a> 
-									</div>
+										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" checked> <a class="jobTypeChkLabel">Any date</a> </div>
 									<div>
-										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=0> <a class="jobTypeChkLabel">Today</a> 
-									</div>
+										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=0> <a class="jobTypeChkLabel">Today</a> </div>
 									<div>
-										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=1> <a class="jobTypeChkLabel">Yesterday</a> 
-									</div>
+										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=1> <a class="jobTypeChkLabel">Yesterday</a> </div>
 									<div>
-										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=3> <a class="jobTypeChkLabel">Last 3 days</a> 
-									</div>
+										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=3> <a class="jobTypeChkLabel">Last 3 days</a> </div>
 									<div>
-										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=7> <a class="jobTypeChkLabel">Last 7 days</a> 
-									</div>
+										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=7> <a class="jobTypeChkLabel">Last 7 days</a> </div>
 									<div>
-										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=1 4> <a class="jobTypeChkLabel">Last 14 days</a> 
-									</div>
+										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=1 4> <a class="jobTypeChkLabel">Last 14 days</a> </div>
 									<div>
-										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=3 0> <a class="jobTypeChkLabel">Last 30 days</a> 
-									</div>
-									<input type="submit" value="Submit"> 
-								</div>
+										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" value=3 0> <a class="jobTypeChkLabel">Last 30 days</a> </div>
+									<input type="submit" value="Submit"> </div>
 							</div>
 							
 							<!-- Salary Filter -->
 							<div class="dropdown" style="margin-bottom: 5px">
 								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="dropDownMenuHeader menuHeader4">Salary Range</div> 
-									<span class="dot dot4"></span> 
-								</button>
+									<div class="dropDownMenuHeader menuHeader4">Salary Range</div> <span class="dot dot4"></span> </button>
 								<div class="dropdown-menu dropdown4" aria-labelledby="dropdownMenuButton">
 									<p>
 										<label for="amount">Price Range:</label>
-										<input type="text" id="amount" readonly> 
-									</p>
+										<input type="text" id="amount" readonly> </p>
 									<div id="slider-range"></div>
 								</div>
 							</div>
@@ -155,15 +112,12 @@
 							<!-- Other Filter -->
 							<div class="dropdown">
 								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="dropDownMenuHeader menuHeader5">Other Filters</div> 
-									<span class="dot dot5"></span> 
-								</button>
+									<div class="dropDownMenuHeader menuHeader5">Other Filters</div> <span class="dot dot5"></span> </button>
 								<div class="dropdown-menu dropdown5" aria-labelledby="dropdownMenuButton">
 									<div>
 										<input id="workAuthChk" type="checkbox" aria-label="Checkbox for following text input" name="work_auth">
 										<p id="workAuthChkLabel">Require U.S. Work Authorization</p>
-										<input type="submit" value="Submit"> 
-									</div>
+										<input type="submit" value="Submit"> </div>
 									<div class="dropdown-divider"></div>
 								</div>
 							</div>
@@ -176,15 +130,12 @@
 				<div class="row">
 					<div class="col-md-4  bg-white" style="border: 5px rgb(234, 234, 234) solid">
 					    
-					    <!-- Post Ordering Dropdown -->
+						<!-- Post Ordering Dropdown -->
 						<div class="row">
 							<div class="col-md-12" style="padding: 5px">
 								<div class="dropdown" style="">
 									<button class="btn btn-info dropdown-toggle menuHeader6" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Relevant </button>
-									<div class="dropdown-menu dropdown6" aria-labelledby="dropdownMenuButton"> 
-									    <a class="dropdown-item" href="#">Relevant</a> 
-									    <a class="dropdown-item" href="#">Recent</a> 
-									</div>
+									<div class="dropdown-menu dropdown6" aria-labelledby="dropdownMenuButton"> <a class="dropdown-item" href="#">Relevant</a> <a class="dropdown-item" href="#">Recent</a> </div>
 									<div style="display: inline; position: relative; right: -25px ">{{count}}</div>
 								</div>
 							</div>
@@ -195,18 +146,16 @@
 							<div class="col-md-12" style="padding:0px">
 								<div class="list-group card-group " style=""> 
 								    {% for result in results%}
-									<button type='submit' name='job' value={{result.id}} class="list-group-item list-group-item-action flex-column align-items-start">
-										<div class="d-flex w-100 justify-content-between">
-											<div class="d-flex">
-												<div class="my-auto"> <img src="https://cdn.iconscout.com/icon/free/png-256/codepen-15-896368.png" class="" alt="quixote" style="width: 70px; height: 70px; "> </div>
-												<div style="margin-left: 20px; padding-top: 10px">
-													<h6>{{result.company.name}}</h6>
-													<h4 style="font-weight: bold">{{result.title}}</h4>
-													<h6>{{result.address}}</h6> </div>
-											</div> 
-											<small>{{result.age}}</small> 
-										</div>
-									</button> 
+    									<button type='submit' name='job' value={{result.id}} class="list-group-item list-group-item-action flex-column align-items-start">
+    										<div class="d-flex w-100 justify-content-between">
+    											<div class="d-flex">
+    												<div class="my-auto"> <img src="https://cdn.iconscout.com/icon/free/png-256/codepen-15-896368.png" class="" alt="quixote" style="width: 70px; height: 70px; "> </div>
+    												<div style="margin-left: 20px; padding-top: 10px">
+    													<h6>{{result.company.name}}</h6>
+    													<h4 style="font-weight: bold">{{result.title}}</h4>
+    													<h6>{{result.address}}</h6> </div>
+    											</div> <small>{{result.age}}</small> </div>
+    									</button> 
 									{% endfor %} 
 								</div>
 							</div>
@@ -218,20 +167,17 @@
 						<div class="row">
 							<div class="col-md-12 " style="padding: 0"> <img class="mx-auto d-block img-fluid" alt="Bootstrap Image Preview" src="https://www.peigenesis.com/images/content/pei_tabs/markets/aviation/aviation-banner.jpg" /> </div>
 						</div>
-						<div class="row"> 
-						    {{ no_jobs }}
+						<div class="row"> {{ no_jobs }}
 							<div class="col-md-4">
 								<h3>{{job.company.name}}</h3>
-								<h5></h5>{{job.title}}</h5>
-								<h6>${{job.salary_min}} - ${{job.salary_max}}</h6> 
-							</div>
+								<h5>{{job.title}}</h5>
+								<h6>${{job.salary_min}} - ${{job.salary_max}}</h6> </div>
 							<div class="col-md-8 my-auto" align="center"> <a href="{% url 'applyjob' job.id%}" class="btn btn-info" style="margin: 10px">Apply Now</a>
 								<button type="button" class="btn btn-info" style="margin: 10px">Favorite</button> 
-								{% if jobexists %} 
-								    <a href="{%url 'userviewcompany' job.company.id%}" class="btn btn-info" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
-								    <br/> 
-								{% else %} 
-								{% endif %} 
+								    {% if jobexists %} <a href="{%url 'userviewcompany' job.company.id%}" class="btn btn-info" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
+								        <br/> 
+								    {% else %} 
+    								{% endif %} 
 							</div>
 						</div>
 						<div class="row">
@@ -246,10 +192,13 @@
 		<div class="col-md-2 "> </div>
 	</div>
 </form>
+{%endblock%}
 
+{% block other_js %}
 <!-- JQuery-UI Javascript -->
 <script src="../static/vendor/jquery-ui/js/jquery-1.12.4.js"></script>
 <script src="../static/vendor/jquery-ui/js/jquery-ui.js"></script>
 
 <!-- Custom Search Content JavaScript -->
-<script src="../static/custom/js/custom.js"></script> {%endblock%}
+<script src="../static/custom/js/custom.js"></script> 
+{%endblock%}
