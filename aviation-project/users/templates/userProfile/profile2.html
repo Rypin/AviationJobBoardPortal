@@ -1,12 +1,17 @@
-{% extends "profilePortal.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
+{% extends "base.html" %}
+
+{% block other_css %}
+
+{% endblock %}
+
 {% block content %}
 
+<!-- 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <body style="background:#f8f9fa">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
+ Include the above in your HEAD tag ---------->
 
 {%for user in users%}
 
@@ -472,5 +477,9 @@ function toggle_visibility(x) {
 }
 </script>
 {%endfor%}
-{% endblock content %}
+{% endblock %}
+
+{% block other_js %} 
+	
+{% endblock %}
 </body>
