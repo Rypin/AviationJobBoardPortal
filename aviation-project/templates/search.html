@@ -16,13 +16,13 @@
     <!-- Position & Location Input Fields -->
 	<nav class="navbar navbar-light bg-white" style="margin-bottom: 40px; z-index:0">
 		<div class="form-inline mx-auto">
-			<div class="input-group" style="margin-right: 70px">
+			<div class="input-group" style="margin-right: 35px">
 				<div class="input-group-prepend"> 
 				    <span class="input-group-text" id="basic-addon1">Position</span> 
 				</div> 
 				{{PostingForm.title}} 
 			</div>
-			<div class="input-group">
+			<div class="input-group" style="margin-right: 35px">
 				<div class="input-group-prepend"> 
 				    <span class="input-group-text" id="basic-addon1">Where</span> 
 				</div> 
@@ -30,6 +30,12 @@
 				    {{ PostingForm.geolocation }} 
 				    {{ PostingForm.media.js }} 
 				</div>
+			<div class ="input-group" style="margin-right: 15px">
+				<div class="input-group-prepend">
+				    <span class="input-group-text" id="basic-addon1">Category</span>
+				</div>
+					{{PostingForm.category}}
+			</div>
 			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 		</div>
 	</nav>
@@ -41,7 +47,6 @@
 				<div class="row" style="margin-bottom: 5px; margin-top:50px">
 					<div class="col-md-12 " style="padding: 0">
 						<ul class="nav bg-white" style="padding: 5px; border-radius: 10px; margin-bottom:15px">
-						    
 						    <!-- Position Type Filter -->
 							<div class="dropdown">
 								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -72,7 +77,6 @@
 									<input type="submit" value="Submit" onclick="saveFilters();" /> 
 								</div>
 							</div>
-							
 							<!-- Distance Filter -->
 							<div class="dropdown">
 								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -175,7 +179,7 @@
 				</div>
 				<div class="row">
 					<div class="col-md-4  bg-white" style="border: 5px rgb(234, 234, 234) solid">
-					    
+					  {% if jobexists %}
 					    <!-- Post Ordering Dropdown -->
 						<div class="row">
 							<div class="col-md-12" style="padding: 5px">
@@ -189,13 +193,13 @@
 								</div>
 							</div>
 						</div>
-						
 						<!-- Job Post Card List -->
 						<div class="row" style="">
 							<div class="col-md-12" style="padding:0px">
 								<div class="list-group card-group " style=""> 
 								    {% for result in results%}
-									<button type='submit' name='job' value={{result.id}} class="list-group-item list-group-item-action flex-column align-items-start">
+									<div class = "result">
+										<button type='submit' name='job' value={{result.id}} class="list-group-item list-group-item-action flex-column align-items-start">
 										<div class="d-flex w-100 justify-content-between">
 											<div class="d-flex">
 												<div class="my-auto"> <img src="https://cdn.iconscout.com/icon/free/png-256/codepen-15-896368.png" class="" alt="quixote" style="width: 70px; height: 70px; "> </div>
@@ -203,35 +207,34 @@
 													<h6>{{result.company.name}}</h6>
 													<h4 style="font-weight: bold">{{result.title}}</h4>
 													<h6>{{result.address}}</h6> </div>
-											</div> 
-											<small>{{result.age}}</small> 
+											</div>
+											<small>{{result.age}}</small>
 										</div>
-									</button> 
+									</button>
+									</div>
 									{% endfor %} 
 								</div>
 							</div>
 						</div>
 					</div>
-					
+
 					<!-- Job Post Viewing Section -->
-					<div class="col-md-8  bg-white" style="border: 5px rgb(234, 234, 234) solid">
+					<div class="col-md-8  bg-white post" style="border: 5px rgb(234, 234, 234) solid">
 						<div class="row">
-							<div class="col-md-12 " style="padding: 0"> <img class="mx-auto d-block img-fluid" alt="Bootstrap Image Preview" src="https://www.peigenesis.com/images/content/pei_tabs/markets/aviation/aviation-banner.jpg" /> </div>
+							<div class="col-md-12 " style="padding: 0"> <img class="mx-auto d-block img-fluid" alt="Bootstrap Image Preview" src="{{job.company.banner.url}}" /> </div>
 						</div>
-						<div class="row"> 
+						<div class="row">
 						    {{ no_jobs }}
 							<div class="col-md-4">
-								<h3>{{job.company.name}}</h3>
-								<h5></h5>{{job.title}}</h5>
-								<h6>${{job.salary_min}} - ${{job.salary_max}}</h6> 
+								<h2>{{job.title}}</h2>
+								<h5>{{job.company.name}}</h5>
+								<h6>${{job.salary_min}} - ${{job.salary_max}}</h6>
 							</div>
-							<div class="col-md-8 my-auto" align="center"> <a href="{% url 'applyjob' job.id%}" class="btn btn-info" style="margin: 10px">Apply Now</a>
-								<button type="button" class="btn btn-info" style="margin: 10px">Favorite</button> 
-								{% if jobexists %} 
-								    <a href="{%url 'userviewcompany' job.company.id%}" class="btn btn-info" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
-								    <br/> 
-								{% else %} 
-								{% endif %} 
+									<div class="col-md-8 my-auto" align="center">
+										<button type="button" class="btn btn-info" style="margin: 10px">Favorite</button>
+										<a href="{% url 'applyjob' job.id%}" class="btn btn-info" style="margin: 10px">Apply Now</a>
+								    	<a href="{%url 'userviewcompany' job.company.id%}" class="btn btn-info" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
+								    	<br>
 							</div>
 						</div>
 						<div class="row">
@@ -240,7 +243,15 @@
 							</div>
 						</div>
 					</div>
+
 				</div>
+					{% else %}
+						<div class="row">
+							<div class ="col align-self-center">
+									<p><h3 class="text-secondary"> No jobs matching query found.</h3></p>
+							</div>
+						</div>
+					{% endif %}
 			</div>
 		</div>
 		<div class="col-md-2 "> </div>
