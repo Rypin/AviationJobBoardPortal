@@ -7,8 +7,12 @@ from .forms import EventForm, UpdateEventForm
 from users.models import CompanyProfile as cp
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions import  *
+from django.contrib.auth.decorators import login_required
+from users.decorators import unauthenticated_user , allowed_users
 
 # Create your views here.
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
 def events_view(request):
     now = datetime.now(timezone.utc)
     order_by = request.GET.get('order_by')
@@ -79,6 +83,8 @@ def events_view(request):
 
     return render(request, "events_app/events.html", context=context)
 
+@login_required()
+@allowed_users(allowed_roles=['company_owner'])
 def addEvent(request):
     e_form = EventForm(request.POST)
     if request.method == 'POST':
@@ -106,6 +112,8 @@ def addEvent(request):
 
     return render(request, 'events_app/post_event.html', context)
 
+@login_required()
+@allowed_users(allowed_roles=['company_owner'])
 def editEvent(request, pk):
     u_event = EventListing.objects.get(id=pk)
     eu_form = UpdateEventForm(instance=u_event)
