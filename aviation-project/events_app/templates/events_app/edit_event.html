@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+{% if request.user.groups.all.0.name == "company_owner" %}
+
+<h1 >Edit Event Post</h1>
+    <form method="POST">
+    {% csrf_token %}
+    {{ eu_form|crispy }}
+    <button type="submit" class="btn btn-success btn-lg float-right ">Submit</button>
+    </form>
+
+
+
+
+{% endif %}
+{% endif %}
+{% endblock %}

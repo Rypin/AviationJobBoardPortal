@@ -21,8 +21,10 @@ from django.conf.urls.static import static
 from postjob import views as postjob_views
 from aviation_job_board.views import home_view, companypage_view, postjob_view, chooseRegister_view, chatRoom_view, postjob_view
 from users import views as user_views
-from events_app.views import events_view
 from candidate_application_list import views as appList_view
+from events_app import views as events_app_views
+
+
 urlpatterns = [
     path('', home_view, name='home'),
     path('company/',companypage_view, name='company_page'),
@@ -36,7 +38,7 @@ urlpatterns = [
     # Candate APPLICATION PATH
     path('candidate_applications_page/', appList_view.applicationList, name='candidate_applications_page'),
     
-    path('events/', events_view, name='event_list'),
+    path('events/', events_app_views.events_view, name='event_list'),
     path('register/', user_views.register, name='register'),
     path('company_register', user_views.company_register, name='company_register'),
     path('company_profile_creator/', user_views.addCompanyProfile, name='company_profile_creator'),
@@ -56,8 +58,13 @@ urlpatterns = [
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), name='password_reset_complete'),
     path('oauth/', include('social_django.urls', namespace='social')),
     path('postjob/', postjob_views.posting, name='posting'),
+    path('postEvent/', events_app_views.addEvent, name='postEvent'),
+    path('editEvent/<int:pk>', events_app_views.editEvent, name='editEvent'),
     path('editJob/<int:pk>', postjob_views.editJob, name='editJob'),
     path('sendEmailToJobseeker/<int:pk>', user_views.sendEmailToJobseeker, name='sendEmailToJobseeker'),
+    path('viewUser/<int:user_id>', user_views.view_jobseeker_profile, name='viewJobseeker'),
+    path('uploadProfilePic/', user_views.uploadProfilePic_view, name='uploadProfilePic'),
+
     # JOB SEARCH PATHS
     # path('postjob/', postjob_view, name='posting'),
     path('jobsearch/', postjob_views.jobsearch, name='jobsearch'),

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
 
 <style>
 table {
@@ -58,18 +59,29 @@ tr:nth-child(even) {
 
         .show {display: block;}
 </style>
-
+<div style="margin: 0px 100px 0px 220px">
 <h1>Events</h1>
-
+<div class="dropdown">
 <button onclick="myFunction()" class="dropbtn">Sort By</button>
     <div id="myDropdown" class="dropdown-content">
+        <a href="?order_by=title">Title</a>
         <a href="?order_by=posted">Posted Date</a>
         <a href="?order_by=deadline">Most recent event</a>
     </div>
 
+<button onclick="myFunction2()" class="dropbtn">Events per Page</button>
+    <div id="myDropdown2" class="dropdown-content">
+      <a href="?eventsPerPage=1">1 per Page</a>
+      <a href="?eventsPerPage=2">2 per Page</a>
+    </div>
+</div>
+
 <script>
     function myFunction() {
       document.getElementById("myDropdown").classList.toggle("show");
+    }
+    function myFunction2() {
+      document.getElementById("myDropdown2").classList.toggle("show");
     }
 </script>
 
@@ -81,10 +93,11 @@ tr:nth-child(even) {
         <th>Posted</th>
         <th>Day of Event</th>
     </tr>
-    {% for event in events_listings%}
+    {% for event in events %}
+
     <tr>
         <td>
-            <img style="width:128px;height:128px;" src="{{ event.image.url }}">
+            <img style="width:128px;height:128px;" src="{{ event.company.image.url }}">
         </td>
         <td>
             {{ event.title }}
@@ -100,6 +113,31 @@ tr:nth-child(even) {
         </td>
     </tr>
     {% endfor %}
-</table>
 
+</table>
+{% if events.has_other_pages %}
+  <ul class="pagination">
+    {% if events.has_previous %}
+      <li><a href="?page={{ events.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in events.paginator.page_range %}
+      {% if events.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if events.has_next %}
+      <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+{{ eventsPerPage }}
+{{ epp }}
+</div>
 {% endblock %}

@@ -3,56 +3,114 @@
 {% block content %}
 
 <style>
-    .row {
+    .hov {
         border-radius: 10px;
     }
 
-    .row:hover{
+    .hov:hover{
         background-color:dodgerblue;
     }
 
 </style>
+<script>history.scrollRestoration = "manual"</script>
+<script>
+{% if using_resume %}
+{% else %}
+$(document).ready(function(){
+        $("#builderModal").modal('show');
+    });
+{% endif %}
+</script>
+<div class="modal fade" id="builderModal" tabindex="-1" role="dialog">
+     <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                   <div class="modal-header">
+                          <h5 class="modal-title">How would you like to build your profile?</h5>
+                    </div>
+                   <div class="modal-body">
+                         <div class="row">
+                             <div class="col col-md-5">
+                                    <a href="{% url 'resume' %}" type="button" class="btn btn-primary float-right">Build From Resume</a>
+                             </div>
+                             <div class="col-md-2">
+                                 <center>
+                                     <small class="text-muted">
+                                            Or
+                                     </small>
+                                 </center>
+                             </div>
+                             <div class="col col-md-5">
+                                 <button type = "button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Build Manually</button>
+                              </div>
+                         </div>
+                   </div>
+                  <div class="modal-footer">
+                  </div>
+            </div>
+      </div>
+</div>
 
 <div class="container">
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset class="form-group">
+            <div class="row">
+                <legend class="border-bottom mb-4">Profile Information: <button class="btn btn-success" style="float:right" type="submit" name="save" value="submit"><b>Save</b></button>
+                </legend>
+                <div class="col ml-auto" style="margin-bottom: 25px; margin-top: 10px;">
 
-            <legend class="border-bottom mb-4">Parsed Information:</legend>
+                </div>
+            </div>
+
             <div class="block">
                 <label for="name" style="display: inline-block;width: 140px;text-align: right;">Full Name: </label>
-                <input type="text" name="name" style="margin-bottom:20px; " value={{name}}><br>
+                <input type="text" name="name" style="margin-bottom:20px; " value="{{name}}"><br>
             </div>
             <div class="block" >
-                <label for="email" style="display: inline-block;width: 140px;text-align: right;">Email: </label>
-                <input type="text" name="email" style="margin-bottom:20px; " value={{email}}><br>
+                <label for="email" style="display: inline-block;width: 140px;text-align: right;">Public Email: </label>
+                <input type="text" name="email" style="margin-bottom:20px; " value="{{email}}"><br>
             </div>
             <div class="block">
                 <label for="phone" style="display: inline-block;width: 140px;text-align: right;">Phone Number: </label>
                 <input type="text" name="phone" value={{mobile_number}}><br><br>
             </div>
-            
-
-
+            <div class="block">
+                <label for="address" style="display: inline-block;width: 140px;text-align: right;">Address: </label>
+                <input type="text" name="address" value={{address}}><br><br>
+            </div>
+            <div class="block">
+                <label for="nickname" style="display: inline-block;width: 140px;text-align: right;">Nick Name: </label>
+                <input type="text" name="nickname" value={{nickname}}><br><br>
+            </div>
         </fieldset>
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Parsed Skills:</legend>
-            
+            <legend class="border-bottom mb-4">Skills:</legend>
             {% for skills in parsed_skills %}
-            
+
             {% csrf_token %}
-            <div class="row">
-                <label for="delete" style="margin-left:10px; margin-top:10px;">{{skills|safe}}</label>
+            <div class="row hov">
+                <label for="delete" class="label label-default" style="margin-left:10px; margin-top:10px;"><h3>{{skills|safe}}</h3></label>
                 <div class="col ml-auto" style="margin-bottom: 10px; margin-top: 10px;">
-                    <button class="btn btn-primary" style="float:right" type="submit" name="delete" value="{{skills}}"><b>DEL</b></button>
+                    <button class="btn btn-danger" style="float:right" type="submit" name="delete" value="{{skills}}"><b>DEL</b></button>
                 </div>
-                
             </div>
-            
-            
             {% endfor %}
         </fieldset>
-        <button class="btn btn-primary" type="submit" name="save"><b>Save</b></button>
+        <div class ="row">
+
+        </div>
+
+    </form>
+    <form method ="POST">
+            {% csrf_token %}
+            <div class ="form-row">
+                <div class = "col ml-auto">
+                    <input type ="text" class="form-control" name="addSkill">
+                </div>
+                <div class="col ml-auto" style="margin-bottom: 10px; margin-top: 10px;">
+                    <button class="btn btn-primary" style="float:right" type="submit" name="add"><b>Add Skill</b></button>
+                </div>
+            </div>
     </form>
 </div>
     

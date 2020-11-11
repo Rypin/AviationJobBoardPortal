@@ -1,4 +1,4 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,16 +16,18 @@ from postjob.models import Jobform
 from apply.models import *
 from django.shortcuts import get_object_or_404
 import datetime
+from datetime import datetime
 from .decorators import unauthenticated_user , allowed_users
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate , login
-from postjob.models import Jobform , Jobtype
+from postjob.models import Jobform , Jobtype, Category
 from django.http import HttpResponse , HttpResponseRedirect
 from datetime import datetime
 import pytz
 import psycopg2
 from django.core.mail import send_mail, EmailMessage
 from .filters import UsersFilter
+from events_app.models import EventListing
 
 
 # Create your views here.
@@ -97,8 +99,14 @@ def register(request):
             user.groups.add(group)
 
             user.save()
-            messages.success(request , f'Account Successfully Created! You May Now Log In')
-            return redirect('login')
+            messages.success(request , f'Account Successfully Created! You May Now Create Your Profile')
+            user = authenticate(username=form.cleaned_data['username'] ,
+                                password=form.cleaned_data['password1'] ,
+                                )
+            login(request , user)
+            user = Users(Username=username , Email=email)
+            user.save()
+            return redirect('review')
     else:
         form = UserRegisterForm()
     return render(request , 'users/register.html' , {'form': form})
@@ -206,20 +214,31 @@ def company_profile(request):
 
     company_profile = CompanyProfile.objects.get(user_id=request.user.id)
     jobs = Jobform.objects.filter(company=company_profile.id)
+    events = EventListing.objects.filter(company=company_profile.id)
 
+    company_profile = CompanyProfile.objects.get(user_id=request.user.id)
+    print(company_profile.user.email)
     # if request.POST.get("delete_job"):
     #     jobs.object.filter(id=request.GET.get('id')).delete()
     #     return redirect('company_profile')
 
     delete_job = request.GET.get('d_job')
+    delete_event = request.GET.get('d_event')
+    if delete_job is not None:
+        job = Jobform.objects.filter(id=delete_job).first()
+        count = job.category.count - 1
+        Category.objects.filter(name=job.category.name).update(count=count)
     Jobform.objects.filter(id=delete_job).delete()
+    EventListing.objects.filter(id=delete_event).delete()
 
     context = {
         'u_form': u_form ,
         'cp_Update_form': cp_Update_form ,
         'company_profile': company_profile ,
         'jobs': jobs ,
+        'events': events,
         'delete_job': delete_job ,
+        'delete_event': delete_event,
     }
 
     return render(request , 'users/company_profile.html' , context)
@@ -240,6 +259,7 @@ def resume(request):
             request.session['parsed_email'] = parsed_info.pop('email')
             request.session['parsed_number'] = parsed_info.pop('mobile_number')
             request.session['parsed_skills'] = parsed_info.pop('skills')
+            request.session['parsed_status'] = True
             os.remove(path)
             return redirect('review')
         else:
@@ -289,14 +309,14 @@ def ParseSkills(request , skills):
     return
 
 
-def getSkills(request):
+def getSkills(username):
     postgres_select_query = """SELECT skill_id FROM users_users_skills WHERE users_id = (%s)"""
     connection = psycopg2.connect(user=settings.DATABASES['default']['USER'] ,
                                   password=settings.DATABASES['default']['PASSWORD'] ,
                                   host=settings.DATABASES['default']['HOST'] ,
                                   port=settings.DATABASES['default']['PORT'] ,
                                   database=settings.DATABASES['default']['NAME'])
-    user = Users.objects.get(Username=request.user.username)
+    user = Users.objects.get(Username=username)
     skills = []
     try:
         cursor = connection.cursor()
@@ -341,28 +361,86 @@ def removeSkill(users_id , skill):
             cursor.close()
             connection.close()
 
-
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
 def review(request):
     if request.method == 'GET':
-        return render(request , 'users/review.html' , context={'name': request.session.get('parsed_name') ,
-                                                               'email': request.session.get('parsed_email') ,
-                                                               'mobile_number': request.session.get('parsed_number') ,
-                                                               'parsed_skills': request.session.get('parsed_skills')})
-    if request.method == 'POST' and 'save' in request.POST:
-        ParseSkills(request , request.session['parsed_skills'])
-        return redirect('userProfile-home')
-    elif request.method == 'POST' and 'delete' in request.POST:
-        skills = request.session.get('parsed_skills')
-        print(skills)
-        remove_skill = request.POST.get('delete')
-        skills.remove(remove_skill)
-        request.session['parsed_skills'] = skills
-        return redirect('review')
-    return render(request , 'users/review.html' , context={'name': request.session.get('parsed_name') ,
-                                                           'email': request.session.get('parsed_email') ,
-                                                           'mobile_number': request.session.get('parsed_number') ,
-                                                           'parsed_skills': request.session.get('parsed_skills')})
-
+        using_resume = request.GET.get('using_resume')
+        if 'parsed_status' in request.session:
+            using_resume = True
+        else:
+            using_resume = False
+        if 'parsed_skills' in request.session:
+            context = {'name': request.session.get('parsed_name') ,
+                       'email': request.session.get('parsed_email') ,
+                       'mobile_number': request.session.get('parsed_number') ,
+                       'parsed_skills': request.session.get('parsed_skills'),
+                        'nickname': request.session.get('parsed_nickName'),
+                        'address': request.session.get('parsed_address'),
+                        'using_resume': using_resume}
+        else:
+            context = {
+                'name': "",
+                'email': "",
+                'mobile_number': "",
+                'parsed_skills': [],
+                'nickname':"",
+                'address': "",
+                'using_resume': using_resume
+            }
+        return render(request , 'users/review.html' , context)
+    if request.method == 'POST':
+        request.session['parsed_name'] = request.POST.get('name')
+        request.session['parsed_email'] = request.POST.get('email')
+        request.session['parsed_number'] = request.POST.get('phone')
+        request.session['parsed_nickName'] = request.POST.get('nickname')
+        request.session['parsed_address'] = request.POST.get('address')
+        request.session['parsed_status'] = True
+        if 'save' in request.POST:
+            ParseSkills(request , request.session['parsed_skills'])
+            user = Users.objects.filter(Username=request.user.username)
+            if not user.exists():
+                user = Users(Username=request.user.username, Email=request.user.email)
+                user.save()
+                user = Users.objects.filter(Username=request.user.username)
+            user.update(
+                name=request.session.get('parsed_name'), nickName=request.session.get('parsed_nickName'),
+                Email=request.session.get('parsed_email') , phoneNumber=request.session.get('parsed_number') ,
+                address=request.session.get('parsed_address')
+            )
+            if 'parsed_skills' in request.session:
+                del request.session['parsed_name']
+                del request.session['parsed_email']
+                del request.session['parsed_number']
+                del request.session['parsed_nickName']
+                del request.session['parsed_address']
+                del request.session['parsed_status']
+                del request.session['parsed_skills']
+            #Flush parsed data
+            return redirect('userProfile-home')
+        elif 'add' in request.POST:
+            if 'parsed_skills' in request.session:
+                skills = request.session.get('parsed_skills')
+            else:
+                skills = []
+            add_skill = request.POST.get('addSkill')
+            if add_skill != '':
+                skills.append(add_skill)
+            request.session['parsed_skills'] = skills
+            print(request.session['parsed_skills'])
+            return redirect('review')
+        elif 'delete' in request.POST:
+            skills = request.session.get('parsed_skills')
+            remove_skill = request.POST.get('delete')
+            skills.remove(remove_skill)
+            request.session['parsed_skills'] = skills
+            return redirect('review')
+    return render(request , 'users/review.html' , context = {'name': request.session.get('parsed_name') ,
+                       'email': request.session.get('parsed_email') ,
+                       'mobile_number': request.session.get('parsed_number') ,
+                       'parsed_skills': request.session.get('parsed_skills'),
+                        'nickname': request.session.get('parsed_nickName'),
+                        'address': request.session.get('parsed_address')})
 
 @login_required()
 @allowed_users(allowed_roles=['jobseeker'])
@@ -375,7 +453,7 @@ def jobseeker_profile_view(request):
     users = Users.objects.filter(Username=request.user.username)
     works = workExperience.objects.filter(Username=request.user.username)
     educations = educationExperience.objects.filter(Username=request.user.username)
-    skills = getSkills(request)
+    skills = getSkills(request.user.username)
     if request.method == 'POST' and 'editProfile' in request.POST:
         fullname = request.POST['name']
         nickname = request.POST['nickname']
@@ -397,11 +475,11 @@ def jobseeker_profile_view(request):
     if request.method == 'POST' and 'deleteSkill' in request.POST:
         id = (Users.objects.get(Username=request.user.username)).id
         removeSkill(id , request.POST.get('deleteSkill'))
-        skills = getSkills(request)
+        skills = getSkills(request.user.username)
         redirect('userProfile-home')
     if request.method == 'POST' and 'submitSkill' in request.POST:
         ParseSkills(request , [request.POST['newSkill']])
-        skills = getSkills(request)
+        skills = getSkills(request.user.username)
         redirect('userProfile-home')
     applications = Application.objects.filter(applicant=users.first()).all()
     # apptest =
@@ -409,6 +487,7 @@ def jobseeker_profile_view(request):
     return render(request , 'userProfile/profile2.html' ,
                   {'users': users , 'works': works , 'educations': educations , 'applications': applications ,
                    'skills': skills})
+
 
 def uploadProfilePic_view(request):
     users = Users.objects.filter(Username=request.user.username)
@@ -431,6 +510,24 @@ def uploadProfilePic_view(request):
             return redirect('userProfile-home')
     return render(request, 'userProfile/profile2.html')
                     
+
+
+@login_required()
+@allowed_users(allowed_roles=['company_owner'])
+def view_jobseeker_profile(request, user_id):
+    x = user_id
+    user = Users.objects.filter(id=x)
+    username = user.first().Username
+    skills = getSkills(username)
+    works = workExperience.objects.filter(Username=username)
+    educations = educationExperience.objects.filter(Username=username)
+    context={
+        'users':user,
+        'works':works,
+        'educations':educations,
+        'skills':skills
+    }
+    return render(request, 'userProfile/profileViewer.html', context)
 
 def trysearch(request):
     jobs = Jobform.objects.all()
@@ -535,6 +632,26 @@ def viewApplications(request):
         return redirect('company_applications')
     return render(request , 'viewApplications.html' , context)
 
+def uploadProfilePic_view(request):
+    users = Users.objects.filter(Username=request.user.username)
+    if request.method == 'GET':
+        return render(request, 'users/uploadProfilePic.html')
+    if request.method == 'POST' and 'upload' in request.POST:
+            profilePic = request.FILES['image']
+            thisuser = Users.objects.get(Username=request.user.username)
+            thisuser.image = profilePic
+            thisuser.save()
+            tz_NY = pytz.timezone('America/New_York')
+            datetime_NY = datetime.now(tz_NY)
+            #send_mail(
+            #    'You have received a notification from Aviation Job Portal',
+            #    'You have successfully updated your profile picture in your Aviation Job Portal Profile at '+datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+            #    'DoNotReply.AJP@gmail.com',
+            #    [request.user.email],
+            #    fail_silently=False,
+            #)
+            return redirect('userProfile-home')
+    return render(request, 'userProfile/profile2.html')
 
 ######################################################################################################################################################################################
 ######################################################################################################################################################################################
@@ -592,11 +709,3 @@ def addEducationExperience(request):
 
 def about(request):
     return render(request , 'userProfile/profile2.html')
-
-#
-# def redirect(request):
-#     if(request.user.groups.filter(name= 'jobseeker').exists()):
-#         return HttpResponseRedirect('jobsearch')
-#     elif(request.user.groups.filter(name= 'company_owner').exists()):
-#         return HttpResponseRedirect('company_profile')
-#     return HttpResponseRedirect('home')

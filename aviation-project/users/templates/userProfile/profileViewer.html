@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% comment %}  {% endcomment %}
+{% block content %}
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<body style="background:#f8f9fa">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+{%for user in users%}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-3 ">
+			<br>
+			<div class = "offset-2 col-3">
+				<img src= "{{user.image.url}}" border = "2" style = "border-radius:10%;" width = 120 height = 120/>
+
+			</div>
+			<br>
+			<ul class="list-group ">
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><b>Basic Information</b></a>
+				</li>
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link" id="edit-tab" data-toggle="tab" href="#education" role="tab" aria-controls="education" aria-selected="false"><b>Education Experience</b></a>
+				</li>
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link" id="work-tab" data-toggle="tab" href="#work" role="tab" aria-controls="work" aria-selected="false"><b>Work Experience</b></a>
+				</li>
+				<li class="list-group-item list-group-item-action">
+					<a class="nav-link" id="skill-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills" aria-selected="false"><b>Skills</b></a>
+				</li>
+
+			</ul>
+		</div>
+		<div class="col-md-9">
+			<div class="tab-content profile-tab" id="myTabContent">
+				<br>
+				<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Basic Information</h4>
+									<hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Name </b></label>
+										<div class="col-8">
+											<p>{{user.name}}</p>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Nickname </b></label>
+										<div class="col-8">
+											<p>{{user.nickName}}</p>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Email Address </b></label>
+										<div class="col-8">
+											<p>{{user.Email}}</p>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-4 col-form-label"><b>Phone Number </b></label>
+										<div class="col-8">
+											<p>{{user.phoneNumber}}</p>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-tab">
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Education Experience</h4>
+							<hr>
+						</div>
+					</div>
+					{%for education in educations%}
+					{%if education.Username == user.Username%}
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<h4>{{education.title}} In {{education.major}}</h4>
+										<input class="form-control here" type="hidden" name="title" value = "{{education.title}}">
+										<input class="form-control here" type="hidden" name="major" value = "{{education.major}}">
+										<hr>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>School </b></label>
+											<div class="col-8">
+												<p>{{education.school}}</p>
+												<input class="form-control here" type="hidden" name="school" value = "{{education.school}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Duration </b></label>
+											<div class="col-8">
+												<p>{{education.duration}}</p>
+												<input class="form-control here" type="hidden" name="duration" value = "{{education.duration}}">
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					<br>
+					{%endif%}
+					{%endfor%}
+					<br><br>
+				</div>
+
+				<div class="tab-pane fade" id="work" role="tabpanel" aria-labelledby="work-tab">
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Work Experience</h4>
+							<hr>
+						</div>
+					</div>
+					{%for work in works%}
+					{%if work.Username == user.Username%}
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<h4>{{work.job}}</h4>
+										<input class="form-control here" type="hidden" name="job" value = "{{work.job}}">
+										<hr>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Time Worked </b></label>
+											<div class="col-8">
+												<p>{{work.years}}</p>
+												<input class="form-control here" type="hidden" name="years" value = "{{work.years}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Company Name</b></label>
+											<div class="col-8">
+												<p>{{work.company}}</p>
+												<input class="form-control here" type="hidden" name="company" value = "{{work.company}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-4 col-form-label"><b>Additional Comments </b></label>
+											<div class="col-8">
+												<p>{{work.comment}}</p>
+												<input class="form-control here" type="hidden" name="comments" value = "{{work.comment}}">
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					<br>
+					{%endif%}
+					{%endfor%}
+					<br><br>
+				</div>
+
+				<div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skill-tab">
+					<div class ="row">
+						<div class="col-md-12">
+							<h4>Skills</h4>
+							<hr>
+						</div>
+					</div>
+					{%for skill in skills%}
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<h4>{{skill|safe}}</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					{%endfor%}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+function toggle_visibility(x) {
+  var x = document.getElementById(x);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
+{%endfor%}
+{% endblock content %}
+</body>

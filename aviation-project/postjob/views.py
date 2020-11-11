@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from .forms import PostingForm, UpdateJobForm
-from postjob.models import Jobform, Jobtype
+from postjob.models import Jobform, Jobtype, Category
 from datetime import timedelta, date, datetime
 import math
 from users.models import CompanyProfile as cp
+from events_app.models import *
 # Create your views here.
 
 def posting(request):
@@ -27,9 +28,10 @@ def posting(request):
 
 
             #done_job = filled_form.save()
-            companyid = request.GET.get('company')
+            companyid = request.GET.get('company') #Till this day I don't know how I was able to make this line work it, request.user.id will work just as fine
             id = cp.objects.get(id=companyid)
             obj.company = id
+            obj.category = Category.objects.get(name=filled_form.cleaned_data['category'])
             #done_job.save()
             # filled_form.save(company=companyid, title=title, description=description, postdate=postdate,
             #                         jobtype=jobtype, deadlinedate=deadlinedate, posttime=posttime, deadlinetime=deadlinetime,
@@ -183,10 +185,15 @@ def searchpage(request, *args, **kwargs):
 def userviewcompany(request, company_id):
     try:
         company = cp.objects.get(id=company_id)
+        events = EventListing.objects.filter(company=company_id)
+        jobs = Jobform.objects.filter(company=company_id)
+        print(company)
+        print(events)
+        print(jobs)
     except company.DoesNotExist:
         raise Http404('There are no Open jobs that match this search')
-    
-    return render(request, "userViewCompany.html", {'company': company})
+
+    return render(request, "userViewCompany.html", {'company': company, 'events': events, 'jobs': jobs})
 
 
 

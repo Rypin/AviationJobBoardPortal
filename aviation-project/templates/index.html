@@ -1,168 +1,104 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} 
 {% load sass_tags %}
-<head>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-   {% comment %} 
-   <link rel="stylesheet" href="style/landing.scss">
-   {% endcomment %}
-   {% comment %} 
-   <link href="{% static 'scss/landing.scss' %}" rel="stylesheet" type="text/scss" />
-   {% endcomment %}
-   <link href="{% sass_src 'front/scss/landing/landing.scss' %}" rel="stylesheet" type="text/css" />
-   <script src='../static/front/js/landing.js' defer></script>
+
+{% block other_css %}
+<link href="{% sass_src 'front/scss/landing/landing.scss' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 
 
-</head>
+{% block content %}
 <div class="container-fluid">
-   <div class="searchBox">
-      <h1 class= 'display-4 text-center jobSearching'>Job searching just got easier</h1>
-      <button class='uploadResume'type="button"><span>Upload Resume</span></button>
-      <div class="container">
-         <div class='switchButtons'>
-            <button data-tab-target="#job" class="findJob"type="button"><span>Find a Job</span></button>
-            <button data-tab-target="#candidate" class='candidate'type="button"><span>Find a Candidate</span></button>
-         </div>
-
-         <div class="tab-content">
-            <div class="row active" id="job" data-tab-content>
-
-                {% comment %} <form class="form-inline" method="GET" action="{%url 'jobsearch'%}">
-                <div class="col-lg-3">
-                     <div class="form-group">
-                        <label for = "jobtitle"></label>
-                        <input type="text" id="jobtitle" name="jobtitle" class="form-control" placeholder="Job">
-                    </div> 
-
-               </div>
-               <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for = "zipcode"></label>
-                        <input type="text" id="zipcode" name="zipcode" class="form-control" placeholder="Zip code">
-                    </div>
-                  </div>
-               <div class="col-lg-3">
-
-                    <div class="form-group">
-                        <label for="jobtype"></label>
-                        <select id="jobtype" class="form-control" name="jobtype">
-                            <option selected>Job Type</option>
-                            {% for jobtypes in jobtypes %}
-                                <option value="{{ jobtypes}}">{{ jobtypes }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-               </div>
-               <div class="col-lg-3">
-                    <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
-                    </div>
-                </form> {% endcomment %}
-               <!-- {% comment %} <div class="col-lg-5">
-                  <input type="text" class="form-control" placeholder="Web Devloper" aria-label="Recipient's username" aria-describedby="basic-addon2">
-               </div>
-               <div class="col-lg-2">
-                  <input type="text" class="form-control" placeholder="Category" aria-label="Recipient's username" aria-describedby="basic-addon2">
-               </div>
-               <div class="col-lg-3">
-                  <input type="text" class="form-control" placeholder="Location" aria-label="Recipient's username" aria-describedby="basic-addon2">
-               </div>
-               <div class="col-sm-1">
-                  <i class="fa fa-search searchIcon" aria-hidden="true"></i>
-               </div> {% endcomment %} -->
-               
-
-               <form class="form-inline" method="GET" action="{%url 'choose_register'%}" novalidate>
-                  <div class="col-lg-3" >
-                     <div class="form-group ">
-                        <div class='form-control lines'>
-                        {{PostingForm.title}}
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-lg-3">
-                     <div class="form-group">
-                        <div class="form-control lines">
-                           <div id="locationField">
-                              {{ PostingForm.address }}
-                              {{ PostingForm.geolocation }}
-                              {{ PostingForm.media.js }}
-                           </div>
-                        </div>
-                     </div> 
-                     </div> 
-                     <div class="col-lg-3">
-                     <div class="form-group ">
-                        <label for="jobtype"></label>
-                        <select id="jobtype" class="form-control" name="jobtype" style="margin-right: -0px; border: .5px inset #495057">
-                           <option checkbox>Job Type</option>
-                           {% for jobtypes in jobtypes %}
-                           <option value="{{ jobtypes}}">{{ jobtypes }}</option>
-                           {% endfor %}
-                        </select>
-                     </div> 
-                     </div>
-
-               <button class="btn btn-secondary searchBtn2" type="submit"><i class="fa fa-search"></i> Search</button>
-               </form> 
-            </div>
-            
-            <div class="row" id="candidate" data-tab-content>
-               <div class="col-lg-3">
-                  <input id="category"type="text" class="form-control inputCandidate" placeholder="John Smith" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                  <div class="iconBriefCase">
-                     <span><i class="fa fa-briefcase" aria-hidden="true"></i></span>
-                  </div>
-               </div>
-               <div class="col-lg-3">
-                  <div clas="form-group">
-                     <div class="form-field">
-                        {% comment %} <div class="iconLocation"><span><i class="fa fa-search "></i></span></div> {% endcomment %}
-                        <input type="text" class="form-control" placeholder="Location" aria-label="Recipient's username"
-                           aria-describedby="basic-addon2">
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-3">
-                  <!-- {% comment %} <input type="text" class="form-control" placeholder="Category" aria-label="Recipient's username" aria-describedby="basic-addon2"> {% endcomment %} -->
-                  <div class="form-group " style = "margin-bottom: 0">
-                     <div class="form-field">
-                        <div class="select-wrap">
-                           <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                           <select name="" id="" class="form-control">
-                           <option value="">Category</option>
-                           <option value="">Full Time</option>
-                           <option value="">Part Time</option>
-                           <option value="">Freelance</option>
-                           <option value="">Internship</option>
-                           <option value="">Temporary</option>
-                           </select>
-                        </div>
-                        </div>
-                     </div>
-               </div>
-               <div class="col-lg-3">
-
-               {% comment %} <i class="fa fa-search searchIcon" aria-hidden="true"></i>  {% endcomment %}
-                  <div class="form-field">
-					   	<button type="submit" class="form-control btn btn-secondary searchBtn"><span>Search</span></button>
+	<div class="searchBox">
+		<h1 class='display-4 text-center jobSearching'>Job searching just got easier</h1>
+		<button class='uploadResume' type="button"><span>Upload Resume</span></button>
+		<div class="container">
+			<div class='switchButtons'>
+				<button data-tab-target="#job" class="findJob" type="button"><span>Find a Job</span></button>
+				<button data-tab-target="#candidate" class='candidate' type="button"><span>Find a Candidate</span></button>
+			</div>
+			<div class="tab-content">
+				<div class="row active" id="job" data-tab-content>
+					<form class="form-inline" method="GET" action="{%url 'choose_register'%}" novalidate>
+						<div class="col-lg-3">
+							<div class="form-group ">
+								<div class='form-control lines'> {{PostingForm.title}} </div>
+							</div>
 						</div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
+						<div class="col-lg-3">
+							<div class="form-group">
+								<div class="form-control lines">
+									<div id="locationField"> 
+									    {{ PostingForm.address }} 
+									    {{ PostingForm.geolocation }} 
+									    {{ PostingForm.media.js }} 
+									 </div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3">
+							<div class="form-group ">
+								<label for="jobtype"></label>
+								<select id="jobtype" class="form-control" name="jobtype" style="margin-right: -0px; border: .5px inset #495057">
+									<option checkbox>Job Type</option> 
+									    {% for jobtypes in jobtypes %}
+									        <option value="{{ jobtypes}}">{{ jobtypes }}</option> 
+									    {% endfor %} 
+								</select>
+							</div>
+						</div>
+						<button class="btn btn-secondary searchBtn2" type="submit"><i class="fa fa-search"></i> Search</button>
+					</form>
+				</div>
+				<div class="row" id="candidate" data-tab-content>
+					<div class="col-lg-3">
+						<input id="category" type="text" class="form-control inputCandidate" placeholder="John Smith" aria-label="Recipient's username" aria-describedby="basic-addon2">
+						<div class="iconBriefCase"> <span><i class="fa fa-briefcase" aria-hidden="true"></i></span> </div>
+					</div>
+					<div class="col-lg-3">
+						<div clas="form-group">
+							<div class="form-field">
+								<input type="text" class="form-control" placeholder="Location" aria-label="Recipient's username" aria-describedby="basic-addon2"> 
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group " style="margin-bottom: 0">
+							<div class="form-field">
+								<div class="select-wrap">
+									<div class="icon"><span class="ion-ios-arrow-down"></span></div>
+									<select name="" id="" class="form-control">
+										<option value="">Category</option>
+										<option value="">Full Time</option>
+										<option value="">Part Time</option>
+										<option value="">Freelance</option>
+										<option value="">Internship</option>
+										<option value="">Temporary</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-field">
+							<button type="submit" class="form-control btn btn-secondary searchBtn"><span>Search</span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-{% comment %} <section class="industries">
-   <div class="industry">
-      <h5 class="home__name">positions</h5>
-      <h5 class="home__name">positions</h5>
-   </div>
-   <div class="industry">industry card </div>
-   <div class="industry">industry card</div>
-   <div class="industry">industry card</div>
-   <div class="industry">industry card</div>
-   <div class="industry">industry card</div>
-</section> {% endcomment %}
+<!--<section class="industries">-->
+<!--   <div class="industry">-->
+<!--      <h5 class="home__name">positions</h5>-->
+<!--      <h5 class="home__name">positions</h5>-->
+<!--   </div>-->
+<!--   <div class="industry">industry card </div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--</section>-->
 <section class="ftco-section">
     	<div class="container">
     		<div class="row justify-content-center mb-5 pb-3">
@@ -172,38 +108,22 @@
           </div>
         </div>
         <div class="row">
-        	<div class="col-md-3 ftco-animate">
+               {% for category in categories %}
+           <div class="col-lg-3 ftco-animate">
         		<ul class="category">
-        			<li><a href="#">Aviation <br><span class="number">354</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation <br><span class="number">143</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation <br><span class="number">100</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation <br><span class="number">90</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
+        			<li><a href="#">{{category.name}}<br><span class="number">{{category.count}}</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
         		</ul>
         	</div>
-        	<div class="col-md-3 ftco-animate">
-        		<ul class="category">
-        			<li><a href="#">Aviation &amp; Training <br><span class="number">100</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation <br><span class="number">200</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation <br><span class="number">300</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation <br><span class="number">150</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        		</ul>
-        	</div>
-        	<div class="col-md-3 ftco-animate">
-        		<ul class="category">
-        			<li><a href="#">Aviation<br><span class="number">400</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation <br><span class="number">100</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation <br><span class="number">222</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Office &amp; Admin <br><span class="number">123</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        		</ul>
-        	</div>
-        	<div class="col-md-3 ftco-animate">
-        		<ul class="category">
-        			<li><a href="#">Aviation job<br><span class="number">324</span> <span>Open position</span></span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation job<br><span class="number">564</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation job &amp; Sales <br><span class="number">234</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        			<li><a href="#">Aviation job<br><span class="number">425</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        		</ul>
-        	</div>
+               {% endfor %}
+<!--        	<div class="col-md-3 ftco-animate">-->
+
+<!--        		<ul class="category">-->
+<!--        			<li><a href="#">Aviation <br><span class="number">354</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>-->
+<!--        			<li><a href="#">Aviation <br><span class="number">143</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>-->
+<!--        			<li><a href="#">Aviation <br><span class="number">100</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>-->
+<!--        			<li><a href="#">Aviation <br><span class="number">90</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>-->
+<!--        		</ul>-->
+<!--        	</div>-->
         </div>
     	</div>
     </section>
@@ -215,20 +135,34 @@
             <button class="jobPosting" type="submit"><span>Post a Job</span></button>
         </form>
    </div> 
-
+   {% for job in new_jobs %}
    <div class="card w-75 job-post-item job-post-item-body">
       <div class="card-body row">
          <div class="col-md-6">
             <div class="job-post-item-header d-flex align-items-center">
-            <h2 class="mr-3 text-black"><a href="#">FullStack Developer</a></h2>
+            <h2 class="mr-3 text-black"><a href="#">{{job.title}}</a></h2>
                <div class="badge-wrap">
-                  <span class="bg-info text-white badge py-2 px-3">Freelance</span>
+                  <span class="
+                  {% if  job.jobtype.name == 'Full Time' %}
+                  bg-primary
+                  {% elif job.jobtype.name == 'Part Time' %}
+                  bg-success
+                  {% elif job.jobtype.name == 'Internship' %}
+                  bg-secondary
+                  {% elif job.jobtype.name == 'Contract' %}
+                  bg-warning
+                  {% elif job.jobtype.name == 'Temporary' %}
+                  bg-info
+                  {% else %}
+                  bg-info
+                  {%endif%}
+                  text-white badge py-2 px-3">{{job.jobtype.name}}</span>
                </div>
             </div>
             <div class="job-post-item-body d-block d-md-flex">
-               <div class="mr-3"><span class="icon-layers"></span> <a href="#">Lockheed Martin</a></div>
+               <div class="mr-3"><span class="icon-layers"></span> <a href="#">{{job.company.name}}</a></div>
                <div>
-                  <span class="icon-my_location"></span> <span>Washington, DC</span></div>
+                  <span class="icon-my_location"></span> <span>{{job.address}}</span></div>
             </div>
          </div>
 
@@ -238,100 +172,43 @@
                   <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
                      <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
                   </a>
-               <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a>
+               <a href="{% url 'applyjob' job.id%}" class="btn btn-primary py-2">Apply Job</a>
                </div>
             </div>
          </div>
       </div>
-   </div> 
-   
+   </div>
    <br>
-   <div class="card w-75 job-post-item job-post-item-body">
-      <div class="card-body row">
-         <div class="col-md-6">
-            <div class="job-post-item-header d-flex align-items-center">
-            <h2 class="mr-3 text-black"><a href="#">Backend Developer</a></h2>
-               <div class="badge-wrap">
-                  <span class="bg-primary text-white badge py-2 px-3">Partime</span>
-               </div>
-            </div>
-            <div class="job-post-item-body d-block d-md-flex">
-               <div class="mr-3"><span class="icon-layers"></span> <a href="#">NASA</a></div>
-               <div>
-                  <span class="icon-my_location"></span> <span>Dallas, TX</span></div>
-            </div>
-         </div>
+   {% endfor %}
+<!--   <div class="card w-75 job-post-item job-post-item-body">-->
+<!--      <div class="card-body row">-->
+<!--         <div class="col-md-6">-->
+<!--            <div class="job-post-item-header d-flex align-items-center">-->
+<!--            <h2 class="mr-3 text-black"><a href="#">FullStack Developer</a></h2>-->
+<!--               <div class="badge-wrap">-->
+<!--                  <span class="bg-info text-white badge py-2 px-3">Freelance</span>-->
+<!--               </div>-->
+<!--            </div>-->
+<!--            <div class="job-post-item-body d-block d-md-flex">-->
+<!--               <div class="mr-3"><span class="icon-layers"></span> <a href="#">Lockheed Martin</a></div>-->
+<!--               <div>-->
+<!--                  <span class="icon-my_location"></span> <span>Washington, DC</span></div>-->
+<!--            </div>-->
+<!--         </div>-->
 
-         <div class="col-md-6">
-            <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-               <div class="applyIconBtn" >
-                  <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                     <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
-                  </a>
-               <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div> 
-   <br>
-   <div class="card w-75 job-post-item job-post-item-body">
-      <div class="card-body row">
-         <div class="col-md-6">
-            <div class="job-post-item-header d-flex align-items-center">
-            <h2 class="mr-3 text-black"><a href="#">Frontend Developer</a></h2>
-               <div class="badge-wrap">
-                     <span class="bg-warning text-white badge py-2 px-3">Fulltime</span>
-               </div>
-            </div>
-            <div class="job-post-item-body d-block d-md-flex">
-               <div class="mr-3"><span class="icon-layers"></span> <a href="#">Miami Airport</a></div>
-               <div>
-                  <span class="icon-my_location"></span> <span>Miami, FL</span></div>
-            </div>
-         </div>
-
-         <div class="col-md-6">
-            <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-               <div class="applyIconBtn" >
-                  <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                     <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
-                  </a>
-               <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div> 
-   <br>
-   <div class="card w-75 job-post-item job-post-item-body">
-      <div class="card-body row">
-         <div class="col-md-6">
-            <div class="job-post-item-header d-flex align-items-center">
-            <h2 class="mr-3 text-black"><a href="#">Software Engineer(Python)</a></h2>
-               <div class="badge-wrap">
-                     <span class="bg-secondary text-white badge py-2 px-3">Internship</span>
-               </div>
-            </div>
-            <div class="job-post-item-body d-block d-md-flex">
-               <div class="mr-3"><span class="icon-layers"></span> <a href="#">Aero Space</a></div>
-               <div>
-                  <span class="icon-my_location"></span> <span>Houston, TX</span></div>
-            </div>
-         </div>
-
-         <div class="col-md-6">
-            <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-               <div class="applyIconBtn" >
-                  <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                     <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
-                  </a>
-               <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div> 
+<!--         <div class="col-md-6">-->
+<!--            <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">-->
+<!--               <div class="applyIconBtn" >-->
+<!--                  <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">-->
+<!--                     <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>-->
+<!--                  </a>-->
+<!--               <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a>-->
+<!--               </div>-->
+<!--            </div>-->
+<!--         </div>-->
+<!--      </div>-->
+<!--   </div> -->
+<!--   -->
 
 </section> 
 
