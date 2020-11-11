@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="{% static 'vendor/jquery-ui/css/jquery-ui.css' %}"> 
 {% endblock %} 
 
+
 {% block content %} 
 {% csrf_token %}
 <form method="GET" action="{%url 'search_page'%}" novalidate>

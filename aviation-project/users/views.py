@@ -22,7 +22,9 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate , login
 from postjob.models import Jobform , Jobtype, Category
 from django.http import HttpResponse , HttpResponseRedirect
-import psycopg2,pytz
+from datetime import datetime
+import pytz
+import psycopg2
 from django.core.mail import send_mail, EmailMessage
 from .filters import UsersFilter
 from events_app.models import EventListing
@@ -486,6 +488,30 @@ def jobseeker_profile_view(request):
                   {'users': users , 'works': works , 'educations': educations , 'applications': applications ,
                    'skills': skills})
 
+
+def uploadProfilePic_view(request):
+    users = Users.objects.filter(Username=request.user.username)
+    if request.method == 'GET':
+        return render(request, 'users/uploadProfilePic.html')
+    if request.method == 'POST' and 'upload' in request.POST:
+            profilePic = request.FILES['image']
+            thisuser = Users.objects.get(Username=request.user.username)
+            thisuser.image = profilePic
+            thisuser.save()
+            tz_NY = pytz.timezone('America/New_York') 
+            datetime_NY = datetime.now(tz_NY)
+            send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have successfully updated your profile picture in your Aviation Job Portal Profile at '+datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
+            return redirect('userProfile-home')
+    return render(request, 'userProfile/profile2.html')
+                    
+
+
 @login_required()
 @allowed_users(allowed_roles=['company_owner'])
 def view_jobseeker_profile(request, user_id):
@@ -502,6 +528,7 @@ def view_jobseeker_profile(request, user_id):
         'skills':skills
     }
     return render(request, 'userProfile/profileViewer.html', context)
+
 def trysearch(request):
     jobs = Jobform.objects.all()
     if request.method == 'POST' and 'apply' in request.POST:
@@ -524,6 +551,23 @@ def applyjob(request , job_id):
             return redirect('userProfile-home')
         job = Jobform.objects.filter(id=job_id).first()
         company = CompanyProfile.objects.filter(id=job.company.id).first()
+        company_profile = CompanyProfile.objects.get(user_id=job.company.id)
+        tz_NY = pytz.timezone('America/New_York') 
+        datetime_NY = datetime.now(tz_NY)
+        send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have successfully applied to ' + str(job.title) + ' at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
+        send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have received a new job application from '+ str(request.user.email) +' for your ' + str(job.title) + ' position at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. To see this application, click here http://127.0.0.1:8000/candidate_applications_page/ If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [company_profile.user.email],
+                fail_silently=False,
+            )
         files = []
         if len(x) > 0:
             if len(x) > 1:
