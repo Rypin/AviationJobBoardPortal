@@ -454,6 +454,7 @@ def applyjob(request , job_id):
             return redirect('userProfile-home')
         job = Jobform.objects.filter(id=job_id).first()
         company = CompanyProfile.objects.filter(id=job.company.id).first()
+        company_profile = CompanyProfile.objects.get(user_id=job.company.id)
         tz_NY = pytz.timezone('America/New_York') 
         datetime_NY = datetime.now(tz_NY)
         send_mail(
@@ -461,6 +462,13 @@ def applyjob(request , job_id):
                 'You have successfully applied to ' + str(job.title) + ' at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
                 'DoNotReply.AJP@gmail.com',
                 [request.user.email],
+                fail_silently=False,
+            )
+        send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have received a new job application from '+ str(request.user.email) +' for your ' + str(job.title) + ' position at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. To see this application, click here http://127.0.0.1:8000/candidate_applications_page/ If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [company_profile.user.email],
                 fail_silently=False,
             )
         files = []
