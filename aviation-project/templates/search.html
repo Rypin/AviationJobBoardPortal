@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="{% static 'vendor/jquery-ui/css/jquery-ui.css' %}"> 
 {% endblock %} 
 
-{% block content %} 
+{% block content %}
 {% csrf_token %}
 <form method="GET" action="{%url 'search_page'%}" novalidate>
     
@@ -33,7 +33,7 @@
 			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 		</div>
 	</nav>
-	
+	<div id ="filterUrl" value = "{% url 'filter_jobtype'%}"></div>
 	<!-- Main Search Container -->
 	<div class="container-fluid">
 		<div class="row">
@@ -60,8 +60,11 @@
 							</div>
 							<!-- Distance Filter -->
 							<div class="dropdown">
-								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="dropDownMenuHeader menuHeader2">Distance</div> <span class="dot dot2"></span> </button>
+
+								<button class="btn dropDownMenu" type="button" id="distance-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<div class="dropDownMenuHeader menuHeader2">Distance</div> 
+									<span class="dot dot2"></span> 
+								</button>
 								<div class="dropdown-menu dropdown2" aria-labelledby="dropdownMenuButton">
 									<div>
 										<input type="radio" aria-label="Checkbox for following text input" name="distance" value=5> <a class="jobTypeChkLabel">5 miles</a> </div>
@@ -82,8 +85,10 @@
 							
 							<!-- Date Filter -->
 							<div class="dropdown">
-								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="dropDownMenuHeader menuHeader3">Date Posted</div> <span class="dot dot3"></span> </button>
+								<button class="btn dropDownMenu" type="button" id="date-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<div class="dropDownMenuHeader menuHeader3">Date Posted</div> 
+									<span class="dot dot3"></span> 
+								</button>
 								<div class="dropdown-menu dropdown3" aria-labelledby="dropdownMenuButton">
 									<div>
 										<input class="jobTypeChk" type="radio" aria-label="Checkbox for following text input" name="posted_dur" checked> <a class="jobTypeChkLabel">Any date</a> </div>
@@ -104,8 +109,10 @@
 							
 							<!-- Salary Filter -->
 							<div class="dropdown" style="margin-bottom: 5px">
-								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="dropDownMenuHeader menuHeader4">Salary Range</div> <span class="dot dot4"></span> </button>
+								<button class="btn dropDownMenu" type="button" id="salary-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<div class="dropDownMenuHeader menuHeader4">Salary Range</div> 
+									<span class="dot dot4"></span> 
+								</button>
 								<div class="dropdown-menu dropdown4" aria-labelledby="dropdownMenuButton">
 									<p>
 										<label for="amount">Price Range:</label>
@@ -116,8 +123,10 @@
 							
 							<!-- Other Filter -->
 							<div class="dropdown">
-								<button class="btn dropDownMenu" type="button" id="job-type-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="dropDownMenuHeader menuHeader5">Other Filters</div> <span class="dot dot5"></span> </button>
+								<button class="btn dropDownMenu" type="button" id="other-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<div class="dropDownMenuHeader menuHeader5">Other Filters</div> 
+									<span class="dot dot5"></span> 
+								</button>
 								<div class="dropdown-menu dropdown5" aria-labelledby="dropdownMenuButton">
 									<div>
 										<input id="workAuthChk" type="checkbox" aria-label="Checkbox for following text input" name="work_auth">
@@ -159,9 +168,10 @@
 												<div style="margin-left: 20px; padding-top: 10px">
 													<h6>{{result.company.name}}</h6>
 													<h4 style="font-weight: bold">{{result.title}}</h4>
-													<h6>{{result.address}}</h6> </div>
-											</div>
-											<small>{{result.age}}</small>
+													<h6>{{result.address}}</h6>
+												</div>
+											</div> 
+											<small>{{result.age}}</small> 
 										</div>
 									</button>
 									</div>
@@ -217,5 +227,5 @@
 <script src="../static/vendor/jquery-ui/js/jquery-ui.js"></script>
 
 <!-- Custom Search Content JavaScript -->
-<script src="../static/custom/js/custom.js"></script> 
-{%endblock%}
+<script src="../static/custom/js/custom.js"></script>
+<script src="../static/custom/js/searchFilters.js"></script> {%endblock%}

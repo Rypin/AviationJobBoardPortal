@@ -18,7 +18,7 @@
 			</div>
 			<div class="tab-content">
 				<div class="row active" id="job" data-tab-content>
-					<form class="form-inline" method="GET" action="{%url 'choose_register'%}" novalidate>
+					<form class="form-inline" method="GET" action="{%url 'jobsearch'%}" novalidate>
 						<div class="col-lg-3">
 							<div class="form-group ">
 								<div class='form-control lines'> {{PostingForm.title}} </div>
@@ -41,7 +41,7 @@
 								<select id="jobtype" class="form-control" name="jobtype" style="margin-right: -0px; border: .5px inset #495057">
 									<option checkbox>Job Type</option> 
 									    {% for jobtypes in jobtypes %}
-									        <option value="{{ jobtypes}}">{{ jobtypes }}</option> 
+									        <option value="{{jobtypes}}">{{ jobtypes }}</option>
 									    {% endfor %} 
 								</select>
 							</div>

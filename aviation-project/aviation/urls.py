@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from postjob import views as postjob_views
@@ -69,8 +70,12 @@ urlpatterns = [
     # path('postjob/', postjob_view, name='posting'),
     path('jobsearch/', postjob_views.jobsearch, name='jobsearch'),
     path('jobsearch/<int:job_id>/', postjob_views.job_detail, name='job_detail'),
+
     path('view-applications/', user_views.viewApplications, name ='company_applications'),
-    
+    #AJAX FOR JOBSEARCH
+    url(r'^ajax/filterJobtype/$', postjob_views.filterJobtype, name='filter_jobtype'),
+    #
+
     path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'),
     path('about/', user_views.about, name = 'userProfile-about'),
     # path('signup/', user_views.signup, name = 'userProfile-signup'),

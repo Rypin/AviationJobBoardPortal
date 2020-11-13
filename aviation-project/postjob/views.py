@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
+from django.core import serializers
 from django.http import HttpResponse, Http404
 from .forms import PostingForm, UpdateJobForm
 from postjob.models import Jobform, Jobtype, Category
 from datetime import timedelta, date, datetime
+from django.http import JsonResponse
 import math
 from users.models import CompanyProfile as cp
 from events_app.models import *
@@ -86,7 +88,6 @@ def jobPostCount(querySet):
     else:
         return "{} Jobs Found".format(size)
 
-
 def jobsearch(request):
     results = Jobform.objects.all()
     jobtypes = Jobtype.objects.all()
@@ -98,7 +99,6 @@ def jobsearch(request):
     contract = request.GET.get('Contract')
     temporary = request.GET.get('Temporary')
     job_id = request.GET.get('job')
-
     searchaddress = request.GET.get('address')
     searchgeo = request.GET.get('geolocation')
     auth_req = request.GET.get('work_auth')
@@ -196,6 +196,37 @@ def userviewcompany(request, company_id):
 
     return render(request, "userViewCompany.html", {'company': company, 'events': events, 'jobs': jobs})
 
-
-
-
+def filterJobtype(request):
+    url = str(request.GET.get('url')).split('&')
+    query = {}
+    jobs = Jobform.objects.all()
+    result = []
+    for i in url:
+        i = i.replace('?','')
+        item = i.split('=')
+        query[item[0]] = item[1]
+    for condition in query:
+        if condition == 'title' and query[condition] != '' and query[condition] is not None:
+            jobs = jobs.filter(title__icontains=query[condition])
+        if condition =='geolocation':
+            print(query[condition])
+    print(query)
+    fullTime = request.GET.get('Full-Time', None)
+    print(fullTime)
+    partTime = request.GET.get('Part-Time', None)
+    print(partTime)
+    internship = request.GET.get('Internship', None)
+    print(internship)
+    contract = request.GET.get('Contract', None)
+    print(contract)
+    temporary = request.GET.get('Temporary', None)
+    print(temporary)
+    for i in jobs:
+        result.append(i.id)
+    print(jobs)
+    print(result)
+    data = {
+        'results': result
+    }
+    print(data)
+    return JsonResponse(data, safe=False)
