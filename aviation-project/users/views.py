@@ -248,17 +248,21 @@ def resume(request):
     if request.method == 'POST' and 'upload' in request.POST:
         uploaded_file = request.FILES['resume']
         if uploaded_file.name.endswith(".pdf") or uploaded_file.name.endswith(".docx"):
-            fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT , 'resumes'))
-            new_name = str(request.user.id) + uploaded_file.name
+            path = settings.MEDIA_ROOT + "\\" + str(request.user.id) + "\\"
+            fs = FileSystemStorage(location=path)
+            if uploaded_file.name.endswith(".pdf"):
+                new_name = 'resume.pdf'
+            elif uploaded_file.name.endswith(".docx"):
+                new_name = 'resume.docx'
+            path = os.path.join(settings.MEDIA_ROOT , str(request.user.id)) + '/' + new_name
+            os.remove(path)
             fs.save(new_name , uploaded_file)
-            path = os.path.join(settings.MEDIA_ROOT , 'resumes') + '/' + new_name
             parsed_info = ResumeParser(path).get_extracted_data()
             request.session['parsed_name'] = parsed_info.pop('name')
             request.session['parsed_email'] = parsed_info.pop('email')
             request.session['parsed_number'] = parsed_info.pop('mobile_number')
             request.session['parsed_skills'] = parsed_info.pop('skills')
             request.session['parsed_status'] = True
-            os.remove(path)
             return redirect('review')
         else:
             print("Invalid Request")
@@ -407,6 +411,7 @@ def review(request):
                 address=request.session.get('parsed_address')
             )
             if 'parsed_skills' in request.session:
+                request.session.modified = True
                 del request.session['parsed_name']
                 del request.session['parsed_email']
                 del request.session['parsed_number']
