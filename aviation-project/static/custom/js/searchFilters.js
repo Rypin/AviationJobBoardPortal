@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	//variable for distance
-	var distance = 0;
+	var distance = 25;
 	//variable for date posted
 	var dateRange = 0;
 	//variables for salary range
@@ -9,13 +9,8 @@ $(document).ready(function() {
 	//variable for US Work Auth
 	var usAuth = false;
 	function filterJobs(){
-
-	}
-    $('#fullTimeChk').change(function() {
-        //uncheck all jobs
-    	if($('#allJobsChk').is(":checked")){
-    		$('#allJobsChk').prop('checked', false);
-    	}
+	    $(".result").hide();
+        $(".post").hide();
         $.ajax({
 	        url: '/ajax/filterJobtype/',
 	        data: {
@@ -33,9 +28,61 @@ $(document).ready(function() {
 	        },
 	        dataType:'json',
 	        success: function(data){
-	            console.log(data.results)
+	            if (data.results.length === 0){
+	                $("#postCount").html("")
+	                $("#noJob").show();
+	            }
+	            else{
+	                jQuery.each(data.results, function(index, item) {
+	                    if (index == 0){
+	                        $("#post"+item).show();
+	                    }
+	                    $("#result"+item).show();
+                    });
+                    if((data.results.length) === 1){
+                        $("#postCount").html("1 Job Found")
+                    }
+                    else{
+                        $("#postCount").html((data.results.length)+" Job Found");
+                    }
+	            }
+	            for(var key in data.test){
+	            	console.log(key);
+//	            	TODO Create function to add new Job posts
+//                  The for loop here will loop through the dictionary test, key will = id of job post, it will contain another dictionary containing all the data from the job post with the corresponding id from key
+	            }
 	        }
-	    })
-      	console.log($(this).is(':checked'));
-    });
+	    });
+	}
+	$('.resultButton').on("click",function(e){
+	    var postId= $(this).val();
+	    $(".post").hide();
+	    $("#post"+postId).show();
+	});
+	$('#jobTypeFilter').change(function() {
+	            var test = $("input[type='checkbox']:checked").attr('name');
+        console.log(test);
+	    filterJobs();
+	});
+    $('#distanceFilter').change(function(){
+						selected_value = $("input[name='distance']:checked").val();
+						distance = selected_value;
+						filterJobs();
+			        });
+    $('#dateFilter').change(function(){
+						selected_value = $("input[name='posted_dur']:checked").val();
+						dateRange = selected_value;
+						console.log(dateRange)
+						filterJobs();
+			        });
+    $('#salaryFilter').change(function(){
+						selected_value = $("input[name='amount']:checked").val();
+                        salary= $("#salaryRangeChk").is(":checked");
+						dateRange = selected_value;
+						salaryAmount = $('#amount').val();
+						filterJobs();
+			        });
+	$('#workAuthChk').change(function(){
+                        filterJobs();
+	});
 });

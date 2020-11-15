@@ -137,11 +137,10 @@ def jobsearch(request):
 
     if minimum != '' and minimum is not None:
         results = results.filter(salary_max__gte = minimum)
+    # if duration != 'on' and duration is not None:
+    #     listjobs = [r.id for r in results if date.today() - r.postdate <= timedelta(days=int(duration))]
+    #     results = results.filter(id__in=listjobs)
 
-    if duration != 'on' and duration is not None:
-        listjobs = [r.id for r in results if date.today() - r.postdate <= timedelta(days=int(duration))]
-        results = results.filter(id__in=listjobs)
-    
     if distance != 'on' and distance is not None and searchgeo != '' and searchgeo is not None:
         geosearch = searchgeo.split(",")
         searchlat = float(geosearch[0])
@@ -162,7 +161,7 @@ def jobsearch(request):
         if job_id is not None:
             job = Jobform.objects.get(id = job_id)
         else:
-            job = results.order_by("id")[0]
+            job = False
     
     return render(request, 'search.html', {'results': results, 'jobtypes':jobtypes, 'PostingForm':form, "count":jobPostCount(results),'job': job, 'jobexists': job_exists})
 
@@ -197,36 +196,66 @@ def userviewcompany(request, company_id):
     return render(request, "userViewCompany.html", {'company': company, 'events': events, 'jobs': jobs})
 
 def filterJobtype(request):
-    url = str(request.GET.get('url')).split('&')
     query = {}
     jobs = Jobform.objects.all()
     result = []
-    for i in url:
-        i = i.replace('?','')
-        item = i.split('=')
-        query[item[0]] = item[1]
-    for condition in query:
+    data = {}
+    #Getting Data from Ajax request
+    url = str(request.GET.get('url')).split('&')
+    #JobType Variables
+    jobtypes = {
+        'Full Time':request.GET.get('Full-Time', None),
+        'Part Time': request.GET.get('Part-Time', None),
+        'Internship': request.GET.get('Internship', None),
+        'Contract': request.GET.get('Contract', None),
+        'Temporary': request.GET.get('Temporary', None)
+    }
+    jobtypequery = [] # To contain the variables that are chosen for jobtype filter
+    #Distance Filter Variable
+    distance = request.GET.get('distance', None)
+    print('Distance:'+ str(distance))
+    #Date Filter Variable
+    date = request.GET.get('dateRange', None)
+    print('Date:'+str(date))
+    #Salary Filter Variables
+    salary = {
+        'on': request.GET.get('salary', None), #Store our boolean from our checkbox and range value from our slider
+        'range': request.GET.get('salaryRange', None).replace('$','').split(' - ') #replace removes all '$' and split will remove ' - ' and return a list containing our range values
+    }
+    print('Salary:' + str(salary['on']))
+    print(salary['range'])
+    #Other Filter Variables
+    usAuth = request.GET.get('USAuth', None)
+    print('usAuth:'+ str(usAuth))
+    if url != ['']:
+        for i in url: #get the search parameters from the url
+            i = i.replace('?','')
+            item = i.split('=')
+            query[item[0]] = item[1]
+    for condition in query: #query for search(Title Location Category) parameters
         if condition == 'title' and query[condition] != '' and query[condition] is not None:
             jobs = jobs.filter(title__icontains=query[condition])
-        if condition =='geolocation':
+        if condition =='geolocation' and query[condition] != '' and query[condition] is not None:
+            coordinates = query[condition].split('%2C')
+            print(coordinates) #split by %2c
+        if condition == 'category' and query[condition] != '' and query[condition] is not None:
             print(query[condition])
-    print(query)
-    fullTime = request.GET.get('Full-Time', None)
-    print(fullTime)
-    partTime = request.GET.get('Part-Time', None)
-    print(partTime)
-    internship = request.GET.get('Internship', None)
-    print(internship)
-    contract = request.GET.get('Contract', None)
-    print(contract)
-    temporary = request.GET.get('Temporary', None)
-    print(temporary)
+    #for loop for jobtypes
+    if 'true' in jobtypes.values():
+        for type in jobtypes:
+            if jobtypes[type] == 'true':
+                jobtypequery.append(Jobtype.objects.get(name=type))
+        jobs = jobs.filter(jobtype__in = jobtypequery)
+    #distance filter
+    if distance == 0:
+        print(distance)
     for i in jobs:
         result.append(i.id)
     print(jobs)
-    print(result)
-    data = {
-        'results': result
+    data['results'] = result
+    data['test'] ={
+        'i1': {'d1':1,'d2':'hi'},
+        'i2': {'d1': 2 , 'd2': 'sup'} ,
     }
     print(data)
     return JsonResponse(data, safe=False)

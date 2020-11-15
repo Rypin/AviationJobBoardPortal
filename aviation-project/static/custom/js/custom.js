@@ -1,4 +1,4 @@
-$(function() {
+$(document).ready(function() {
 
     // For the Double Slider
     $("#slider-range").slider({
@@ -60,18 +60,22 @@ $(function() {
     })
 
     // The change event function for the "Job Type" filter option
-    $('.jobTypeChk').change(function() {
+    $('#jobTypeBox').change(function() {
+        var test = $("input[type='checkbox']:checked").attr('name');
         if ($(this).prop('checked')) {
             $(".menuHeader1").parent().addClass("headerActive");
             $(".dot1").addClass("dotActive");
+            console.log("Adding");
         } else {
             var anyChecked = false;
-            $('.jobTypeChk').each(function() {
+            $('jobTypeBox').each(function() {
                 if ($(this).prop('checked')) {
                     anyChecked = true;
                 }
+                console.log(anyChecked);
             });
             if (!anyChecked) {
+                console.log('removing')
                 $(".menuHeader1").parent().removeClass("headerActive");
                 $(".dot1").removeClass("dotActive");
             }
@@ -154,6 +158,9 @@ $("input:checkbox").click(function(){
 function salarySelectionEvent(min, max) {
     $(".menuHeader4").text("$" + min + " - " + "$" + max);
     $(".menuHeader4").val("$" + min + " - " + "$" + max);
+    if($(".menuHeader4").parent('.headerActive').length != 0)
+    {
+    }
     $(".menuHeader4").parent().addClass("headerActive");
     $(".dot4").addClass("dotActive");
 }
