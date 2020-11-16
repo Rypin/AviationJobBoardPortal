@@ -8,6 +8,8 @@ $(document).ready(function() {
 	var salaryAmount = $('#amount').val();
 	//variable for US Work Auth
 	var usAuth = false;
+	var oldJobs = $(".resultButton").map(function(){return $(this).val();}).get();
+	console.log(oldJobs)
 	function filterJobs(){
 	    $(".result").hide();
         $(".post").hide();
@@ -15,6 +17,7 @@ $(document).ready(function() {
 	        url: '/ajax/filterJobtype/',
 	        data: {
 	            'url': window.location.search,
+	            'oldJobs': oldJobs,
 	            'Full-Time': $('#fullTimeChk').is(":checked"),
 	            'Part-Time': $('#partTimeChk').is(":checked"),
 	            'Internship': $('#internChk').is(":checked"),
@@ -46,10 +49,9 @@ $(document).ready(function() {
                         $("#postCount").html((data.results.length)+" Job Found");
                     }
 	            }
-	            for(var key in data.test){
+	            for(var key in data.newJobs){
 	            	console.log(key);
-//	            	TODO Create function to add new Job posts
-//                  The for loop here will loop through the dictionary test, key will = id of job post, it will contain another dictionary containing all the data from the job post with the corresponding id from key
+	            	console.log(data.newJobs.key);
 	            }
 	        }
 	    });

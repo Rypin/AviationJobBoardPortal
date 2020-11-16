@@ -202,6 +202,7 @@ def filterJobtype(request):
     data = {}
     #Getting Data from Ajax request
     url = str(request.GET.get('url')).split('&')
+    currentJobs = request.GET.get('oldJobs')
     #JobType Variables
     jobtypes = {
         'Full Time':request.GET.get('Full-Time', None),
@@ -237,7 +238,10 @@ def filterJobtype(request):
             jobs = jobs.filter(title__icontains=query[condition])
         if condition =='geolocation' and query[condition] != '' and query[condition] is not None:
             coordinates = query[condition].split('%2C')
-            print(coordinates) #split by %2c
+            jobsInRange=[r.id for r in jobs if calculate_miles(float(coordinates[0]), float(coordinates[1]), float(str(r.geolocation).split(",")[0]),
+                                                      float(str(r.geolocation).split(",")[1])) <= float(distance)]
+            jobs = jobs.filter(id__in=jobsInRange)
+            print(jobsInRange)
         if condition == 'category' and query[condition] != '' and query[condition] is not None:
             print(query[condition])
     #for loop for jobtypes
@@ -251,11 +255,17 @@ def filterJobtype(request):
         print(distance)
     for i in jobs:
         result.append(i.id)
+        # if i.id in currentJobs:
+        #     data['newPosts'][str(i.id)] = {
+        #         'id': i.id,
+        #         'title': i.title,
+        #         'company': i.company.name,
+        #         'category': i.category.name,
+        #         'jobtype': i.jobtype.name,
+        #         'description': i.description,
+        #         'salaryRange': '$' + str(i.salary_min) + ' - $' + str(i.salary_max)
+        #     }
     print(jobs)
     data['results'] = result
-    data['test'] ={
-        'i1': {'d1':1,'d2':'hi'},
-        'i2': {'d1': 2 , 'd2': 'sup'} ,
-    }
     print(data)
     return JsonResponse(data, safe=False)
