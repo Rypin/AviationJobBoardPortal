@@ -44,6 +44,7 @@
 						</li>
 						
 						<!-- Favorited Job Post Section -->
+						{% if request.user.groups.all.0.name == "jobseeker" %}
 						<li id="animatable" style="display: none">
 							<hr>
 							<div style="margin: 0px 0px 0px 10px"> 
@@ -56,7 +57,14 @@
 							</div>
 							<div class="collapse" id="collapseExample" style="">
 								<div class="card card-body" id="cardBody">
-									<div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
+									<div id="favoriteJobs" class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
+										{% comment %}
+										{% for favjob in request.user. %}
+										<label class="btn btn-secondary">
+											<a href="{% url 'job_detail' favjob.id %}">{{favjob.title}} (#{{favjob.id}})</a>
+										{% endfor %}
+										{% endcomment %}
+										<!--
 										<label class="btn btn-secondary">
 											<input type="radio" name="options" id="option1" checked=""> Job Post (#1) </label>
 										<label class="btn btn-secondary">
@@ -72,13 +80,14 @@
 										<label class="btn btn-secondary">
 											<input type="radio" name="options" id="option3"> Job Post (#7) </label>
 										<label class="btn btn-secondary">
-											<input type="radio" name="options" id="option3"> Job Post (#8) </label>
+											<input type="radio" name="options" id="option3"> Job Post (#8) </label> -->
+										
 									</div>
 								</div>
 							</div>
 							<hr> 
 						</li>
-						
+						{% endif %}
 					</ul>
 				</section>
 			</div>
@@ -123,7 +132,27 @@
 	<!-- Bootstrap core JavaScript -->
 	<script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
 	<script src='../static/front/js/nav.js' defer></script> 
-  	<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+	<script>
+
+	var url_mask = "{% url 'job_detail' 123 %}".replace(/123/, "id");
+
+	$.ajax({
+			url: '/ajax/load_favoritejobs/',
+			dataType: 'json',
+			success: function (respData) {
+			if (respData.exists) {
+
+				for(x of respData.jobs) {
+					link = url_mask.replace("id", x[0])
+					$("#favoriteJobs").append(`<button class=\"btn btn-secondary\" onclick=\"window.location.href=\'${link}\'\">${x[1]} (#${x[0]})</button>`);
+				}
+			}
+			}
+	});
+
+	</script>
   
   	{% block other_js %} 
 	
