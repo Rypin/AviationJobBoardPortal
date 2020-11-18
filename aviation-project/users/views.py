@@ -684,9 +684,6 @@ def loadJobs(request):
         alljobs.append((job.id, job.title))
 
     data = {
-        'exists': True,
-        'username': user.Username,
-		'id': user.id,
         'jobs': alljobs,
     }
     return JsonResponse(data)
