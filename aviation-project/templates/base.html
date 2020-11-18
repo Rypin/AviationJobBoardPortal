@@ -15,18 +15,19 @@
 	<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
   <link href="{% sass_src 'front/scss/nav/nav.scss' %}" rel="stylesheet" type="text/css" />
-
-	<link href="{% static 'custom/css/candAppsCustom.css' %}" rel="stylesheet" type="text/css" />
-</head>
   
+  <!-- NEEDS TO BE MOVED -->
+	<link href="{% static 'custom/css/candAppsCustom.css' %}" rel="stylesheet" type="text/css" />
+  
+  <!-- Where page-specific css files are inserted -->
   {% block other_css %}
 
   {% endblock %}
 </head>
 
 <body>
-  {% if user.is_authenticated %}
-  <!-- Side Dashboard -->
+  	{% if user.is_authenticated %}
+  	<!-- Side Dashboard -->
 	<div class="container-fluid" style="height: 100%">
 		<div id="toggleNavBar" class="sideNav">
 			<section class='expandToggle' style="z-index:1">
@@ -52,48 +53,34 @@
 					<li class="linkItem">
 						<a href="{% url 'logout' %}"> <i class="fa fa-sign-out icon" aria-hidden="true"></i> <span>Logout</span> </a>
 					</li>
-
-					<!-- Favorited Job Post Section -->
-					<li id="animatable" style="display: none">
-						<hr>
-						<div style="margin-left: 5px; margin-right: 5px; margin-bottom: 4px"> 
-							<span style="margin-right: 1px;padding-left: 0px;font-weight: 500;">Favorited Job Posts</span>
-							<span>
-            					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample" style="margin-bottom: 5px;">
-              						<i class="fa fa-chevron-down"></i>
-            					</button>
-							</span>
-						</div>
-						<div class="collapse" id="collapseExample" style="">
-							<div class="card card-body" id="cardBody">
-								<div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
-									<label class="btn btn-secondary">
-										<input type="radio" name="options" id="option1" checked=""> Job Post (#1) </label>
-									<label class="btn btn-secondary">
-										<input type="radio" name="options" id="option2"> Job Post (#2) </label>
-									<label class="btn btn-secondary active">
-										<input type="radio" name="options" id="option3"> Job Post (#3) </label>
-									<label class="btn btn-secondary">
-										<input type="radio" name="options" id="option4"> Job Post (#4) </label>
-									<label class="btn btn-secondary">
-										<input type="radio" name="options" id="option5"> Job Post (#5) </label>
-									<label class="btn btn-secondary">
-										<input type="radio" name="options" id="option6"> Job Post (#6) </label>
-									<label class="btn btn-secondary">
-										<input type="radio" name="options" id="option3"> Job Post (#7) </label>
-									<label class="btn btn-secondary">
-										<input type="radio" name="options" id="option3"> Job Post (#8) </label>
+						
+						<!-- Favorited Job Post Section -->
+						{% if request.user.groups.all.0.name == "jobseeker" %}
+						<li id="animatable" style="display: none">
+							<hr>
+							<div style="margin: 0px 0px 0px 10px"> 
+								<span style="margin-right: 1px;padding-left: 0px; font: 18px Calibri, sans-serif">Favorited Job Posts</span>
+								<span>
+									<button id="sideDashButton" class="btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample" style="margin-bottom: 7px;">
+										<i class="fa fa-chevron-down"></i>
+									</button>
+								</span>
+							</div>
+							<div class="collapse" id="collapseExample" style="">
+								<div class="card card-body" id="cardBody">
+									<div id="favoriteJobs" class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
+                    <!-- Favorite Job Links Loaded Here -->
+									</div>
 								</div>
 							</div>
-						</div>
-						<hr> 
-					</li>
-					
-				</ul>
-			</section>
-		</div>
-  </div>
-  {% endif %}
+							<hr> 
+						</li>
+						{% endif %}
+					</ul>
+				</section>
+			</div>
+	</div>
+  	{% endif %}
   
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
@@ -141,7 +128,6 @@
   </nav>
 
    <!--End Navigation Bar -->
-  
 
 	{% block content %} 
 	
@@ -149,10 +135,33 @@
 	
 	<!-- Bootstrap core JavaScript -->
 	<script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
-	<script src='../static/front/js/nav.js' defer></script>
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+	
+  <!-- JQuery JavaScript Library-->            
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+              
+  <!-- Navigation Bar JavaScript -->
+  <script src='../static/front/js/nav.js' defer></script>
+              
+  <!-- Favorite Job Links Loading JavaScript -->
+	<script>
 
+	var url_mask = "{% url 'search_page'%}?job=id";
+
+	$.ajax({
+			url: '/ajax/load_favoritejobs/',
+			dataType: 'json',
+			success: function (respData) {
+				for(x of respData.jobs) {
+					link = url_mask.replace("id", x[0])
+					$("#favoriteJobs").append(`<button class=\"btn btn-secondary\" onclick=\"window.location.href=\'${link}\'\">${x[1]} (#${x[0]})</button>`);
+				}
+			}
+	});
+
+	</script>
   
+  <!-- Where page-specific js files are inserted -->
   {% block other_js %} 
 	
 	{% endblock %}
