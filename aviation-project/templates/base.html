@@ -132,12 +132,12 @@
 	
 	{% endblock %} 
 	
-	<!-- Bootstrap core JavaScript -->
-	<script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
+	<!-- Bootstrap core JavaScript --> 
+	<script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script> 
   	<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 	
-	<!-- JQuery JavaScript Library-->            
-	<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+	<!-- JQuery JavaScript Library -->            
+	<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script> 
 				
 	<!-- Navigation Bar JavaScript -->
 	<script src='../static/front/js/nav.js' defer></script>
@@ -145,18 +145,28 @@
 	<!-- Favorite Job Links Loading JavaScript -->
 	<script>
 
-	var url_mask = "{% url 'search_page'%}?job=id";
+	$(window).on('load', function(){
+		if($("#favoriteJobs").length != 0){
+			var url_mask = "{% url 'search_page'%}?job=id";
 
-	$.ajax({
-			url: '/ajax/load_favoritejobs/',
-			dataType: 'json',
-			success: function (respData) {
-				for(x of respData.jobs) {
-					link = url_mask.replace("id", x[0])
-					$("#favoriteJobs").append(`<button class=\"btn btn-secondary\" onclick=\"window.location.href=\'${link}\'\">${x[1]} (#${x[0]})</button>`);
+			$.ajax({
+				url: '/ajax/load_favoritejobs/',
+				dataType: 'json',
+				success: function (respData) {
+					for(x of respData.jobs) {
+						link = url_mask.replace("id", x[0])
+						$("#favoriteJobs").append(`<button class=\"btn btn-secondary\" onclick=\"window.location.href=\'${link}\'\">${x[1]} (#${x[0]})</button>`);
+					}
 				}
-			}
+			});
+
+			console.log("fav job loading function fired")
+		}
 	});
+
+	
+
+	
 
 	</script>
   
