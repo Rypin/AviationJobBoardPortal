@@ -88,145 +88,130 @@
 		</div>
 	</div>
 </div>
+<!--<section class="industries">-->
+<!--   <div class="industry">-->
+<!--      <h5 class="home__name">positions</h5>-->
+<!--      <h5 class="home__name">positions</h5>-->
+<!--   </div>-->
+<!--   <div class="industry">industry card </div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--   <div class="industry">industry card</div>-->
+<!--</section>-->
 <section class="ftco-section">
-	<div class="container">
-		<div class="row justify-content-center mb-5 pb-3">
-			<div class="col-md-7 heading-section text-center ftco-animate"> <span class="subheading">Job Categories</span>
-				<h2 class="mb-4">Top Categories</h2> </div>
-		</div>
-		<div class="row">
-			<div class="col-md-3 ftco-animate">
-				<ul class="category">
-					<li><a href="#">Aviation <br><span class="number">354</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation <br><span class="number">143</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation <br><span class="number">100</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation <br><span class="number">90</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-				</ul>
-			</div>
-			<div class="col-md-3 ftco-animate">
-				<ul class="category">
-					<li><a href="#">Aviation &amp; Training <br><span class="number">100</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation <br><span class="number">200</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation <br><span class="number">300</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation <br><span class="number">150</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-				</ul>
-			</div>
-			<div class="col-md-3 ftco-animate">
-				<ul class="category">
-					<li><a href="#">Aviation<br><span class="number">400</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation <br><span class="number">100</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation <br><span class="number">222</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Office &amp; Admin <br><span class="number">123</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-				</ul>
-			</div>
-			<div class="col-md-3 ftco-animate">
-				<ul class="category">
-					<li><a href="#">Aviation job<br><span class="number">324</span> <span>Open position</span></span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation job<br><span class="number">564</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation job &amp; Sales <br><span class="number">234</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-					<li><a href="#">Aviation job<br><span class="number">425</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</section>
-<section class="recentJobs">
-	<div class=' postJob'>
-		<h1 class='h1Recent'>Recent Jobs</h1>
-		<form method="GET" action="{% url 'post_job' %}">
-			<button class="jobPosting" type="submit"><span>Post a Job</span></button>
-		</form>
-	</div>
-	<div class="card w-75 job-post-item job-post-item-body">
-		<div class="card-body row">
-			<div class="col-md-6">
-				<div class="job-post-item-header d-flex align-items-center">
-					<h2 class="mr-3 text-black"><a href="#">FullStack Developer</a></h2>
-					<div class="badge-wrap"> <span class="bg-info text-white badge py-2 px-3">Freelance</span> </div>
-				</div>
-				<div class="job-post-item-body d-block d-md-flex">
-					<div class="mr-3"><span class="icon-layers"></span> <a href="#">Lockheed Martin</a></div>
-					<div> <span class="icon-my_location"></span> <span>Washington, DC</span></div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-					<div class="applyIconBtn">
-						<a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2"> <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span> </a> <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a> 
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<br>
-	<div class="card w-75 job-post-item job-post-item-body">
-		<div class="card-body row">
-			<div class="col-md-6">
-				<div class="job-post-item-header d-flex align-items-center">
-					<h2 class="mr-3 text-black"><a href="#">Backend Developer</a></h2>
-					<div class="badge-wrap"> <span class="bg-primary text-white badge py-2 px-3">Partime</span> </div>
-				</div>
-				<div class="job-post-item-body d-block d-md-flex">
-					<div class="mr-3"><span class="icon-layers"></span> <a href="#">NASA</a></div>
-					<div> <span class="icon-my_location"></span> <span>Dallas, TX</span></div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-					<div class="applyIconBtn">
-						<a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2"> <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span> </a> <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a> 
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<br>
-	<div class="card w-75 job-post-item job-post-item-body">
-		<div class="card-body row">
-			<div class="col-md-6">
-				<div class="job-post-item-header d-flex align-items-center">
-					<h2 class="mr-3 text-black"><a href="#">Frontend Developer</a></h2>
-					<div class="badge-wrap"> <span class="bg-warning text-white badge py-2 px-3">Fulltime</span> </div>
-				</div>
-				<div class="job-post-item-body d-block d-md-flex">
-					<div class="mr-3"><span class="icon-layers"></span> <a href="#">Miami Airport</a></div>
-					<div> <span class="icon-my_location"></span> <span>Miami, FL</span></div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-					<div class="applyIconBtn">
-						<a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2"> <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span> </a> <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a> 
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<br>
-	<div class="card w-75 job-post-item job-post-item-body">
-		<div class="card-body row">
-			<div class="col-md-6">
-				<div class="job-post-item-header d-flex align-items-center">
-					<h2 class="mr-3 text-black"><a href="#">Software Engineer(Python)</a></h2>
-					<div class="badge-wrap"> <span class="bg-secondary text-white badge py-2 px-3">Internship</span> </div>
-				</div>
-				<div class="job-post-item-body d-block d-md-flex">
-					<div class="mr-3"><span class="icon-layers"></span> <a href="#">Aero Space</a></div>
-					<div> <span class="icon-my_location"></span> <span>Houston, TX</span></div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-					<div class="applyIconBtn">
-						<a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2"> <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span> </a> <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a> 
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-{% endblock %}
+    	<div class="container">
+    		<div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section text-center ftco-animate">
+          	<span class="subheading">Job Categories</span>
+            <h2 class="mb-4">Top Categories</h2>
+          </div>
+        </div>
+        <div class="row">
+               {% for category in categories %}
+           <div class="col-lg-3 ftco-animate">
+        		<ul class="category">
+        			<li><a href="#">{{category.name}}<br><span class="number">{{category.count}}</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
+        		</ul>
+        	</div>
+               {% endfor %}
+<!--        	<div class="col-md-3 ftco-animate">-->
 
-{% block other_js %}
-<script src='../static/front/js/landing.js' defer></script>
+<!--        		<ul class="category">-->
+<!--        			<li><a href="#">Aviation <br><span class="number">354</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>-->
+<!--        			<li><a href="#">Aviation <br><span class="number">143</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>-->
+<!--        			<li><a href="#">Aviation <br><span class="number">100</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>-->
+<!--        			<li><a href="#">Aviation <br><span class="number">90</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>-->
+<!--        		</ul>-->
+<!--        	</div>-->
+        </div>
+    	</div>
+    </section>
+<section class="recentJobs">
+
+   <div class=' postJob'>
+         <h1 class='h1Recent'>Recent Jobs</h1>
+        <form method="GET" action="{% url 'post_job' %}">
+            <button class="jobPosting" type="submit"><span>Post a Job</span></button>
+        </form>
+   </div> 
+   {% for job in new_jobs %}
+   <div class="card w-75 job-post-item job-post-item-body">
+      <div class="card-body row">
+         <div class="col-md-6">
+            <div class="job-post-item-header d-flex align-items-center">
+            <h2 class="mr-3 text-black"><a href="#">{{job.title}}</a></h2>
+               <div class="badge-wrap">
+                  <span class="
+                  {% if  job.jobtype.name == 'Full Time' %}
+                  bg-primary
+                  {% elif job.jobtype.name == 'Part Time' %}
+                  bg-success
+                  {% elif job.jobtype.name == 'Internship' %}
+                  bg-secondary
+                  {% elif job.jobtype.name == 'Contract' %}
+                  bg-warning
+                  {% elif job.jobtype.name == 'Temporary' %}
+                  bg-info
+                  {% else %}
+                  bg-info
+                  {%endif%}
+                  text-white badge py-2 px-3">{{job.jobtype.name}}</span>
+               </div>
+            </div>
+            <div class="job-post-item-body d-block d-md-flex">
+               <div class="mr-3"><span class="icon-layers"></span> <a href="#">{{job.company.name}}</a></div>
+               <div>
+                  <span class="icon-my_location"></span> <span>{{job.address}}</span></div>
+            </div>
+         </div>
+
+         <div class="col-md-6">
+            <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
+               <div class="applyIconBtn" >
+                  <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                     <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
+                  </a>
+               <a href="{% url 'applyjob' job.id%}" class="btn btn-primary py-2">Apply Job</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <br>
+   {% endfor %}
+<!--   <div class="card w-75 job-post-item job-post-item-body">-->
+<!--      <div class="card-body row">-->
+<!--         <div class="col-md-6">-->
+<!--            <div class="job-post-item-header d-flex align-items-center">-->
+<!--            <h2 class="mr-3 text-black"><a href="#">FullStack Developer</a></h2>-->
+<!--               <div class="badge-wrap">-->
+<!--                  <span class="bg-info text-white badge py-2 px-3">Freelance</span>-->
+<!--               </div>-->
+<!--            </div>-->
+<!--            <div class="job-post-item-body d-block d-md-flex">-->
+<!--               <div class="mr-3"><span class="icon-layers"></span> <a href="#">Lockheed Martin</a></div>-->
+<!--               <div>-->
+<!--                  <span class="icon-my_location"></span> <span>Washington, DC</span></div>-->
+<!--            </div>-->
+<!--         </div>-->
+
+<!--         <div class="col-md-6">-->
+<!--            <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">-->
+<!--               <div class="applyIconBtn" >-->
+<!--                  <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">-->
+<!--                     <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>-->
+<!--                  </a>-->
+<!--               <a href="{%url 'choose_register'%}" class="btn btn-primary py-2">Apply Job</a>-->
+<!--               </div>-->
+<!--            </div>-->
+<!--         </div>-->
+<!--      </div>-->
+<!--   </div> -->
+<!--   -->
+
+</section> 
+
+		
+		</section>
 {% endblock %}

@@ -143,9 +143,9 @@ WSGI_APPLICATION = 'aviation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'projdb',
+        'NAME': '',
         'USER': 'postgres',
-        'PASSWORD': 'pgbazerpass', #Put the password that you used for PostrgeSQL
+        'PASSWORD': '', #Put the password that you used for PostrgeSQL
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -223,3 +223,5 @@ STATICFILES_FINDERS = (
 )
 
 LOGIN_REDIRECT_URL = 'home'
+
+# TEST

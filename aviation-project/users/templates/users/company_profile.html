@@ -96,6 +96,7 @@
                             <div class="form-group">
                                 <button class="btn btn-outline-info" type="submit">Update</button>
                             </div>
+                            {%csrf_token%}
                             </form>
                             <a href="{% url 'password_reset' %}" >Change Password?</a>
                         </p>
@@ -103,9 +104,8 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="jobs" role="tabpanel" aria-labelledby="nav-jobs-tab">
-                {% for job in jobs%}
+                {% for job in jobs %}
                 {%csrf_token%}
-
                 <div class="card" id="HoverCard">
                     <div class="card-body">
                             <div class="row">
@@ -130,9 +130,11 @@
 
 
                                     <form action="{% url 'editJob' job.pk %}">
+                                        {%csrf_token%}
                                     <button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary" name="{{job.id}}" value="{{job.id}}">
                                         <a><b>Edit</b></a>
                                     </button>
+                                        {%csrf_token%}
                                     </form>
                                 </div>
                             </div>
@@ -170,9 +172,6 @@
                                 </div>
 
                             </div>
-
-
-
                     </div>
                 </div>
                 {% endfor %}

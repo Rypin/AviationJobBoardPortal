@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.utils.translation import gettext_lazy as _
 from datetime import date, time, datetime, timezone
 from django_google_maps import fields as map_fields
@@ -11,14 +12,18 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Jobtype(models.Model):
     name = models.CharField(max_length=50)
-
     def __str__(self):
         return self.name
-
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    count = models.IntegerField(default=0)
+    def __str__(self):
+        return self.name
 class Jobform(models.Model):
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     jobtype = models.ForeignKey(Jobtype, on_delete=models.CASCADE)
     description = models.TextField()
 
@@ -56,6 +61,8 @@ class Jobform(models.Model):
         else:
             return "{} days".format(diff.days)
 
-
-            
-        
+    def save(self , *args , **kwargs):
+        created = self.pk is None
+        super(Jobform, self).save(*args , **kwargs)
+        if created:
+            Category.objects.filter(name=self.category.name).update(count=F('count')+1)
