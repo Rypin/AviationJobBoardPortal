@@ -172,7 +172,8 @@
                   <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
                      <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
                   </a>
-               <a href="{% url 'search_page' %}?job={{job.id}}" class="btn btn-primary py-2">Apply Job</a>
+               <button type="button" class="btn btn-primary py-2 applyJob" value ="{% url 'search_page' %}?job={{job.id}}" name="{% url 'quick_apply' job.id %}">Apply Job</button>
+<!--				   href="{% url 'search_page' %}?job={{job.id}}"-->
                </div>
             </div>
          </div>
@@ -209,9 +210,44 @@
 <!--      </div>-->
 <!--   </div> -->
 <!--   -->
+<div class="modal fade" id="applyModal" tabindex="-1" role="dialog">
+     <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                   <div class="modal-header">
+                          <h5 class="modal-title">Would you like to apply with quick apply?</h5>
+                    </div>
+                   <div class="modal-body">
+                         <div class="row">
+                             <div class="col col-md-5">
+                                    <a href="" class="btn btn-success float-right" id = "quickApply">Quick Apply</a>
+                             </div>
+                             <div class="col-md-2">
+                                 <center>
+                                     <small class="text-muted">
+                                            Or
+                                     </small>
+                                 </center>
+                             </div>
+                             <div class="col col-md-5">
+                                 <a href="" class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="applyManually">Apply Manually</a>
+                              </div>
+                         </div>
+                   </div>
+            </div>
+      </div>
+</div>
+</section>
+{% endblock %}
 
-</section> 
 
-		
-		</section>
+{% block other_js %}
+<script>
+$(document).ready(function(){
+	$(".applyJob").on("click", function(e){
+		$("#applyModal").modal("show");
+		$("#quickApply").attr("href", $(this).attr("name"));
+		$("#applyManually").attr("href", $(this).val());
+	});
+});
+</script>
 {% endblock %}

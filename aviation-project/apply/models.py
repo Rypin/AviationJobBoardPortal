@@ -1,6 +1,8 @@
+import os
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.db.models import signals
+from django.core.files.base import File
 from datetime import *
 
 class Application(models.Model):
@@ -19,7 +21,20 @@ class Application(models.Model):
     notes = models.TextField(default='')
     def __str__(self):
         return f'{self.applicant.Username}\'s Application for job ID:{self.job.id}'
-
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return '{0}\{1}'.format(instance.user.id, filename)
+class QuickApply(models.Model):
+    user = models.OneToOneField('users.Users', on_delete=models.CASCADE)
+    resume = models.FileField(upload_to=user_directory_path)
+    def replace_resume(self, file):
+        oldresume = self.resume.path
+        if file.name.endswith('.pdf'):
+            name = 'resume.pdf'
+        elif file.name.endswith('.docx'):
+            name = 'resume.docx'
+        self.resume.save(name, File(file), save = True)
+        os.remove(oldresume)
 ##SIGNAL FOR CREATING STATUS WITH EVERY APPLICATION##
 #def create_status(sender, instance, created, **kwargs):
 #    if created:

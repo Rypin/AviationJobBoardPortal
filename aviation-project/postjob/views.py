@@ -145,9 +145,14 @@ def jobsearch(request):
         geosearch = searchgeo.split(",")
         searchlat = float(geosearch[0])
         searchlon = float(geosearch[1])
-
+        print(geosearch)
         listjobs = [r.id for r in results if calculate_miles(searchlat, searchlon, float(str(r.geolocation).split(",")[0]), float(str(r.geolocation).split(",")[1])) <= float(distance)]
+        for r in results:
+            print(calculate_miles(searchlat , searchlon , float(str(r.geolocation).split(",")[0]) , float(str(r.geolocation).split(",")[1])))
+        print(listjobs)
+        print(results)
         results = results.filter(id__in=listjobs)
+        print(results)
 
     job_exists = request.GET.get('jobexists')
     job_exists = True   
@@ -162,7 +167,7 @@ def jobsearch(request):
             job = Jobform.objects.get(id = job_id)
         else:
             job = False
-    
+    print(results)
     return render(request, 'search.html', {'results': results, 'jobtypes':jobtypes, 'PostingForm':form, "count":jobPostCount(results),'job': job, 'jobexists': job_exists})
 
 def job_detail(request, job_id):
@@ -200,9 +205,11 @@ def filterJobtype(request):
     jobs = Jobform.objects.all()
     result = []
     data = {}
+    print(request)
     #Getting Data from Ajax request
     url = str(request.GET.get('url')).split('&')
-    currentJobs = request.GET.get('oldJobs')
+    currentJobs = str(request.GET.get('currentJobs', None)).split(' ')
+    currentJobs.remove('')
     #JobType Variables
     jobtypes = {
         'Full Time':request.GET.get('Full-Time', None),
@@ -214,17 +221,13 @@ def filterJobtype(request):
     jobtypequery = [] # To contain the variables that are chosen for jobtype filter
     #Distance Filter Variable
     distance = request.GET.get('distance', None)
-    print('Distance:'+ str(distance))
     #Date Filter Variable
-    date = request.GET.get('dateRange', None)
-    print('Date:'+str(date))
+    dateRange = request.GET.get('dateRange', None)
     #Salary Filter Variables
     salary = {
         'on': request.GET.get('salary', None), #Store our boolean from our checkbox and range value from our slider
         'range': request.GET.get('salaryRange', None).replace('$','').split(' - ') #replace removes all '$' and split will remove ' - ' and return a list containing our range values
     }
-    print('Salary:' + str(salary['on']))
-    print(salary['range'])
     #Other Filter Variables
     usAuth = request.GET.get('USAuth', None)
     print('usAuth:'+ str(usAuth))
@@ -241,31 +244,39 @@ def filterJobtype(request):
             jobsInRange=[r.id for r in jobs if calculate_miles(float(coordinates[0]), float(coordinates[1]), float(str(r.geolocation).split(",")[0]),
                                                       float(str(r.geolocation).split(",")[1])) <= float(distance)]
             jobs = jobs.filter(id__in=jobsInRange)
-            print(jobsInRange)
         if condition == 'category' and query[condition] != '' and query[condition] is not None:
-            print(query[condition])
+            jobs = jobs.filter(category=query[condition])
     #for loop for jobtypes
+    print(dateRange)
+    if isinstance(dateRange, str) and dateRange != '0':
+         listjobs = [r.id for r in jobs if date.today() - r.postdate <= timedelta(days=int(dateRange))]
+         jobs = jobs.filter(id__in=listjobs)
     if 'true' in jobtypes.values():
         for type in jobtypes:
             if jobtypes[type] == 'true':
                 jobtypequery.append(Jobtype.objects.get(name=type))
         jobs = jobs.filter(jobtype__in = jobtypequery)
     #distance filter
-    if distance == 0:
-        print(distance)
+    if salary['on'] == 'true':
+        jobs = jobs.filter(salary_min__gte=int(salary['range'][0].replace(',','')))
+        jobs = jobs.filter(salary_max__lte=int(salary['range'][1].replace(',','')))
+    print(currentJobs)
+    data['newPosts'] = {}
     for i in jobs:
         result.append(i.id)
-        # if i.id in currentJobs:
-        #     data['newPosts'][str(i.id)] = {
-        #         'id': i.id,
-        #         'title': i.title,
-        #         'company': i.company.name,
-        #         'category': i.category.name,
-        #         'jobtype': i.jobtype.name,
-        #         'description': i.description,
-        #         'salaryRange': '$' + str(i.salary_min) + ' - $' + str(i.salary_max)
-        #     }
-    print(jobs)
+        if str(i.id) not in currentJobs:
+            data['newPosts'][str(i.id)] = {
+                'id': i.id,
+                'title': i.title,
+                'company': i.company.name,
+                'address': i.address,
+                'age': i.age(),
+                'banner': i.company.banner.url,
+                'category': i.category.name,
+                'jobtype': i.jobtype.name,
+                'description': i.description,
+                'salaryRange': '$' + str(i.salary_min) + ' - $' + str(i.salary_max)
+            }
     data['results'] = result
     print(data)
     return JsonResponse(data, safe=False)

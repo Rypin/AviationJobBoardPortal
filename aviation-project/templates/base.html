@@ -2,7 +2,11 @@
 {% load sass_tags %}
 <!DOCTYPE html>
 <html lang="en">
-
+{% if messages %}
+	{% for message in messages %}
+		{{message}}
+	{% endfor %}
+{% endif %}
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,7 +19,7 @@
 	<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
   	<link href="{% sass_src 'front/scss/nav/nav.scss' %}" rel="stylesheet" type="text/css" /> </head>
-  
+
   	{% block other_css %}
 
   	{% endblock %}
@@ -122,9 +126,8 @@
 	
 	<!-- Bootstrap core JavaScript -->
 	<script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
-	<script src='../static/front/js/nav.js' defer></script> 
+	<script src='../static/front/js/nav.js' defer></script>
   	<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  
   	{% block other_js %} 
 	
 	{% endblock %}

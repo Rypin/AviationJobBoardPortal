@@ -18,12 +18,12 @@ $(document).ready(function() {
 
 
     // Indicate selection for the "Distance" filter option
-    $(".dropdown2 a").click(function() {
-         $(".menuHeader2").text($(this).text());
-         $(".menuHeader2").val($(this).text());
-         $(".menuHeader2").parent().addClass("headerActive");
-         $(".dot2").addClass("dotActive");
-    });
+//    $(".dropdown2 a").click(function() {
+//         $(".menuHeader2").text($(this).text());
+//         $(".menuHeader2").val($(this).text());
+//         $(".menuHeader2").parent().addClass("headerActive");
+//         $(".dot2").addClass("dotActive");
+//    });
 
     // $(".dropdown2 a").change(function() {
     //     $(".menuHeader2").text($(this).text());
@@ -33,67 +33,67 @@ $(document).ready(function() {
     // }); 
 
     // Indicate selection for the "Date Posted" filter option
-    $(".dropdown3 a").click(function() {
-        $(".menuHeader3").text($(this).text());
-        $(".menuHeader3").val($(this).text());
-        $(".menuHeader3").parent().addClass("headerActive");
-        $(".dot3").addClass("dotActive");
-    });
+//    $(".dropdown3 a").click(function() {
+//        $(".menuHeader3").text($(this).text());
+//        $(".menuHeader3").val($(this).text());
+//        $(".menuHeader3").parent().addClass("headerActive");
+//        $(".dot3").addClass("dotActive");
+//    });
 
     // Indicate selection for the "Salary Range" filter option
-    $(".dropdown4 a").click(function() {
-        $(".menuHeader4").text($(this).text());
-        $(".menuHeader4").val($(this).text());
-        $(".menuHeader4").parent().addClass("headerActive");
-        $(".dot4").addClass("dotActive");
-    });
+//    $(".dropdown4 a").click(function() {
+//        $(".menuHeader4").text($(this).text());
+//        $(".menuHeader4").val($(this).text());
+//        $(".menuHeader4").parent().addClass("headerActive");
+//        $(".dot4").addClass("dotActive");
+//    });
 
     // The change event function for the filter options in "Other Filters"
-    $('#workAuthChk').change(function() {
-        if ($(this).prop('checked')) {
-            $(".menuHeader5").parent().addClass("headerActive");
-            $(".dot5").addClass("dotActive");
-        } else {
-            $(".menuHeader5").parent().removeClass("headerActive");
-            $(".dot5").removeClass("dotActive");
-        }
-    })
+//    $('#workAuthChk').change(function() {
+//        if ($(this).prop('checked')) {
+//            $(".menuHeader5").parent().addClass("headerActive");
+//            $(".dot5").addClass("dotActive");
+//        } else {
+//            $(".menuHeader5").parent().removeClass("headerActive");
+//            $(".dot5").removeClass("dotActive");
+//        }
+//    })
 
     // The change event function for the "Job Type" filter option
-    $('#jobTypeBox').change(function() {
-        var test = $("input[type='checkbox']:checked").attr('name');
-        if ($(this).prop('checked')) {
-            $(".menuHeader1").parent().addClass("headerActive");
-            $(".dot1").addClass("dotActive");
-            console.log("Adding");
-        } else {
-            var anyChecked = false;
-            $('jobTypeBox').each(function() {
-                if ($(this).prop('checked')) {
-                    anyChecked = true;
-                }
-                console.log(anyChecked);
-            });
-            if (!anyChecked) {
-                console.log('removing')
-                $(".menuHeader1").parent().removeClass("headerActive");
-                $(".dot1").removeClass("dotActive");
-            }
-        }
-    })
+//    $('#jobTypeBox').change(function() {
+//        var test = $("input[type='checkbox']:checked").attr('name');
+//        if ($(this).prop('checked')) {
+//            $(".menuHeader1").parent().addClass("headerActive");
+//            $(".dot1").addClass("dotActive");
+//            console.log("Adding");
+//        } else {
+//            var anyChecked = false;
+//            $('jobTypeBox').each(function() {
+//                if ($(this).prop('checked')) {
+//                    anyChecked = true;
+//                }
+//                console.log(anyChecked);
+//            });
+//            if (!anyChecked) {
+//                console.log('removing')
+//                $(".menuHeader1").parent().removeClass("headerActive");
+//                $(".dot1").removeClass("dotActive");
+//            }
+//        }
+//    })
 
     // Indicate selection for the "Other Filters" filter option
-    $(".dropdown5 a").click(function() {
-        $(".menuHeader5").text($(this).text());
-        $(".menuHeader5").val($(this).text());
-        $(".menuHeader5").parent().addClass("headerActive");
-        $(".dot5").addClass("dotActive");
-    });
-    
-    $(".dropdown6 a").click(function() {
-        $(".menuHeader6").text($(this).text());
-        $(".menuHeader6").val($(this).text());
-    });
+//    $(".dropdown5 a").click(function() {
+//        $(".menuHeader5").text($(this).text());
+//        $(".menuHeader5").val($(this).text());
+//        $(".menuHeader5").parent().addClass("headerActive");
+//        $(".dot5").addClass("dotActive");
+//    });
+//
+//    $(".dropdown6 a").click(function() {
+//        $(".menuHeader6").text($(this).text());
+//        $(".menuHeader6").val($(this).text());
+//    });
 
     
 
@@ -158,11 +158,11 @@ $("input:checkbox").click(function(){
 function salarySelectionEvent(min, max) {
     $(".menuHeader4").text("$" + min + " - " + "$" + max);
     $(".menuHeader4").val("$" + min + " - " + "$" + max);
-    if($(".menuHeader4").parent('.headerActive').length != 0)
-    {
-    }
-    $(".menuHeader4").parent().addClass("headerActive");
-    $(".dot4").addClass("dotActive");
+//    if($(".menuHeader4").parent('.headerActive').length != 0)
+//    {
+//    }
+//    $(".menuHeader4").parent().addClass("headerActive");
+//    $(".dot4").addClass("dotActive");
 }
 
 // A function that removes the selection indication for all filter options (and sets some options to default values)
@@ -186,9 +186,9 @@ function salarySelectionEvent(min, max) {
     $("#tempChk").removeAttr("checked");
 } */
 
-function saveFilters(){
-        console.log(document.getElementById("fullTimeChk").setAttribute("checked", "true"));
-}
+//function saveFilters(){
+//        console.log(document.getElementById("fullTimeChk").setAttribute("checked", "true"));
+//}
 
 // An auxiliary function for the double bar slider's change event that returns a number with comma seperation (in string form)
 function formatNumber(num) {
