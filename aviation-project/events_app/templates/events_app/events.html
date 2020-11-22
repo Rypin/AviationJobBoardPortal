@@ -59,7 +59,7 @@ tr:nth-child(even) {
 
         .show {display: block;}
 </style>
-
+<div style="margin: 0px 100px 0px 220px">
 <h1>Events</h1>
 <div class="dropdown">
 <button onclick="myFunction()" class="dropbtn">Sort By</button>
@@ -74,6 +74,10 @@ tr:nth-child(even) {
       <a href="?eventsPerPage=1">1 per Page</a>
       <a href="?eventsPerPage=2">2 per Page</a>
     </div>
+
+<button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: rgb(38, 91, 126); color: white; border-style: none;" class="btn btn-primary" name="{{job.id}}" value="{{job.id}}">
+                                        <a><b>Show only RSVP Events</b></a>
+                                    </button>
 </div>
 
 <script>
@@ -92,6 +96,7 @@ tr:nth-child(even) {
         <th>Description</th>
         <th>Posted</th>
         <th>Day of Event</th>
+        <th>R.S.V.P. for Event</th>
     </tr>
     {% for event in events %}
 
@@ -110,6 +115,11 @@ tr:nth-child(even) {
         </td>
         <td>
             {{ event.deadline }}
+        </td>
+        <td>
+            <button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary" name="{{job.id}}" value="{{job.id}}">
+                                        <a><b>RSVP</b></a>
+                                    </button>
         </td>
     </tr>
     {% endfor %}
@@ -137,6 +147,5 @@ tr:nth-child(even) {
   </ul>
 {% endif %}
 
-{{ eventsPerPage }}
-{{ epp }}
+</div>
 {% endblock %}

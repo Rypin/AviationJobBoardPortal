@@ -141,9 +141,13 @@ def company_register(request):
     return render(request , 'users/company_register.html' , {'form': form})
 
 
+
 def addCompanyProfile(request):
     cp_form = CompanyProfileForm(request.POST)
     if request.method == 'POST':
+        if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
+            group = Group.objects.get(name='jobseeker')
+            request.user.groups.add(group)
         cp_form = CompanyProfileForm(request.POST)
         if cp_form.is_valid():
             name = cp_form.cleaned_data['name']
@@ -360,9 +364,11 @@ def removeSkill(users_id , skill):
             connection.close()
 
 @login_required()
-@allowed_users(allowed_roles=['jobseeker'])
 def review(request):
     if request.method == 'GET':
+        if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
+            group = Group.objects.get(name='jobseeker')
+            request.user.groups.add(group)
         using_resume = request.GET.get('using_resume')
         if 'parsed_status' in request.session:
             using_resume = True

@@ -8,6 +8,17 @@
 
 
 {% block content %}
+{% if user.is_authenticated %}
+{% if request.user.groups.all.0.name != "jobseeker" %}
+{% if request.user.groups.all.0.name != "company_owner" %}
+<h1>
+	Choose whether you're a jobseeker or a company owner
+</h1>
+<h3 style="margin-top:30px;"> <a class="user btn-lg" href="{% url 'review' %}">Jobseeker (search for jobs, events, etc...)</a></h3>
+                <h3 style="margin-top:20px;"> <a class="employer btn-lg" href="{% url 'company_profile_creator' %}">Company Owner</a></h3>
+{% endif %}
+{% endif %}
+{% endif %}
 <div class="container-fluid">
 	<div class="searchBox">
 		<h1 class='display-4 text-center jobSearching'>Job searching just got easier</h1>

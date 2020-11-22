@@ -12,6 +12,9 @@
     }
 
 </style>
+{% if request.user.groups.all.0.name == "company_owner" %}
+<h1>You are not authorized to view this page</h1>
+{% else %}
 <script>history.scrollRestoration = "manual"</script>
 <script>
 {% if using_resume %}
@@ -113,6 +116,7 @@ $(document).ready(function(){
             </div>
     </form>
 </div>
+{% endif %}
     
 
 
