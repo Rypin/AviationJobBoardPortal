@@ -18,7 +18,7 @@
 			</div>
 			<div class="tab-content">
 				<div class="row active" id="job" data-tab-content>
-					<form class="form-inline" method="GET" action="{%url 'choose_register'%}" novalidate>
+					<form class="form-inline" method="GET" action="{%url 'jobsearch'%}" novalidate>
 						<div class="col-lg-3">
 							<div class="form-group ">
 								<div class='form-control lines'> {{PostingForm.title}} </div>
@@ -41,7 +41,7 @@
 								<select id="jobtype" class="form-control" name="jobtype" style="margin-right: -0px; border: .5px inset #495057">
 									<option checkbox>Job Type</option> 
 									    {% for jobtypes in jobtypes %}
-									        <option value="{{ jobtypes}}">{{ jobtypes }}</option> 
+									        <option value="{{jobtypes}}">{{ jobtypes }}</option>
 									    {% endfor %} 
 								</select>
 							</div>
@@ -111,6 +111,9 @@
                {% for category in categories %}
            <div class="col-lg-3 ftco-animate">
         		<ul class="category">
+
+        			<li><a href="{% url 'search_page' %}?category={{category.id}}">{{category.name}}<br><span class="number">{{category.count}}</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
+
         			<li><a href="#">{{category.name}}<br><span class="number">{{category.count}}</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
         		</ul>
         	</div>
@@ -140,7 +143,7 @@
       <div class="card-body row">
          <div class="col-md-6">
             <div class="job-post-item-header d-flex align-items-center">
-            <h2 class="mr-3 text-black"><a href="#">{{job.title}}</a></h2>
+            <h2 class="mr-3 text-black"><a href="{% url 'search_page' %}?job={{job.id}}">{{job.title}}</a></h2>
                <div class="badge-wrap">
                   <span class="
                   {% if  job.jobtype.name == 'Full Time' %}
@@ -172,7 +175,8 @@
                   <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
                      <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
                   </a>
-               <a href="{% url 'applyjob' job.id%}" class="btn btn-primary py-2">Apply Job</a>
+               <button type="button" class="btn btn-primary py-2 applyJob" value ="{% url 'search_page' %}?job={{job.id}}" name="{% url 'quick_apply' job.id %}">Apply Job</button>
+<!--				   href="{% url 'search_page' %}?job={{job.id}}"-->
                </div>
             </div>
          </div>
@@ -209,9 +213,44 @@
 <!--      </div>-->
 <!--   </div> -->
 <!--   -->
+<div class="modal fade" id="applyModal" tabindex="-1" role="dialog">
+     <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                   <div class="modal-header">
+                          <h5 class="modal-title">Would you like to apply with quick apply?</h5>
+                    </div>
+                   <div class="modal-body">
+                         <div class="row">
+                             <div class="col col-md-5">
+                                    <a href="" class="btn btn-success float-right" id = "quickApply">Quick Apply</a>
+                             </div>
+                             <div class="col-md-2">
+                                 <center>
+                                     <small class="text-muted">
+                                            Or
+                                     </small>
+                                 </center>
+                             </div>
+                             <div class="col col-md-5">
+                                 <a href="" class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="applyManually">Apply Manually</a>
+                              </div>
+                         </div>
+                   </div>
+            </div>
+      </div>
+</div>
+</section>
+{% endblock %}
 
-</section> 
 
-		
-		</section>
+{% block other_js %}
+<script>
+$(document).ready(function(){
+	$(".applyJob").on("click", function(e){
+		$("#applyModal").modal("show");
+		$("#quickApply").attr("href", $(this).attr("name"));
+		$("#applyManually").attr("href", $(this).val());
+	});
+});
+</script>
 {% endblock %}

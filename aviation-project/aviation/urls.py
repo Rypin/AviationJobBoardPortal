@@ -70,10 +70,12 @@ urlpatterns = [
     # path('postjob/', postjob_view, name='posting'),
     path('jobsearch/', postjob_views.jobsearch, name='jobsearch'),
     path('jobsearch/<int:job_id>/', postjob_views.job_detail, name='job_detail'),
-    path('view-applications/', user_views.viewApplications, name ='company_applications'),
 
-    
-    
+    path('view-applications/', user_views.viewApplications, name ='company_applications'),
+    #AJAX FOR JOBSEARCH
+    url(r'^ajax/filterJobtype/$', postjob_views.filterJobtype, name='filter_jobtype'),
+  
+    path('quickapply/<int:job_id>/', user_views.quickApply, name='quick_apply'),
     path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'),
 
     

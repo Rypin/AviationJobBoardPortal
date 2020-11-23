@@ -1,9 +1,9 @@
+
 {% extends "base.html" %}
 
 {% block other_css %}
 
 {% endblock %}
-
 {% block content %}
 
 <!-- 
@@ -12,9 +12,7 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
  Include the above in your HEAD tag ---------->
-
 {%for user in users%}
-
 <script>
 
 	var x = 0;
@@ -57,9 +55,16 @@
 
 			<br>
 			<div class="offset-1 col-3">
-				<button type="button" class="btn btn-primary">
-					<a href="{% url 'resume' %}" style="text-decoration: none; color: white"><b>Upload Resume</b></a><br/>
+				<form method = "POST" id = "resumeForm" enctype="multipart/form-data">
+				{%csrf_token%}
+					<input type = "file" style="visibility:hidden;" id="uploadResume" class="uploadResume" name ="uploadResume">
+					<button type="button" class="btn btn-primary resumeButton">
+						<a style="text-decoration: none; color: white;"><b>Upload Quick Resume</b></a>
+					<br/>
 				</button>
+				</form>
+
+
 			</div>
 			<br>
 			<ul class="list-group ">
@@ -475,11 +480,20 @@ function toggle_visibility(x) {
     x.style.display = "none";
   }
 }
+document.getElementById("uploadResume").onchange = function() {
+    document.getElementById("resumeForm").submit();
+};
 </script>
 {%endfor%}
 {% endblock %}
 
 {% block other_js %} 
-	
+	<script>
+		$(document).ready(function(){
+			$(".resumeButton").on("click", function(e){
+				$("#uploadResume").click();
+			});
+		});
+	</script>
 {% endblock %}
 </body>
