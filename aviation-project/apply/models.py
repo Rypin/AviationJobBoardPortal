@@ -33,8 +33,10 @@ class QuickApply(models.Model):
             name = 'resume.pdf'
         elif file.name.endswith('.docx'):
             name = 'resume.docx'
+        if os.path.isfile(oldresume):
+            os.remove(oldresume)
         self.resume.save(name, File(file), save = True)
-        os.remove(oldresume)
+
 ##SIGNAL FOR CREATING STATUS WITH EVERY APPLICATION##
 #def create_status(sender, instance, created, **kwargs):
 #    if created:
