@@ -74,10 +74,17 @@ urlpatterns = [
     path('view-applications/', user_views.viewApplications, name ='company_applications'),
     #AJAX FOR JOBSEARCH
     url(r'^ajax/filterJobtype/$', postjob_views.filterJobtype, name='filter_jobtype'),
+  
     path('quickapply/<int:job_id>/', user_views.quickApply, name='quick_apply'),
-    #
-
     path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'),
+
+    
+
+
+
+
+
+
     path('about/', user_views.about, name = 'userProfile-about'),
     # path('signup/', user_views.signup, name = 'userProfile-signup'),
     path('addwork/', user_views.addWorkingExperience, name = 'userProfile-addwork'),
@@ -88,6 +95,9 @@ urlpatterns = [
     path('trysearch/', user_views.trysearch, name='trysearch'),
     path('applyjob/<int:job_id>', user_views.applyjob, name='applyjob'),
     path('userviewcompany/<int:company_id>',postjob_views.userviewcompany, name='userviewcompany'),
+
+    path('fav/<int:job_id>', user_views.favorite_add, name='favorite_add'),
+    url(r'^ajax/load_favoritejobs/$', user_views.loadJobs, name='favoritejobs'),
 ]
 
 if settings.DEBUG:

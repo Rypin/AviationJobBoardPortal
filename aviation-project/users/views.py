@@ -28,7 +28,7 @@ import psycopg2,pytz
 from django.core.mail import send_mail, EmailMessage
 from .filters import UsersFilter
 from events_app.models import EventListing
-
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -729,3 +729,33 @@ def addEducationExperience(request):
 
 def about(request):
     return render(request , 'userProfile/profile2.html')
+
+
+#############################################################################################
+#############################################################################################
+#############################################################################################
+
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
+def favorite_add(request, job_id):
+    user = Users.objects.get(Username=request.user.username)
+
+    if user.favoriteJobs.filter(id=job_id).exists():
+        e = user.favoriteJobs.get(id=job_id)
+        user.favoriteJobs.remove(e)
+    else:
+        user.favoriteJobs.add(job_id)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+def loadJobs(request):
+    user = Users.objects.get(Username=request.user.username)
+    alljobs = []
+
+    for job in user.favoriteJobs.all():
+        alljobs.append((job.id, job.title))
+
+    data = {
+        'jobs': alljobs,
+    }
+    return JsonResponse(data)

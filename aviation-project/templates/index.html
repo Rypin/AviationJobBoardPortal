@@ -111,7 +111,10 @@
                {% for category in categories %}
            <div class="col-lg-3 ftco-animate">
         		<ul class="category">
+
         			<li><a href="{% url 'search_page' %}?category={{category.id}}">{{category.name}}<br><span class="number">{{category.count}}</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
+
+        			<li><a href="#">{{category.name}}<br><span class="number">{{category.count}}</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
         		</ul>
         	</div>
                {% endfor %}
