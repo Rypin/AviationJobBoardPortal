@@ -26,7 +26,6 @@ navBar.addEventListener('mouseleave', () => {
     x.className = "dissolve" 
     setTimeout(function(){
         x.style.display = "none"
-        console.log("Fired2")
     },750)
 });
 
