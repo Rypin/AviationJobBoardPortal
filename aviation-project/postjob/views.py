@@ -195,6 +195,86 @@ def userviewcompany(request, company_id):
 
     return render(request, "userViewCompany.html", {'company': company, 'events': events, 'jobs': jobs})
 
-
-
+def filterJobtype(request):
+    query = {}
+    jobs = Jobform.objects.all()
+    result = []
+    data = {}
+    print(request)
+    #Getting Data from Ajax request
+    url = str(request.GET.get('url')).split('&')
+    currentJobs = str(request.GET.get('currentJobs', None)).split(' ')
+    currentJobs.remove('')
+    #JobType Variables
+    jobtypes = {
+        'Full Time':request.GET.get('Full-Time', None),
+        'Part Time': request.GET.get('Part-Time', None),
+        'Internship': request.GET.get('Internship', None),
+        'Contract': request.GET.get('Contract', None),
+        'Temporary': request.GET.get('Temporary', None)
+    }
+    jobtypequery = [] # To contain the variables that are chosen for jobtype filter
+    #Distance Filter Variable
+    distance = request.GET.get('distance', None)
+    #Date Filter Variable
+    dateRange = request.GET.get('dateRange', None)
+    #Salary Filter Variables
+    salary = {
+        'on': request.GET.get('salary', None), #Store our boolean from our checkbox and range value from our slider
+        'range': request.GET.get('salaryRange', None).replace('$','').split(' - ') #replace removes all '$' and split will remove ' - ' and return a list containing our range values
+    }
+    #Other Filter Variables
+    usAuth = request.GET.get('USAuth', None)
+    print('usAuth:'+ str(usAuth))
+    if url != ['']:
+        for i in url: #get the search parameters from the url
+            i = i.replace('?','')
+            item = i.split('=')
+            query[item[0]] = item[1]
+    for condition in query: #query for search(Title Location Category) parameters
+        if condition == 'title' and query[condition] != '' and query[condition] is not None:
+            jobs = jobs.filter(title__icontains=query[condition])
+        if condition =='geolocation' and query[condition] != '' and query[condition] is not None:
+            coordinates = query[condition].split('%2C')
+            print(coordinates)
+            jobsInRange=[r.id for r in jobs if calculate_miles(float(coordinates[0]), float(coordinates[1]), float(str(r.geolocation).split(",")[0]),
+                                                      float(str(r.geolocation).split(",")[1])) <= float(distance)]
+            print(jobsInRange)
+            jobs = jobs.filter(id__in=jobsInRange)
+        if condition == 'category' and query[condition] != '' and query[condition] is not None:
+            jobs = jobs.filter(category=query[condition])
+    #for loop for jobtypes
+    print(dateRange)
+    if isinstance(dateRange, str) and dateRange != '0':
+         listjobs = [r.id for r in jobs if date.today() - r.postdate <= timedelta(days=int(dateRange))]
+         jobs = jobs.filter(id__in=listjobs)
+    if 'true' in jobtypes.values():
+        for type in jobtypes:
+            if jobtypes[type] == 'true':
+                jobtypequery.append(Jobtype.objects.get(name=type))
+        jobs = jobs.filter(jobtype__in = jobtypequery)
+    #distance filter
+    if salary['on'] == 'true':
+        jobs = jobs.filter(salary_min__gte=int(salary['range'][0].replace(',','')))
+        jobs = jobs.filter(salary_max__lte=int(salary['range'][1].replace(',','')))
+    print(currentJobs)
+    data['newPosts'] = {}
+    for i in jobs:
+        result.append(i.id)
+        if str(i.id) not in currentJobs:
+            data['newPosts'][str(i.id)] = {
+                'id': i.id,
+                'title': i.title,
+                'company': i.company.name,
+                'address': i.address,
+                'age': i.age(),
+                'banner': i.company.banner.url,
+                'category': i.category.name,
+                'jobtype': i.jobtype.name,
+                'description': i.description,
+                'salaryRange': '$' + str(i.salary_min) + ' - $' + str(i.salary_max)
+            }
+    data['results'] = result
+    print(data)
+    return JsonResponse(data, safe=False)
 

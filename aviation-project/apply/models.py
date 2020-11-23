@@ -19,7 +19,24 @@ class Application(models.Model):
     notes = models.TextField(default='')
     def __str__(self):
         return f'{self.applicant.Username}\'s Application for job ID:{self.job.id}'
-
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return '{0}\{1}'.format(instance.user.id, filename)
+class QuickApply(models.Model):
+    user = models.OneToOneField('users.Users', on_delete=models.CASCADE)
+    resume = models.FileField(upload_to=user_directory_path)
+    def replace_resume(self, file):
+        oldresume = self.resume.path
+        print(
+            'replacing'
+        )
+        if file.name.endswith('.pdf'):
+            name = 'resume.pdf'
+        elif file.name.endswith('.docx'):
+            name = 'resume.docx'
+        if os.path.isfile(oldresume):
+            os.remove(oldresume)
+        self.resume.save(name, File(file), save=True)
 ##SIGNAL FOR CREATING STATUS WITH EVERY APPLICATION##
 #def create_status(sender, instance, created, **kwargs):
 #    if created:
