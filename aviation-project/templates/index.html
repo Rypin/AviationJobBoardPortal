@@ -1,10 +1,16 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+{% load static %} 
 {% load sass_tags %}
 
 {% block other_css %}
 <link href="{% sass_src 'front/scss/landing/landing.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
+{% block sideDashBoard %}
+
+	{% include "sideDashboard.html"%}
+
+{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -244,6 +250,10 @@
 
 
 {% block other_js %}
+<!-- Favorite Job Links Loading JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+
+<!-- ??? -->
 <script>
 $(document).ready(function(){
 	$(".applyJob").on("click", function(e){

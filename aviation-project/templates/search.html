@@ -213,7 +213,7 @@
 								<small>{{result.jobtype.name}}</small>
 							</div>
 									<div class="col-md-8 my-auto" align="center">
-										<button type="button" class="btn btn-info favoriteButton" style="margin: 10px">Favorite</button>
+										<a href="{%url 'favorite_add' result.id%}" class="btn btn-info" style="margin: 10px">Favorite</a>
 										<a href="{% url 'applyjob' result.id%}" class="btn btn-info applyButton" style="margin: 10px">Apply Now</a>
 										<a href="{%url 'quick_apply' result.id%}"class="btn btn-info applyButton" style="margin: 10px">Quick Apply</a>
 								    	<a href="{% url 'userviewcompany' result.company.id%}" class="btn btn-info companyButton" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
@@ -241,7 +241,7 @@
 								<small>{{job.jobtype.name}}</small>
 							</div>
 									<div class="col-md-8 my-auto" align="center">
-										<button type="button" class="btn btn-info" style="margin: 10px">Favorite</button>
+										<a href="{%url 'favorite_add' job.id%}" class="btn btn-info" style="margin: 10px">Favorite</a>
 										<a href="{% url 'applyjob' job.id%}" class="btn btn-info" style="margin: 10px" name = "{% url 'quick_apply' job.id %}" value = "{% url 'applyjob' job.id%}">Apply Now</a>
 								    	<a href="{%url 'userviewcompany' job.company.id%}" class="btn btn-info" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
 								    	<br>
