@@ -145,8 +145,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'ajbpassfa2020', #Put the password that you used for PostrgeSQL
-        'HOST': 'ajb-2020.cw3uaamzkbuc.us-east-2.rds.amazonaws.com',
+        'PASSWORD': '', #Put the password that you used for PostrgeSQL
+        'HOST': '',
         'PORT': '5432',
     }
 }
