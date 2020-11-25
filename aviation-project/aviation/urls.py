@@ -35,10 +35,10 @@ urlpatterns = [
     path('inbox/',chatRoom_view, name='inbox'),
 
     ### Candidate Application Related Pages ###
-    path('candidate_applications_page/', appList_view.applicationList, name='candidate_applications_page'), # [o] No Sidebar Issues
+    path('candidate_applications_page/', appList_view.applicationList, name='candidate_applications_page'), # [X] No Sidebar Issues
 
     ### User Profile Related Pages ###
-    path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'), # [o] No Sidebar Issues
+    path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'), # [X] No Sidebar Issues
     path('about/', user_views.about, name = 'userProfile-about'),
     path('addwork/', user_views.addWorkingExperience, name = 'userProfile-addwork'),
     path('addeducation/', user_views.addEducationExperience, name = 'userProfile-addeducation'),
@@ -56,9 +56,9 @@ urlpatterns = [
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), name='password_reset_complete'),
 
     ### Job Search Related Pages ###
-    path('search/', postjob_views.jobsearch, name='search_page'), # [o] No Sidebar Issues
+    path('search/', postjob_views.jobsearch, name='search_page'), # [X] No Sidebar Issues
     path('trysearch/', user_views.trysearch, name='trysearch'),
-    path('jobsearch/', postjob_views.jobsearch, name='jobsearch'), # [o] No Sidebar Issues
+    path('jobsearch/', postjob_views.jobsearch, name='jobsearch'), # Redundent?
     path('jobsearch/<int:job_id>/', postjob_views.job_detail, name='job_detail'),
     path('applyjob/<int:job_id>', user_views.applyjob, name='applyjob'),
     path('quickapply/<int:job_id>/', user_views.quickApply, name='quick_apply'),
@@ -70,7 +70,7 @@ urlpatterns = [
     path('editJob/<int:pk>', postjob_views.editJob, name='editJob'),
 
     ### Events Related Pages ###
-    path('events/', events_app_views.events_view, name='event_list'), # [o] No Sidebar Issues
+    path('events/', events_app_views.events_view, name='event_list'), # [X] No Sidebar Issues
     path('postEvent/', events_app_views.addEvent, name='postEvent'),
     path('editEvent/<int:pk>', events_app_views.editEvent, name='editEvent'),
 
@@ -78,10 +78,10 @@ urlpatterns = [
     path('company/',companypage_view, name='company_page'), 
     path('company_register', user_views.company_register, name='company_register'),
     path('company_profile_creator/', user_views.addCompanyProfile, name='company_profile_creator'),
-    path('company_profile', user_views.company_profile, name='company_profile'), # [o] No Sidebar Issues
+    path('company_profile', user_views.company_profile, name='company_profile'), # [X] No Sidebar Issues
 
     ### User Search Page ###
-    path('user_search_page', user_views.user_search_page, name='user_search_page'), # [o] No Sidebar Issues
+    path('user_search_page', user_views.user_search_page, name='user_search_page'), # [X] No Sidebar Issues
 
     ### Favoriting Job Related Pages ###
     path('fav/<int:job_id>', user_views.favorite_add, name='favorite_add'),

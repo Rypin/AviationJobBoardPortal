@@ -9,6 +9,12 @@
 <link rel="stylesheet" href="{% static 'vendor/jquery-ui/css/jquery-ui.css' %}">
 {% endblock %} 
 
+{% block sideDashBoard %}
+
+	{% include "sideDashboard.html"%}
+
+{% endblock %}
+
 {% block content %}
 {% csrf_token %}
 <form method="GET" action="{%url 'search_page'%}" novalidate>
@@ -34,9 +40,10 @@
 		</div>
 	</nav>
 	<!-- Main Search Container -->
+	<div style="margin: auto">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-8 " style="margin: 0 auto">
+			<div class="col-md-8 " style="margin-left: 250px">
 				<div class="row" style="margin-bottom: 5px; margin-top:50px">
 					<div class="col-md-12 " style="padding: 0">
 						<!-- Position Type Filter -->
@@ -265,10 +272,14 @@
 		</div>
 		<div class="col-md-2 "> </div>
 	</div>
+	</div>
 </form>
 {%endblock%}
 
 {% block other_js %}
+<!-- Favorite Job Links Loading JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+
 <!-- JQuery-UI Javascript -->
 <script src="../static/vendor/jquery-ui/js/jquery-1.12.4.js"></script>
 <script src="../static/vendor/jquery-ui/js/jquery-ui.js"></script>

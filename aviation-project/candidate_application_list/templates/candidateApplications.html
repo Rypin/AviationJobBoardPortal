@@ -7,7 +7,14 @@
 
 {% endblock %}
 
+{% block sideDashBoard %}
+
+    {% include "sideDashboard.html"%}
+
+{% endblock %}
+
 {% block content %}
+<div style="margin: 0px 100px 0px 220px">
 <div class="container-flex" id="mainContainer">
     <div class="row">
        <div class="col-3 align-self-start" id="sideMenu">
@@ -170,6 +177,16 @@
        </div>
     </div>
  </div>
+</div>
+
+{% endblock content %}
+
+{% block other_js %}
+
+<!-- Favorite Job Links Loading JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+
+<!-- ??? -->
 <script>
     function confirmSelection(id){
         var x = document.getElementById(id).name;
@@ -196,4 +213,5 @@
     function getNotes(appid){
     }
 </script>
- {% endblock content %}
+
+{% endblock %}
