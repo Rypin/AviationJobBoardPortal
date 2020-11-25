@@ -1,6 +1,8 @@
+import os
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.db.models import signals
+from django.core.files.base import File
 from datetime import *
 
 class Application(models.Model):
@@ -27,16 +29,13 @@ class QuickApply(models.Model):
     resume = models.FileField(upload_to=user_directory_path)
     def replace_resume(self, file):
         oldresume = self.resume.path
-        print(
-            'replacing'
-        )
         if file.name.endswith('.pdf'):
             name = 'resume.pdf'
         elif file.name.endswith('.docx'):
             name = 'resume.docx'
         if os.path.isfile(oldresume):
             os.remove(oldresume)
-        self.resume.save(name, File(file), save=True)
+        self.resume.save(name, File(file), save = True)
 ##SIGNAL FOR CREATING STATUS WITH EVERY APPLICATION##
 #def create_status(sender, instance, created, **kwargs):
 #    if created:
