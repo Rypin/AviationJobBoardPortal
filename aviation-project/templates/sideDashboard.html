@@ -1,3 +1,5 @@
+{% load static %}
+
 {% if user.is_authenticated %}
   	<!-- Side Dashboard -->
 	<div class="container-fluid" style="height: 100%">
@@ -53,3 +55,16 @@
 		</div>
 	</div>
 {% endif %}
+
+<!-- JQuery JavaScript Library -->            
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+<!-- Global vars with django variables for other external js files to access -->
+<script>
+	var global_vars = {
+		'searchPageURL': "{% url 'search_page' %}"
+	}
+</script>
+
+<!-- "Favorited Jobs" Side-Dashboard Section Updating JavaScript -->
+<script src="{% static 'custom/js/loadSideDashBoard.js' %}"></script>

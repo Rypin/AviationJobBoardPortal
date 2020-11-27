@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="{% static 'vendor/jquery-ui/css/jquery-ui.css' %}">
 
 <!-- Stylings for favorite buttons -->
-<link href="{% static 'custom/favoriteButtonStylings.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'custom/css/favoriteButtonStylings.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %} 
 
 {% block sideDashBoard %}
@@ -222,8 +222,14 @@
 								<small>{{result.id}} {{result.category.name}}</small>
 								<small>{{result.jobtype.name}}</small>
 							</div>
-									<div class="col-md-8 my-auto" align="center">
+									<div class="col-md-8 my-auto d-flex justify-content-center" align="center">
 										{% comment %}<a href="{%url 'favorite_add' result.id%}" class="btn btn-info" style="margin: 10px">Favorite</a>{% endcomment %}
+
+										<a href="Javascript:void(0);" class="outer unfavoritedBody d-flex justify-content-center align-items-center align-self-center mr-2" value="{{result.id}}">
+											<div class="heart fa fa-heart-o unfavoritedHeart"></div>
+										</a>
+
+
 										<a href="{% url 'applyjob' result.id%}" class="btn btn-info applyButton" style="margin: 10px">Apply Now</a>
 										<a href="{%url 'quick_apply' result.id%}"class="btn btn-info applyButton" style="margin: 10px">Quick Apply</a>
 								    	<a href="{% url 'userviewcompany' result.company.id%}" class="btn btn-info companyButton" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
@@ -250,8 +256,14 @@
 								<small>{{job.id}} {{job.category.name}}</small>
 								<small>{{job.jobtype.name}}</small>
 							</div>
-									<div class="col-md-8 my-auto" align="center">
+									<div class="col-md-8 my-auto d-flex justify-content-center" align="center">
 										{%comment%} <a href="{%url 'favorite_add' job.id%}" class="btn btn-info" style="margin: 10px">Favorite</a> {%endcomment%}
+
+										<a href="Javascript:void(0);" class="outer unfavoritedBody d-flex justify-content-center align-items-center align-self-center mr-2" value="{{job.id}}">
+											<div class="heart fa fa-heart-o unfavoritedHeart"></div>
+										 </a>
+
+
 										<a href="{% url 'applyjob' job.id%}" class="btn btn-info" style="margin: 10px" name = "{% url 'quick_apply' job.id %}" value = "{% url 'applyjob' job.id%}">Apply Now</a>
 								    	<a href="{%url 'userviewcompany' job.company.id%}" class="btn btn-info" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
 								    	<br>
@@ -280,15 +292,9 @@
 {%endblock%}
 
 {% block other_js %}
-<!-- Global vars with django variables for other external js files to access -->
-<script>
-	var global_vars = {
-		'searchPageURL': "{% url 'search_page' %}"
-	}
-</script>
 
-<!-- Favorite Job Links Loading JavaScript -->
-{%comment%} <script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script> {%endcomment%}
+<!-- Favorite Button Styling Updating JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteButtons.js' %}"></script>
 
 <!-- JQuery-UI Javascript -->
 <script src="../static/vendor/jquery-ui/js/jquery-1.12.4.js"></script>
@@ -296,7 +302,9 @@
 
 <!-- Custom Search Content JavaScript -->
 <script src="../static/custom/js/custom.js"></script>
-<script src="../static/custom/js/searchFilters.js"></script> {%endblock%}
+<script src="../static/custom/js/searchFilters.js"></script> 
 
 <!-- Favorite Job Links Loading JavaScript -->
 <script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+
+{%endblock%}

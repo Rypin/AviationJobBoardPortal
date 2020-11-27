@@ -6,7 +6,7 @@
 <link href="{% sass_src 'front/scss/landing/landing.scss' %}" rel="stylesheet" type="text/css" />
 
 <!-- Stylings for favorite buttons -->
-<link href="{% static 'custom/favoriteButtonStylings.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'custom/css/favoriteButtonStylings.css' %}" rel="stylesheet" type="text/css" />
 
 {% endblock %}
 
@@ -264,15 +264,8 @@
 
 {% block other_js %}
 
-<!-- Global vars with django variables for other external js files to access -->
-<script>
-	var global_vars = {
-		'searchPageURL': "{% url 'search_page' %}"
-	}
-</script>
-
-<!-- Favorite Job Links Loading JavaScript -->
-<script src="{% static 'custom/js/loadFavoriteJobs_Index.js' %}"></script>
+<!-- Favorite Button Styling Updating JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteButtons.js' %}"></script>
 
 <!-- ??? -->
 <script>
@@ -285,11 +278,4 @@ $(document).ready(function(){
 });
 </script>
 
-<!-- <script>
-$(".heart.fa").click(function() {
-	$(this).toggleClass("fa-heart fa-heart-o");
-  	$(this).toggleClass("unfavoritedHeart favoritedHeart");
-  	$(this).parent().toggleClass("unfavoritedBody favoritedBody");
-});
-</script> -->
 {% endblock %}

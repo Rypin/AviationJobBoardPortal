@@ -19,6 +19,6 @@ function refreshSideBarFavJobListings() {
         }
     });
 
-    console.log("function 1 fired");
+    console.log("refreshSideBarFavJobListings() fired");
     
 }
