@@ -84,8 +84,10 @@ urlpatterns = [
     path('user_search_page', user_views.user_search_page, name='user_search_page'), # [X] No Sidebar Issues
 
     ### Favoriting Job Related Pages ###
-    path('fav/<int:job_id>', user_views.favorite_add, name='favorite_add'),
+    # path('fav/<int:job_id>', user_views.favorite_add, name='favorite_add'),
+    url(r'^ajax/add_favoritejobs/$', user_views.favorite_toggle, name='favorite_toggle'),
     url(r'^ajax/load_favoritejobs/$', user_views.loadJobs, name='favoritejobs'),
+    url(r'^ajax/refresh_favoritejobbutton_styles/$', user_views.refreshHomePageFavButtonStyles, name='favjobbutton_home_refresh'),
     
     ### Admin Related Pages ###
     path('admin/', admin.site.urls),

@@ -7,6 +7,9 @@
 
 <!-- JQuery-UI CSS -->
 <link rel="stylesheet" href="{% static 'vendor/jquery-ui/css/jquery-ui.css' %}">
+
+<!-- Stylings for favorite buttons -->
+<link href="{% static 'custom/favoriteButtonStylings.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %} 
 
 {% block sideDashBoard %}
@@ -220,7 +223,7 @@
 								<small>{{result.jobtype.name}}</small>
 							</div>
 									<div class="col-md-8 my-auto" align="center">
-										<a href="{%url 'favorite_add' result.id%}" class="btn btn-info" style="margin: 10px">Favorite</a>
+										{% comment %}<a href="{%url 'favorite_add' result.id%}" class="btn btn-info" style="margin: 10px">Favorite</a>{% endcomment %}
 										<a href="{% url 'applyjob' result.id%}" class="btn btn-info applyButton" style="margin: 10px">Apply Now</a>
 										<a href="{%url 'quick_apply' result.id%}"class="btn btn-info applyButton" style="margin: 10px">Quick Apply</a>
 								    	<a href="{% url 'userviewcompany' result.company.id%}" class="btn btn-info companyButton" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
@@ -248,7 +251,7 @@
 								<small>{{job.jobtype.name}}</small>
 							</div>
 									<div class="col-md-8 my-auto" align="center">
-										<a href="{%url 'favorite_add' job.id%}" class="btn btn-info" style="margin: 10px">Favorite</a>
+										{%comment%} <a href="{%url 'favorite_add' job.id%}" class="btn btn-info" style="margin: 10px">Favorite</a> {%endcomment%}
 										<a href="{% url 'applyjob' job.id%}" class="btn btn-info" style="margin: 10px" name = "{% url 'quick_apply' job.id %}" value = "{% url 'applyjob' job.id%}">Apply Now</a>
 								    	<a href="{%url 'userviewcompany' job.company.id%}" class="btn btn-info" style="margin: 10px; text-decoration: none; color: white">Company Page</a>
 								    	<br>
@@ -277,8 +280,15 @@
 {%endblock%}
 
 {% block other_js %}
+<!-- Global vars with django variables for other external js files to access -->
+<script>
+	var global_vars = {
+		'searchPageURL': "{% url 'search_page' %}"
+	}
+</script>
+
 <!-- Favorite Job Links Loading JavaScript -->
-<script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+{%comment%} <script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script> {%endcomment%}
 
 <!-- JQuery-UI Javascript -->
 <script src="../static/vendor/jquery-ui/js/jquery-1.12.4.js"></script>
@@ -287,3 +297,6 @@
 <!-- Custom Search Content JavaScript -->
 <script src="../static/custom/js/custom.js"></script>
 <script src="../static/custom/js/searchFilters.js"></script> {%endblock%}
+
+<!-- Favorite Job Links Loading JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>

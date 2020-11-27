@@ -4,6 +4,10 @@
 
 {% block other_css %}
 <link href="{% sass_src 'front/scss/landing/landing.scss' %}" rel="stylesheet" type="text/css" />
+
+<!-- Stylings for favorite buttons -->
+<link href="{% static 'custom/favoriteButtonStylings.css' %}" rel="stylesheet" type="text/css" />
+
 {% endblock %}
 
 {% block sideDashBoard %}
@@ -178,9 +182,18 @@
          <div class="col-md-6">
             <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
                <div class="applyIconBtn" >
-                  <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                     <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
-                  </a>
+				    <a href="Javascript:void(0);" class="outer unfavoritedBody d-flex justify-content-center align-items-center mr-2" value="{{job.id}}">
+						<div class="heart fa fa-heart-o unfavoritedHeart"></div>
+				 	</a> 
+                   <!--<a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+
+
+
+					  <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span> 
+					 
+					  
+
+                  </a>  -->
                <button type="button" class="btn btn-primary py-2 applyJob" value ="{% url 'search_page' %}?job={{job.id}}" name="{% url 'quick_apply' job.id %}">Apply Job</button>
 <!--				   href="{% url 'search_page' %}?job={{job.id}}"-->
                </div>
@@ -250,8 +263,16 @@
 
 
 {% block other_js %}
+
+<!-- Global vars with django variables for other external js files to access -->
+<script>
+	var global_vars = {
+		'searchPageURL': "{% url 'search_page' %}"
+	}
+</script>
+
 <!-- Favorite Job Links Loading JavaScript -->
-<script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+<script src="{% static 'custom/js/loadFavoriteJobs_Index.js' %}"></script>
 
 <!-- ??? -->
 <script>
@@ -263,4 +284,12 @@ $(document).ready(function(){
 	});
 });
 </script>
+
+<!-- <script>
+$(".heart.fa").click(function() {
+	$(this).toggleClass("fa-heart fa-heart-o");
+  	$(this).toggleClass("unfavoritedHeart favoritedHeart");
+  	$(this).parent().toggleClass("unfavoritedBody favoritedBody");
+});
+</script> -->
 {% endblock %}
