@@ -95,6 +95,7 @@ urlpatterns = [
     path('userviewcompany/<int:company_id>',postjob_views.userviewcompany, name='userviewcompany'),
 
     path('fav/<int:job_id>', user_views.favorite_add, name='favorite_add'),
+    path('rsvpEvents/<int:event_id>', user_views.rsvpEvent_add, name='rsvpEvent_add'),
     url(r'^ajax/load_favoritejobs/$', user_views.loadJobs, name='favoritejobs'),
 ]
 

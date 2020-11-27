@@ -689,6 +689,17 @@ def favorite_add(request, job_id):
         user.favoriteJobs.add(job_id)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
+def rsvpEvent_add(request, event_id):
+    user = Users.objects.get(Username=request.user.username)
+
+    if user.rsvpEvents.filter(id=event_id).exists():
+        e = user.rsvpEvents.get(id=event_id)
+        user.rsvpEvents.remove(e)
+    else:
+        user.rsvpEvents.add(event_id)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 def loadJobs(request):
     user = Users.objects.get(Username=request.user.username)

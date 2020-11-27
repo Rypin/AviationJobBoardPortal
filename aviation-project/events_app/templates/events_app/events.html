@@ -75,9 +75,14 @@ tr:nth-child(even) {
       <a href="?eventsPerPage=2">2 per Page</a>
     </div>
 
-<button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: rgb(38, 91, 126); color: white; border-style: none;" class="btn btn-primary" name="{{job.id}}" value="{{job.id}}">
-                                        <a><b>Show only RSVP Events</b></a>
-                                    </button>
+<a href="?RSVP_only=None" style="position: relative; bottom: 30px; margin-top:40px; right: 10px; left: 10px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: rgb(38, 91, 126); color: white; border-style: none;" class="btn btn-primary">
+                                        Show ALL Events
+</a>
+
+<a href="?RSVP_only=True" style="position: relative; bottom: 30px; left: 15px; margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: rgb(38, 91, 126); color: white; border-style: none;" class="btn btn-primary">
+                                        Show only RSVP Events
+</a>
+
 </div>
 
 <script>
@@ -117,9 +122,9 @@ tr:nth-child(even) {
             {{ event.deadline }}
         </td>
         <td>
-            <button type="submit" style="margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary" name="{{job.id}}" value="{{job.id}}">
-                                        <a><b>RSVP</b></a>
-                                    </button>
+            <a href="{% url 'rsvpEvent_add' event.id %}" style="position: relative; bottom:20px; right: 23px; margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary" name="{{event.id}}" value="{{event.id}}">
+                                        RSVP
+            </a>
         </td>
     </tr>
     {% endfor %}
