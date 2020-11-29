@@ -144,7 +144,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'fall2020sprint3',
+        'NAME': 'ajb_sprint3',
         'USER': 'postgres',
         'PASSWORD': '123miles', #Put the password that you used for PostrgeSQL
         'HOST': 'localhost',

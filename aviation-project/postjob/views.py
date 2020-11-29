@@ -4,8 +4,10 @@ from .forms import PostingForm, UpdateJobForm
 from postjob.models import Jobform, Jobtype, Category
 from datetime import timedelta, date, datetime
 import math
+from users.models import Users
 from users.models import CompanyProfile as cp
 from events_app.models import *
+from django.core.mail import send_mail, EmailMessage
 # Create your views here.
 
 def posting(request):
@@ -37,7 +39,17 @@ def posting(request):
             #                         jobtype=jobtype, deadlinedate=deadlinedate, posttime=posttime, deadlinetime=deadlinetime,
             #                          address=address, geolocation=geolocation, salary_min=salary_min, salary_max=salary_max)
             obj.save()
-
+            subscribed = id.subscribed_users.all()
+            if subscribed.exists():
+                for x in subscribed:
+                    print(x.Email)
+                    send_mail(
+                    'You have received a notification from Aviation Job Portal',
+                    'A company you have subscribed to has posted a new job: ' + str(obj.title) + ' at ' + str(id.name) + ' is now available for applications. The Job description is as follows: '+str(obj.description)+' Please visit the Aviation Job Portal for additional information.',
+                    'DoNotReply.AJP@gmail.com',
+                    [x.Email],
+                    fail_silently=False,
+                )
             return redirect('company_profile')
     else:
         filled_form = PostingForm()
@@ -187,13 +199,20 @@ def userviewcompany(request, company_id):
         company = cp.objects.get(id=company_id)
         events = EventListing.objects.filter(company=company_id)
         jobs = Jobform.objects.filter(company=company_id)
+        users = Users.objects.filter(Username=request.user.username).first()
+        subscribed_boolean = False
+        subscribed = company.subscribed_users.all()
+        if subscribed.exists():
+            for x in subscribed:
+                if x == users:
+                    subscribed_boolean = True
         print(company)
         print(events)
         print(jobs)
     except company.DoesNotExist:
         raise Http404('There are no Open jobs that match this search')
 
-    return render(request, "userViewCompany.html", {'company': company, 'events': events, 'jobs': jobs})
+    return render(request, "userViewCompany.html", {'company': company, 'events': events, 'jobs': jobs, 'subscribed_boolean':subscribed_boolean})
 
 
 

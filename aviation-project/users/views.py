@@ -9,7 +9,7 @@ from django.conf import settings
 import os
 from django.http import HttpResponse
 from django.contrib.auth.models import User , auth
-from .models import Users , CompanyProfile , Skill
+from .models import Users , CompanyProfile , Skill, Subscription
 from .models import workExperience
 from .models import educationExperience
 from postjob.models import Jobform
@@ -589,6 +589,23 @@ def applyjob(request , job_id):
         return redirect('userProfile-home')
         ##SOME ISSUES WITH FS IDK HOW TO FIX THE ISSUE OF HAVING DUPLICATE FILES IN SAME APPLICATION##
     return render(request , 'applyjob.html')
+
+
+def subscribe(request, company_id):
+    users = Users.objects.filter(Username=request.user.username).first()
+    company = CompanyProfile.objects.filter(id=company_id).first()
+    s1 = Subscription(jobseeker = users, name = users.Email, company = company)
+    subscribed = company.subscribed_users.all()
+    if subscribed.exists():
+        for x in subscribed:
+            if x == s1.jobseeker:
+                company.subscribed_users.remove(x)
+                return render(request, 'unsubscribe.html')
+        else:
+            s1.save()   
+            print(company.subscribed_users.all())
+            return render(request, 'subscribe.html')
+    return render(request, 'userviewcompany.html')
 
 
 def getFiles(applications):

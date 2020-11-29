@@ -48,6 +48,8 @@ urlpatterns = [
     path('appStatus/', user_views.applicationStatus_view, name='application_status'),
     path('resume/', user_views.resume, name='resume'),
     path('review/', user_views.review, name='review'),
+    path('subscribe/<int:company_id>', user_views.subscribe, name='subscribe'),
+    path('unsubscribe/<int:company_id>', user_views.subscribe, name='unsubscribe'),
  #   path('profile/', user_views.jobseeker_profile_view, name='profile'),
     path('choose_register/', chooseRegister_view, name='choose_register'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),

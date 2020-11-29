@@ -8,6 +8,8 @@ from users.models import CompanyProfile as cp
 from postjob.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions import  *
+from django.core.mail import send_mail, EmailMessage
+
 
 # Create your views here.
 def events_view(request):
@@ -96,6 +98,16 @@ def addEvent(request):
             obj.company = id
 
             obj.save()
+            subscribed = id.subscribed_users.all()
+            if subscribed.exists():
+                for x in subscribed:
+                    send_mail(
+                    'You have received a notification from Aviation Job Portal',
+                    'A company you have subscribed to has posted a new event: ' + str(obj.title) + ' at ' + str(id.name) + ' is now available for applications. The Event description is as follows: '+str(obj.description)+' Please visit the Aviation Job Portal for additional information.',
+                    'DoNotReply.AJP@gmail.com',
+                    [x.Email],
+                    fail_silently=False,
+                )
             messages.success(request, f'Event Posted')
             return redirect('company_profile')
         else:
@@ -104,6 +116,7 @@ def addEvent(request):
     context = {
         'e_form': e_form,
     }
+ 
 
     return render(request, 'events_app/post_event.html', context)
 
