@@ -10,6 +10,7 @@
 {% endblock %} 
 
 {% block content %}
+
 {% csrf_token %}
 <form method="GET" action="{%url 'search_page'%}" novalidate>
     
