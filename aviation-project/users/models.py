@@ -51,6 +51,7 @@ class Users (models.Model):
 	image = models.ImageField(upload_to = 'profile_image', default = 'default.png')
 	skills = models.ManyToManyField(Skill)
 	favoriteJobs = models.ManyToManyField('postjob.Jobform', related_name="favorite",default=None, blank=True)
+	rsvpEvents = models.ManyToManyField('events_app.EventListing', related_name='rsvp', default=None, blank=True)
 	def __str__(self):
 		return f'{self.Username} Profile'
 	

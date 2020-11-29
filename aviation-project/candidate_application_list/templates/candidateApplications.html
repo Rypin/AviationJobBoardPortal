@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block other_css %}
 
 <link href="{% static 'custom/css/candAppsCustom.css' %}" rel="stylesheet" type="text/css" />
@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="container-flex" id="mainContainer">
     <div class="row">
        <div class="col-3 align-self-start" id="sideMenu">
@@ -195,4 +196,5 @@
     function getNotes(appid){
     }
 </script>
+
  {% endblock content %}

@@ -206,12 +206,12 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 # this is a gmail account I temporarily created for this project
-EMAIL_HOST_USER = 'aviationjobboard@gmail.com'
-EMAIL_HOST_PASSWORD = 'ajbpass1029' #I temporarily removed the password
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = '' #I temporarily removed the password
 
 
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '86598zr5xlzp1g'
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'fCzfd2ZIMxZAsgH5'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = ''
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = ''
 
 SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, "static")
 
