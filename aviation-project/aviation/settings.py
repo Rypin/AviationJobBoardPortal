@@ -143,7 +143,6 @@ WSGI_APPLICATION = 'aviation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
         'NAME': 'ajb_sprint3',
         'USER': 'postgres',
         'PASSWORD': '123miles', #Put the password that you used for PostrgeSQL
@@ -213,8 +212,8 @@ EMAIL_HOST_PASSWORD = 'VelocityPoints1!' #I temporarily removed the password
 
 
 
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '86598zr5xlzp1g'
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'fCzfd2ZIMxZAsgH5'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = ''
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = ''
 
 SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, "static")
 
@@ -226,3 +225,5 @@ STATICFILES_FINDERS = (
 )
 
 LOGIN_REDIRECT_URL = 'home'
+
+# TEST

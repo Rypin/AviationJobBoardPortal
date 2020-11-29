@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta, timezone
-from users.models import CompanyProfile
+from users.models import CompanyProfile, Users
 
 # Create your models here.
 class EventListing(models.Model):

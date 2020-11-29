@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-
 <style>
     .hov {
         border-radius: 10px;
@@ -12,14 +11,12 @@
     }
 
 </style>
+{% if request.user.groups.all.0.name == "company_owner" %}
+<h1>You are not authorized to view this page</h1>
+{% else %}
 <script>history.scrollRestoration = "manual"</script>
 <script>
-{% if using_resume %}
-{% else %}
-$(document).ready(function(){
-        $("#builderModal").modal('show');
-    });
-{% endif %}
+
 </script>
 <div class="modal fade" id="builderModal" tabindex="-1" role="dialog">
      <div class="modal-dialog" role="document">
@@ -58,7 +55,6 @@ $(document).ready(function(){
                 <legend class="border-bottom mb-4">Profile Information: <button class="btn btn-success" style="float:right" type="submit" name="save" value="submit"><b>Save</b></button>
                 </legend>
                 <div class="col ml-auto" style="margin-bottom: 25px; margin-top: 10px;">
-
                 </div>
             </div>
 
@@ -113,8 +109,18 @@ $(document).ready(function(){
             </div>
     </form>
 </div>
-    
 
+{% endif %}
 
 {% endblock content %}
+{% block other_js %}
+<script>
+{% if using_resume %}
+{% else %}
+$(document).ready(function(){
+        $("#builderModal").modal('show');
+});
+{% endif %}
+</script>
+{% endblock other_js %}
 

@@ -112,9 +112,10 @@ def applicationList(request):
 def getFiles(applications):
     app_files = dict()
     for x in applications:
-        user = User.objects.get(username=x.applicant.Username)
+        user = Users.objects.get(Username=x.applicant.Username)
         for y in x.files:
             path = "/media/" + str(user.id) + "/application_files/" + str(x.id) + "/" + y
+            print(path)
             test = {
                 y:path
             }

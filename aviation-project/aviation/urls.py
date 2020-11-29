@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from postjob import views as postjob_views
@@ -71,8 +72,12 @@ urlpatterns = [
     # path('postjob/', postjob_view, name='posting'),
     path('jobsearch/', postjob_views.jobsearch, name='jobsearch'),
     path('jobsearch/<int:job_id>/', postjob_views.job_detail, name='job_detail'),
+
     path('view-applications/', user_views.viewApplications, name ='company_applications'),
-    
+    #AJAX FOR JOBSEARCH
+    url(r'^ajax/filterJobtype/$', postjob_views.filterJobtype, name='filter_jobtype'),
+  
+    path('quickapply/<int:job_id>/', user_views.quickApply, name='quick_apply'),
     path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'),
     path('uploadProfilePic/', user_views.uploadProfilePic_view, name='uploadProfilePic'),
     path('about/', user_views.about, name = 'userProfile-about'),
@@ -85,6 +90,10 @@ urlpatterns = [
     path('trysearch/', user_views.trysearch, name='trysearch'),
     path('applyjob/<int:job_id>', user_views.applyjob, name='applyjob'),
     path('userviewcompany/<int:company_id>',postjob_views.userviewcompany, name='userviewcompany'),
+
+    path('fav/<int:job_id>', user_views.favorite_add, name='favorite_add'),
+    path('rsvpEvents/<int:event_id>', user_views.rsvpEvent_add, name='rsvpEvent_add'),
+    url(r'^ajax/load_favoritejobs/$', user_views.loadJobs, name='favoritejobs'),
 ]
 
 if settings.DEBUG:

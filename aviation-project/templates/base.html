@@ -2,7 +2,11 @@
 {% load sass_tags %}
 <!DOCTYPE html>
 <html lang="en">
-
+{% if messages %}
+	{% for message in messages %}
+		{{message}}
+	{% endfor %}
+{% endif %}
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,75 +17,71 @@
 	
 	<!-- Bootstrap core CSS -->
 	<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-  	<link href="{% sass_src 'front/scss/nav/nav.scss' %}" rel="stylesheet" type="text/css" /> </head>
-  
-  	{% block other_css %}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
-  	{% endblock %}
+	<!-- Navigation Bar CSS -->
+  	<link href="{% sass_src 'front/scss/nav/nav.scss' %}" rel="stylesheet" type="text/css" />
+  
+	<!-- Where page-specific css files are inserted -->
+	{% block other_css %}
+
+	{% endblock %}
 </head>
 
 <body>
   	{% if user.is_authenticated %}
   	<!-- Side Dashboard -->
 	<div class="container-fluid" style="height: 100%">
-			<div id="toggleNavBar" class="sideNav">
-				<section class='expandToggle' style="z-index:1">
-					<ul id="expandToggle" style="padding: 0px">
+		<div id="toggleNavBar" class="sideNav">
+			<section class='expandToggle' style="z-index:1">
+				<ul id="expandToggle" style="padding: 0px">
+				    
+				    <!-- Web Page Links -->
+					{% if request.user.groups.all.0.name == "jobseeker" %}
+					<li class="linkItem">
+						<a href="{% url 'search_page' %}"> <i class="fa fa-home icon" aria-hidden="true"></i> <span>Search Jobs</span></a>
+					</li>
+					<li class="linkItem">
+						<a href="{% url 'userProfile-home' %}"> <i class="fa fa-tachometer icon" aria-hidden="true"></i> <span>Profile</span></a>
+					</li>
+					<li class="linkItem">
+						<a href="{% url 'event_list' %}"> <i class="fa fa-flag icon" aria-hidden="true"></i> <span>Events</span></a>
+					</li>
+					{% endif %}
+					{% if request.user.groups.all.0.name == "company_owner" %}
+					<li class="linkItem">
+						<a href="{% url 'company_profile' %}"> <i class="fa fa-tachometer icon" aria-hidden="true"></i> <span>Profile</span></a>
+					</li>
+					{% endif %}
+					<li class="linkItem">
+						<a href="{% url 'logout' %}"> <i class="fa fa-sign-out icon" aria-hidden="true"></i> <span>Logout</span> </a>
+					</li>
 						
-						<!-- Web Page Links -->
-						<li class="linkItem">
-							<a href="{% url 'home' %}"> <i class="fa fa-home icon" aria-hidden="true"></i> <span>Home</span></a>
-						</li>
-						<li class="linkItem">
-							<a href="{% url 'userProfile-home' %}"> <i class="fa fa-tachometer icon" aria-hidden="true"></i> <span>Profile</span></a>
-						</li>
-						<li class="linkItem">
-							<a href="{% url 'event_list' %}"> <i class="fa fa-flag icon" aria-hidden="true"></i> <span>Events</span></a>
-						</li>
-						<li class="linkItem">
-							<a href="{% url 'logout' %}"> <i class="fa fa-sign-out icon" aria-hidden="true"></i> <span>Logout</span> </a>
-						</li>
-						
-						<!-- Favorited Job Post Section -->
-						<li id="animatable" style="display: none">
-							<hr>
-							<div style="margin: 0px 0px 0px 10px"> 
-								<span style="margin-right: 1px;padding-left: 0px; font: 18px Calibri, sans-serif">Favorited Job Posts</span>
-								<span>
-									<button id="sideDashButton" class="btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample" style="margin-bottom: 7px;">
-										<i class="fa fa-chevron-down"></i>
-									</button>
-								</span>
-							</div>
-							<div class="collapse" id="collapseExample" style="">
-								<div class="card card-body" id="cardBody">
-									<div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-secondary">
-											<input type="radio" name="options" id="option1" checked=""> Job Post (#1) </label>
-										<label class="btn btn-secondary">
-											<input type="radio" name="options" id="option2"> Job Post (#2) </label>
-										<label class="btn btn-secondary active">
-											<input type="radio" name="options" id="option3"> Job Post (#3) </label>
-										<label class="btn btn-secondary">
-											<input type="radio" name="options" id="option4"> Job Post (#4) </label>
-										<label class="btn btn-secondary">
-											<input type="radio" name="options" id="option5"> Job Post (#5) </label>
-										<label class="btn btn-secondary">
-											<input type="radio" name="options" id="option6"> Job Post (#6) </label>
-										<label class="btn btn-secondary">
-											<input type="radio" name="options" id="option3"> Job Post (#7) </label>
-										<label class="btn btn-secondary">
-											<input type="radio" name="options" id="option3"> Job Post (#8) </label>
-									</div>
+					<!-- Favorited Job Post Section -->
+					{% if request.user.groups.all.0.name == "jobseeker" %}
+					<li id="animatable" style="display: none">
+						<hr>
+						<div style="margin: 0px 0px 0px 10px"> 
+							<span style="margin-right: 1px;padding-left: 0px; font: 18px Calibri, sans-serif">Favorited Job Posts</span>
+							<span>
+								<button id="sideDashButton" class="btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample" style="margin-bottom: 7px;">
+									<i class="fa fa-chevron-down"></i>
+								</button>
+							</span>
+						</div>
+						<div class="collapse" id="collapseExample" style="">
+							<div class="card card-body" id="cardBody">
+								<div id="favoriteJobs" class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
+                    			<!-- Favorite Job Links Loaded Here -->
 								</div>
 							</div>
-							<hr> 
-						</li>
-						
-					</ul>
-				</section>
-			</div>
+						</div>
+						<hr> 
+					</li>
+					{% endif %}
+				</ul>
+			</section>
+		</div>
 	</div>
   	{% endif %}
   
@@ -91,42 +91,93 @@
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"> 
+					{% if user.is_authenticated %}
+					{% if request.user.groups.all.0.name == "jobseeker" %}
+					<li class="nav-item active">
 						<a class="nav-link" href="{% url 'home' %}">Home
 							<span class="sr-only">(current)</span>
-						</a> 
+						</a>
 					</li>
+					<li class="nav-item"> <a class="nav-link" href="{% url 'userProfile-home' %}">Profile</a> </li>
 					<li class="nav-item"> <a class="nav-link" href="{% url 'event_list' %}">Events</a> </li>
-					<li class="nav-item"> <a class="nav-link" href="{% url 'search_page' %}">Search Jobs</a> </li>
-					{% if user.is_authenticated %}
-						<li class="nav-item"> <a class="nav-link" href="{% url 'userProfile-home' %}">Profile</a> </li>
-						<li class="nav-item"> <a class="nav-link" href="{% url 'user_search_page' %}">Search Users</a> </li>
-						<li class="nav-item"> <a class="nav-link" href="{% url 'logout' %}">Logout</a> </li> 
+					<li class="nav-item"> <a class="nav-link" href="{% url 'logout' %}">Logout</a> </li>
+					{% endif %}
+					{% if request.user.groups.all.0.name == "company_owner" %}
+					<li class="nav-item active">
+						<a class="nav-link" href="{% url 'company_profile' %}">Profile
+							<span class="sr-only">(current)</span>
+						</a>
+					</li>
+					<li class="nav-item"> <a class="nav-link" href="{% url 'user_search_page' %}">Search Users</a> </li>
+					<li class="nav-item"> <a class="nav-link" href="{% url 'candidate_applications_page' %}">Applications</a> </li>
+					<li class="nav-item"> <a class="nav-link" href="{% url 'logout' %}">Logout</a> </li>
+					{% endif %}
 					{% else %}
-						<li class="nav-item"> 
-							<a class="nav-link" href="{% url 'login' %}" style="padding: .5rem 2rem; color: white; background-color: #1de9b6; border-radius: 2px; font-size: 18px; display: flex; justify-content: center; align-content: center; align-items: center">Login</a>
-						</li>
-						<li class="nav-item" style="margin-top: -1.1px"> 
-							<a class="nav-link" href="{% url 'choose_register' %}" style="padding: 0.5rem 2rem; background-color: #ff6d00; color: white; font-size: 18px; border-radius: 2px; margin-left: 20px; ">Register</a> 
-						</li> 
+					<li class="nav-item active">
+						<a class="nav-link" href="{% url 'home' %}">Home
+							<span class="sr-only">(current)</span>
+						</a>
+					</li>
+					<li class="nav-item"> 
+						<a class="nav-link" href="{% url 'login' %}" style="padding: .5rem 2rem; color: white; background-color: #1de9b6; border-radius: 2px; font-size: 18px; display: flex; justify-content: center; align-content: center; align-items: center">Login</a>
+					</li>
+					<li class="nav-item" style="margin-top: -1.1px"> 
+						<a class="nav-link" href="{% url 'choose_register' %}" style="padding: 0.5rem 2rem; background-color: #ff6d00; color: white; font-size: 18px; border-radius: 2px; margin-left: 20px; ">Register</a> 
+					</li> 
 					{% endif %} 
 				</ul>  
 			</div>
 		</div>
 	</nav>
-  
 
-	{% block content %} 
-	
-	{% endblock %} 
-	
-	<!-- Bootstrap core JavaScript -->
-	<script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script>
-	<script src='../static/front/js/nav.js' defer></script> 
+   	<!--End Navigation Bar -->
+
+	{% block content %}
+	{% endblock %}
+
+	<!-- Bootstrap core JavaScript --> 
+	<script src="{% static 'vendor/jquery/jquery.slim.min.js' %}"></script> 
   	<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  
-  	{% block other_js %} 
 	
+	<!-- JQuery JavaScript Library -->            
+	<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script> 
+				
+	<!-- Navigation Bar JavaScript -->
+	<script src='../static/front/js/nav.js' defer></script>
+				
+	<!-- Favorite Job Links Loading JavaScript -->
+	<script>
+
+	$(window).on('load', function(){
+		if($("#favoriteJobs").length != 0){
+			var url_mask = "{% url 'search_page'%}?job=id";
+
+			$.ajax({
+				url: '/ajax/load_favoritejobs/',
+				dataType: 'json',
+				success: function (respData) {
+					for(x of respData.jobs) {
+						link = url_mask.replace("id", x[0])
+						$("#favoriteJobs").append(`<button class=\"btn btn-secondary\" onclick=\"window.location.href=\'${link}\'\">${x[1]} (#${x[0]})</button>`);
+					}
+				}
+			});
+
+			console.log("fav job loading function fired")
+		}
+	});
+
+	
+
+	
+
+	</script>
+  
+  	<!-- Where page-specific js files are inserted -->
+  	{% block other_js %} 
+
+
+
 	{% endblock %}
 </body>
 

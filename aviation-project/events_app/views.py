@@ -5,17 +5,23 @@ from datetime import datetime, timedelta, timezone
 from django.db.models.functions import Lower
 from .forms import EventForm, UpdateEventForm
 from users.models import CompanyProfile as cp
+from users.models import Users
 from postjob.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions import  *
 from django.core.mail import send_mail, EmailMessage
-
+from django.contrib.auth.decorators import login_required
+from users.decorators import unauthenticated_user , allowed_users
 
 # Create your views here.
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
 def events_view(request):
     now = datetime.now(timezone.utc)
+    RSVP_only = request.GET.get('RSVP_only')
     order_by = request.GET.get('order_by')
     ordering = order_by
+    user = Users.objects.get(Username=request.user.username)
 
     # if order_by == None:
     #     ordering = 'posted'
@@ -31,9 +37,21 @@ def events_view(request):
         request.session['order_by'] = order_by
         ob = request.session.get('order_by')
 
-
+    e_rsvp = None
+    if request.GET.get('RSVP_only') is None:
+        if 'RSVP_only' in request.session:
+            if request.session.get('RSVP_only') is not None:
+                e_rsvp = request.session.get('RSVP_only')
+            else:
+                request.session['RSVP_only'] = None
+    else:
+        request.session['RSVP_only'] = RSVP_only
+        e_rsvp = request.session.get('RSVP_only')
 
     events_listings = EventListing.objects.all().filter(deadline__gte=now).order_by(ob) #change to ordering maybe
+
+    if e_rsvp == 'True':
+        events_listings = user.rsvpEvents.all()
 
     eventsPerPage = request.GET.get('eventsPerPage')
 
@@ -77,11 +95,14 @@ def events_view(request):
         'events_listings' : events_listings,
         'eventsPerPage' : eventsPerPage,
         'events' : events,
-        'epp' : epp
+        'epp' : epp,
+        'RSVP_only' : RSVP_only
     }
 
     return render(request, "events_app/events.html", context=context)
 
+@login_required()
+@allowed_users(allowed_roles=['company_owner'])
 def addEvent(request):
     e_form = EventForm(request.POST)
     if request.method == 'POST':
@@ -120,6 +141,8 @@ def addEvent(request):
 
     return render(request, 'events_app/post_event.html', context)
 
+@login_required()
+@allowed_users(allowed_roles=['company_owner'])
 def editEvent(request, pk):
     u_event = EventListing.objects.get(id=pk)
     eu_form = UpdateEventForm(instance=u_event)

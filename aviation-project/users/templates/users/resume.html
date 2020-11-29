@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+
 {% block content %}
 
 	<form method="POST" enctype="multipart/form-data">
@@ -9,6 +10,6 @@
             <input type = "file" name = "resume">
 			<button class= "btn btn-secondary" type="submit" name ="upload">Upload</button>
         </fieldset>
-
+        <small>We'll keep this resume saved so you can quickly apply to jobs in the future.</small>
 {% endblock content %}
 
