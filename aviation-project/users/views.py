@@ -150,7 +150,7 @@ def addCompanyProfile(request):
     cp_form = CompanyProfileForm(request.POST)
     if request.method == 'POST':
         if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
-            group = Group.objects.get(name='jobseeker')
+            group = Group.objects.get(name='company_owner')
             request.user.groups.add(group)
         cp_form = CompanyProfileForm(request.POST)
         if cp_form.is_valid():

@@ -3,6 +3,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+<div style="margin: 0px 100px 0px 220px">
 <h1>Send Email to Jobseeker {{ jobseeker.name }}</h1>
 <form method="POST">
     {% csrf_token %}
@@ -13,7 +14,7 @@
         <button type="submit" class="btn-primary">Send Email</button>
     </div>
 </form>
-
+</div>
 
 
 
