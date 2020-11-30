@@ -145,9 +145,13 @@ def company_register(request):
     return render(request , 'users/company_register.html' , {'form': form})
 
 
+
 def addCompanyProfile(request):
     cp_form = CompanyProfileForm(request.POST)
     if request.method == 'POST':
+        if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
+            group = Group.objects.get(name='jobseeker')
+            request.user.groups.add(group)
         cp_form = CompanyProfileForm(request.POST)
         if cp_form.is_valid():
             name = cp_form.cleaned_data['name']
@@ -366,13 +370,15 @@ def removeSkill(users_id , skill):
             connection.close()
 
 @login_required()
-@allowed_users(allowed_roles=['jobseeker'])
 def review(request):
     if request.method == 'GET':
+        if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
+            group = Group.objects.get(name='jobseeker')
+            request.user.groups.add(group)
         using_resume = request.session.get('parsed_status', None)
         user = Users.objects.filter(Username=request.user.username)
         if not user.exists():
-            user = Users(Username=request.user.username , Email=request.user.email)
+            user = Users(Username=request.user.username, Email=request.user.email)
             user.save()
         print(using_resume)
         if using_resume is None:
@@ -747,6 +753,17 @@ def favorite_add(request, job_id):
         user.favoriteJobs.add(job_id)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
+def rsvpEvent_add(request, event_id):
+    user = Users.objects.get(Username=request.user.username)
+
+    if user.rsvpEvents.filter(id=event_id).exists():
+        e = user.rsvpEvents.get(id=event_id)
+        user.rsvpEvents.remove(e)
+    else:
+        user.rsvpEvents.add(event_id)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 def loadJobs(request):
     user = Users.objects.get(Username=request.user.username)
