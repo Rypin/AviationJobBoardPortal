@@ -667,14 +667,18 @@ def subscribe(request, company_id):
     subscribed = company.subscribed_users.all()
     if subscribed.exists():
         for x in subscribed:
-            if x == s1.jobseeker:
+            if x == s1.jobseeker: 
                 company.subscribed_users.remove(x)
                 return render(request, 'unsubscribe.html')
         else:
             s1.save()   
             print(company.subscribed_users.all())
-            return render(request, 'subscribe.html')
-    return render(request, 'userviewcompany.html')
+            return render(request, 'subscribe.html')            
+    else:
+        s1.save()   
+        print(company.subscribed_users.all())
+        return render(request, 'subscribe.html')
+    
 
 
 def getFiles(applications):
