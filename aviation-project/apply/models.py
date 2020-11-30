@@ -36,7 +36,6 @@ class QuickApply(models.Model):
         if os.path.isfile(oldresume):
             os.remove(oldresume)
         self.resume.save(name, File(file), save = True)
-
 ##SIGNAL FOR CREATING STATUS WITH EVERY APPLICATION##
 #def create_status(sender, instance, created, **kwargs):
 #    if created:

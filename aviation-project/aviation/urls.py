@@ -49,6 +49,10 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
 
+    ### Company Subscription Related Pages ###
+    path('subscribe/<int:company_id>', user_views.subscribe, name='subscribe'),
+    path('unsubscribe/<int:company_id>', user_views.subscribe, name='unsubscribe'),
+
     ### Password/Pass-Reset Related Pages ###
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'), name='password_reset'),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'), name='password_reset_done'),
@@ -73,6 +77,7 @@ urlpatterns = [
     path('events/', events_app_views.events_view, name='event_list'), # [X] No Sidebar Issues
     path('postEvent/', events_app_views.addEvent, name='postEvent'),
     path('editEvent/<int:pk>', events_app_views.editEvent, name='editEvent'),
+    path('rsvpEvents/<int:event_id>', user_views.rsvpEvent_add, name='rsvpEvent_add'),
 
     ### Company Profile Related Pages ###
     path('company/',companypage_view, name='company_page'), 
@@ -102,6 +107,7 @@ urlpatterns = [
     path('uploadProfilePic/', user_views.uploadProfilePic_view, name='uploadProfilePic'),
     path('view-applications/', user_views.viewApplications, name ='company_applications'),
     path('userviewcompany/<int:company_id>',postjob_views.userviewcompany, name='userviewcompany'),
+
 ]
 
 if settings.DEBUG:

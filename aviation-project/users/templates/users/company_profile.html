@@ -118,15 +118,10 @@
                     <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    {{job.title}}
+                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{job.title}}">{{job.title}}</h5>
 
-                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{job.title}}"></h5>
-                                    {{job.jobtype}}
-
-                                    <p class="card-text"><input class="form-control here" type="hidden" name="type" value="{{job.jobtype}}"></p>
-                                    {{job.description}}
-
-                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{job.description}}"></p>
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="type" value="{{job.jobtype}}">{{job.jobtype}}</p>
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{job.description}}">{{job.description}}</p>
                                 </div>
 
                                 <div class="col ml auto">
@@ -158,11 +153,10 @@
                     <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    {{event.title}}
-                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{event.title}}"></h5>
+                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{event.title}}">{{event.title}}</h5>
 
-                                    {{event.description}}
-                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{event.description}}"></p>
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{event.description}}">{{event.description}}</p>
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{event.description}}">Number of people who RSVP for event: </p>
                                 </div>
 
                                 <div class="col ml auto">

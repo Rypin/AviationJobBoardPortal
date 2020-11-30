@@ -11,7 +11,7 @@ from django.conf import settings
 import os
 from django.http import HttpResponse
 from django.contrib.auth.models import User , auth
-from .models import Users , CompanyProfile , Skill
+from .models import Users , CompanyProfile , Skill, Subscription
 from .models import workExperience
 from .models import educationExperience
 from postjob.models import Jobform
@@ -24,7 +24,9 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate , login
 from postjob.models import Jobform , Jobtype, Category
 from django.http import HttpResponse , HttpResponseRedirect
-import psycopg2,pytz
+from datetime import datetime
+import pytz
+import psycopg2
 from django.core.mail import send_mail, EmailMessage
 from .filters import UsersFilter
 from events_app.models import EventListing
@@ -145,9 +147,13 @@ def company_register(request):
     return render(request , 'users/company_register.html' , {'form': form})
 
 
+
 def addCompanyProfile(request):
     cp_form = CompanyProfileForm(request.POST)
     if request.method == 'POST':
+        if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
+            group = Group.objects.get(name='jobseeker')
+            request.user.groups.add(group)
         cp_form = CompanyProfileForm(request.POST)
         if cp_form.is_valid():
             name = cp_form.cleaned_data['name']
@@ -366,13 +372,15 @@ def removeSkill(users_id , skill):
             connection.close()
 
 @login_required()
-@allowed_users(allowed_roles=['jobseeker'])
 def review(request):
     if request.method == 'GET':
+        if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
+            group = Group.objects.get(name='jobseeker')
+            request.user.groups.add(group)
         using_resume = request.session.get('parsed_status', None)
         user = Users.objects.filter(Username=request.user.username)
         if not user.exists():
-            user = Users(Username=request.user.username , Email=request.user.email)
+            user = Users(Username=request.user.username, Email=request.user.email)
             user.save()
         print(using_resume)
         if using_resume is None:
@@ -517,6 +525,30 @@ def jobseeker_profile_view(request):
                   {'users': users , 'works': works , 'educations': educations , 'applications': applications ,
                    'skills': skills})
 
+
+def uploadProfilePic_view(request):
+    users = Users.objects.filter(Username=request.user.username)
+    if request.method == 'GET':
+        return render(request, 'users/uploadProfilePic.html')
+    if request.method == 'POST' and 'upload' in request.POST:
+            profilePic = request.FILES['image']
+            thisuser = Users.objects.get(Username=request.user.username)
+            thisuser.image = profilePic
+            thisuser.save()
+            tz_NY = pytz.timezone('America/New_York') 
+            datetime_NY = datetime.now(tz_NY)
+            send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have successfully updated your profile picture in your Aviation Job Portal Profile at '+datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
+            return redirect('userProfile-home')
+    return render(request, 'userProfile/profile2.html')
+                    
+
+
 @login_required()
 @allowed_users(allowed_roles=['company_owner'])
 def view_jobseeker_profile(request, user_id):
@@ -533,6 +565,7 @@ def view_jobseeker_profile(request, user_id):
         'skills':skills
     }
     return render(request, 'userProfile/profileViewer.html', context)
+
 def trysearch(request):
     jobs = Jobform.objects.all()
     if request.method == 'POST' and 'apply' in request.POST:
@@ -586,6 +619,23 @@ def applyjob(request , job_id):
             return redirect('userProfile-home')
         job = Jobform.objects.filter(id=job_id).first()
         company = CompanyProfile.objects.filter(id=job.company.id).first()
+        company_profile = CompanyProfile.objects.get(user_id=job.company.id)
+        tz_NY = pytz.timezone('America/New_York') 
+        datetime_NY = datetime.now(tz_NY)
+        send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have successfully applied to ' + str(job.title) + ' at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
+        send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have received a new job application from '+ str(request.user.email) +' for your ' + str(job.title) + ' position at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. To see this application, click here http://127.0.0.1:8000/candidate_applications_page/ If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [company_profile.user.email],
+                fail_silently=False,
+            )
         files = []
         if len(x) > 0:
             if len(x) > 1:
@@ -608,6 +658,23 @@ def applyjob(request , job_id):
         return redirect('userProfile-home')
         ##SOME ISSUES WITH FS IDK HOW TO FIX THE ISSUE OF HAVING DUPLICATE FILES IN SAME APPLICATION##
     return render(request , 'applyjob.html')
+
+
+def subscribe(request, company_id):
+    users = Users.objects.filter(Username=request.user.username).first()
+    company = CompanyProfile.objects.filter(id=company_id).first()
+    s1 = Subscription(jobseeker = users, name = users.Email, company = company)
+    subscribed = company.subscribed_users.all()
+    if subscribed.exists():
+        for x in subscribed:
+            if x == s1.jobseeker:
+                company.subscribed_users.remove(x)
+                return render(request, 'unsubscribe.html')
+        else:
+            s1.save()   
+            print(company.subscribed_users.all())
+            return render(request, 'subscribe.html')
+    return render(request, 'userviewcompany.html')
 
 
 def getFiles(applications):
@@ -767,6 +834,17 @@ def favorite_toggle(request):
 
     return JsonResponse(data)
 
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
+def rsvpEvent_add(request, event_id):
+    user = Users.objects.get(Username=request.user.username)
+
+    if user.rsvpEvents.filter(id=event_id).exists():
+        e = user.rsvpEvents.get(id=event_id)
+        user.rsvpEvents.remove(e)
+    else:
+        user.rsvpEvents.add(event_id)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 def loadJobs(request):
     user = Users.objects.get(Username=request.user.username)

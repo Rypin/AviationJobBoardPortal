@@ -5,9 +5,11 @@ from datetime import datetime, timedelta, timezone
 from django.db.models.functions import Lower
 from .forms import EventForm, UpdateEventForm
 from users.models import CompanyProfile as cp
+from users.models import Users
 from postjob.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions import  *
+from django.core.mail import send_mail, EmailMessage
 from django.contrib.auth.decorators import login_required
 from users.decorators import unauthenticated_user , allowed_users
 
@@ -16,8 +18,10 @@ from users.decorators import unauthenticated_user , allowed_users
 @allowed_users(allowed_roles=['jobseeker'])
 def events_view(request):
     now = datetime.now(timezone.utc)
+    RSVP_only = request.GET.get('RSVP_only')
     order_by = request.GET.get('order_by')
     ordering = order_by
+    user = Users.objects.get(Username=request.user.username)
 
     # if order_by == None:
     #     ordering = 'posted'
@@ -33,9 +37,21 @@ def events_view(request):
         request.session['order_by'] = order_by
         ob = request.session.get('order_by')
 
-
+    e_rsvp = None
+    if request.GET.get('RSVP_only') is None:
+        if 'RSVP_only' in request.session:
+            if request.session.get('RSVP_only') is not None:
+                e_rsvp = request.session.get('RSVP_only')
+            else:
+                request.session['RSVP_only'] = None
+    else:
+        request.session['RSVP_only'] = RSVP_only
+        e_rsvp = request.session.get('RSVP_only')
 
     events_listings = EventListing.objects.all().filter(deadline__gte=now).order_by(ob) #change to ordering maybe
+
+    if e_rsvp == 'True':
+        events_listings = user.rsvpEvents.all()
 
     eventsPerPage = request.GET.get('eventsPerPage')
 
@@ -79,7 +95,8 @@ def events_view(request):
         'events_listings' : events_listings,
         'eventsPerPage' : eventsPerPage,
         'events' : events,
-        'epp' : epp
+        'epp' : epp,
+        'RSVP_only' : RSVP_only
     }
 
     return render(request, "events_app/events.html", context=context)
@@ -102,6 +119,16 @@ def addEvent(request):
             obj.company = id
 
             obj.save()
+            subscribed = id.subscribed_users.all()
+            if subscribed.exists():
+                for x in subscribed:
+                    send_mail(
+                    'You have received a notification from Aviation Job Portal',
+                    'A company you have subscribed to has posted a new event: ' + str(obj.title) + ' at ' + str(id.name) + ' is now available for applications. The Event description is as follows: '+str(obj.description)+' Please visit the Aviation Job Portal for additional information.',
+                    'DoNotReply.AJP@gmail.com',
+                    [x.Email],
+                    fail_silently=False,
+                )
             messages.success(request, f'Event Posted')
             return redirect('company_profile')
         else:
@@ -110,6 +137,7 @@ def addEvent(request):
     context = {
         'e_form': e_form,
     }
+ 
 
     return render(request, 'events_app/post_event.html', context)
 
