@@ -77,7 +77,9 @@
 
 {% endblock %}
 
+
 {% block content %}
+
 <div style="margin: 0px 100px 0px 220px">
 <h1>User Search Page</h1>
 <form method="get">
@@ -107,11 +109,13 @@
     {% endfor %}
 </table>
 </div>
+
 {% endblock content %}
 
 {% block other_js %}
 
 <!-- Favorite Job Links Loading JavaScript -->
 <script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+
 
 {% endblock %}
