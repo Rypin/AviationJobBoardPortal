@@ -29,61 +29,10 @@
 </head>
 
 <body>
-  	{% if user.is_authenticated %}
-  	<!-- Side Dashboard -->
-	<div class="container-fluid" style="height: 100%">
-		<div id="toggleNavBar" class="sideNav">
-			<section class='expandToggle' style="z-index:1">
-				<ul id="expandToggle" style="padding: 0px">
-				    
-				    <!-- Web Page Links -->
-					{% if request.user.groups.all.0.name == "jobseeker" %}
-					<li class="linkItem">
-						<a href="{% url 'search_page' %}"> <i class="fa fa-home icon" aria-hidden="true"></i> <span>Search Jobs</span></a>
-					</li>
-					<li class="linkItem">
-						<a href="{% url 'userProfile-home' %}"> <i class="fa fa-tachometer icon" aria-hidden="true"></i> <span>Profile</span></a>
-					</li>
-					<li class="linkItem">
-						<a href="{% url 'event_list' %}"> <i class="fa fa-flag icon" aria-hidden="true"></i> <span>Events</span></a>
-					</li>
-					{% endif %}
-					{% if request.user.groups.all.0.name == "company_owner" %}
-					<li class="linkItem">
-						<a href="{% url 'company_profile' %}"> <i class="fa fa-tachometer icon" aria-hidden="true"></i> <span>Profile</span></a>
-					</li>
-					{% endif %}
-					<li class="linkItem">
-						<a href="{% url 'logout' %}"> <i class="fa fa-sign-out icon" aria-hidden="true"></i> <span>Logout</span> </a>
-					</li>
-						
-					<!-- Favorited Job Post Section -->
-					{% if request.user.groups.all.0.name == "jobseeker" %}
-					<li id="animatable" style="display: none">
-						<hr>
-						<div style="margin: 0px 0px 0px 10px"> 
-							<span style="margin-right: 1px;padding-left: 0px; font: 18px Calibri, sans-serif">Favorited Job Posts</span>
-							<span>
-								<button id="sideDashButton" class="btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample" style="margin-bottom: 7px;">
-									<i class="fa fa-chevron-down"></i>
-								</button>
-							</span>
-						</div>
-						<div class="collapse" id="collapseExample" style="">
-							<div class="card card-body" id="cardBody">
-								<div id="favoriteJobs" class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
-                    			<!-- Favorite Job Links Loaded Here -->
-								</div>
-							</div>
-						</div>
-						<hr> 
-					</li>
-					{% endif %}
-				</ul>
-			</section>
-		</div>
-	</div>
-  	{% endif %}
+	<!-- Where the sideDashBoard is inserted if applicable. NOTE: Must be positioned before the standard navigation bar -->
+	{% block sideDashBoard %}
+
+	{% endblock %}
   
 	<!-- Navigation Bar -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
@@ -144,34 +93,6 @@
 				
 	<!-- Navigation Bar JavaScript -->
 	<script src='../static/front/js/nav.js' defer></script>
-				
-	<!-- Favorite Job Links Loading JavaScript -->
-	<script>
-
-	$(window).on('load', function(){
-		if($("#favoriteJobs").length != 0){
-			var url_mask = "{% url 'search_page'%}?job=id";
-
-			$.ajax({
-				url: '/ajax/load_favoritejobs/',
-				dataType: 'json',
-				success: function (respData) {
-					for(x of respData.jobs) {
-						link = url_mask.replace("id", x[0])
-						$("#favoriteJobs").append(`<button class=\"btn btn-secondary\" onclick=\"window.location.href=\'${link}\'\">${x[1]} (#${x[0]})</button>`);
-					}
-				}
-			});
-
-			console.log("fav job loading function fired")
-		}
-	});
-
-	
-
-	
-
-	</script>
   
   	<!-- Where page-specific js files are inserted -->
   	{% block other_js %} 
