@@ -1,63 +1,35 @@
-
 {% extends "base.html" %}
+{% load static %}
 
 {% block other_css %}
 
 {% endblock %}
+
+{% block sideDashBoard %}
+
+	{% include "sideDashboard.html"%}
+
+{% endblock %}
+
 {% block content %}
-
-<!-- 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<body style="background:#f8f9fa">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
- Include the above in your HEAD tag ---------->
 {%for user in users%}
-<script>
-
-	var x = 0;
-
-	
-
-	function accordianString() {
-
-		x++;
-
-		
-
-		document.getElementById("header0").setAttribute("id", "header" + String(x));
-
-
-        document.getElementById("button0").setAttribute("aria-controls", "collapse" + String(x));
-        document.getElementById("button0").setAttribute("data-target", "#collapse" + String(x));
-        document.getElementById("button0").setAttribute("id", "button" + String(x));
-
-        document.getElementById("collapse0").setAttribute("aria-labelledby", "heading" + String(x));
-
-        document.getElementById("collapse0").setAttribute("id", "collapse" + String(x));
-	}
-	
-</script>
-
 <div class="container">
 	<div class="row">
 		<div class="col-md-3 ">
 			<br>
-			<div class = "offset-2 col-3">
+			<div class = "offset-1 col-3">
 				<img src= "{{user.image.url}}" border = "2" style = "border-radius:10%;" width = 120 height = 120/>
 				
 			</div>
-			<div class="offset-0 col-3">
+			<div style="margin-top: 10px;">
 				<button type="button" class="btn btn-primary">
 					<a href="{% url 'uploadProfilePic' %}" style="text-decoration: none; color: white"><b>Update Profile Picture</b></a><br/>
 				</button>
 			</div>
-
-			<br>
-			<div class="offset-1 col-3">
+			<div style="margin-top: 10px; margin-bottom: 10px;">
 				<form method = "POST" id = "resumeForm" enctype="multipart/form-data">
 				{%csrf_token%}
-					<input type = "file" style="visibility:hidden;" id="uploadResume" class="uploadResume" name ="uploadResume">
+					<input type = "file" style="visibility:hidden; display: none;" id="uploadResume" class="uploadResume" name ="uploadResume">
 					<button type="button" class="btn btn-primary resumeButton">
 						<a style="text-decoration: none; color: white;"><b>Upload Quick Resume</b></a>
 					<br/>
@@ -66,7 +38,6 @@
 
 
 			</div>
-			<br>
 			<ul class="list-group ">
 				<li class="list-group-item list-group-item-action">
 					<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><b>Basic Information</b></a>
@@ -140,7 +111,7 @@
 										</div>
 									</div>
 									<div class="form-group row">
-										<div class="offset-9 col-8">
+										<div class="offset-8 col-8">
 											<button type="button" class="btn btn-primary">
 												<a href="{% url 'password_reset' %}" style="text-decoration: none; color: white"><b>Change Password</b></a><br/>
 											</button>
@@ -368,7 +339,7 @@
 										</div>
 										
 										<div class="form-group row">
-											<div class="offset-9 col-8">
+											<div class="offset-8 col-8">
 												<button type="button" class="btn btn-primary">
 													<a href="{% url 'userProfile-home' %}" style="text-decoration: none; color: white"><b>Go Back</b></a><br/>
 												</button>
@@ -470,30 +441,49 @@
 		</div>
 	</div>
 </div>
-
-<script>
-function toggle_visibility(x) {
-  var x = document.getElementById(x);
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-document.getElementById("uploadResume").onchange = function() {
-    document.getElementById("resumeForm").submit();
-};
-</script>
 {%endfor%}
 {% endblock %}
 
 {% block other_js %} 
-	<script>
-		$(document).ready(function(){
-			$(".resumeButton").on("click", function(e){
-				$("#uploadResume").click();
-			});
+
+<!-- Favorite Job Links Loading JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+
+<!-- ??? -->
+<script>
+	var x = 0;
+	function accordianString() {
+		x++;
+		document.getElementById("header0").setAttribute("id", "header" + String(x));
+        document.getElementById("button0").setAttribute("aria-controls", "collapse" + String(x));
+        document.getElementById("button0").setAttribute("data-target", "#collapse" + String(x));
+        document.getElementById("button0").setAttribute("id", "button" + String(x));
+        document.getElementById("collapse0").setAttribute("aria-labelledby", "heading" + String(x));
+        document.getElementById("collapse0").setAttribute("id", "collapse" + String(x));
+	}
+</script>
+
+<!-- ??? -->
+<script>
+	function toggle_visibility(x) {
+	  var x = document.getElementById(x);
+	  if (x.style.display === "none") {
+		x.style.display = "block";
+	  } else {
+		x.style.display = "none";
+	  }
+	}
+	document.getElementById("uploadResume").onchange = function() {
+		document.getElementById("resumeForm").submit();
+	};
+</script>
+
+<!-- ??? -->
+<script>
+	$(document).ready(function(){
+		$(".resumeButton").on("click", function(e){
+			$("#uploadResume").click();
 		});
-	</script>
+	});
+</script>
 {% endblock %}
-</body>

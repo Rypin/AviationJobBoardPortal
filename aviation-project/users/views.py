@@ -812,7 +812,27 @@ def favorite_add(request, job_id):
         user.favoriteJobs.remove(e)
     else:
         user.favoriteJobs.add(job_id)
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+    return HttpResponse('<script>history.back();</script>')
+    
+    #return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
+def favorite_toggle(request):
+    user = Users.objects.get(Username=request.user.username)
+
+    if user.favoriteJobs.filter(id=request.GET.get('JobID')).exists():
+        e = user.favoriteJobs.get(id=request.GET.get('JobID'))
+        user.favoriteJobs.remove(e)
+    else:
+        user.favoriteJobs.add(request.GET.get('JobID'))
+
+    data = {
+        'jobID': request.GET.get('JobID'),
+    }
+
+    return JsonResponse(data)
 
 @login_required()
 @allowed_users(allowed_roles=['jobseeker'])
@@ -837,3 +857,16 @@ def loadJobs(request):
         'jobs': alljobs,
     }
     return JsonResponse(data)
+
+def refreshHomePageFavButtonStyles(request):
+    user = Users.objects.get(Username=request.user.username)
+    alljobids = []
+
+    for job in user.favoriteJobs.all():
+        alljobids.append(job.id)
+
+    data = {
+        'jobIDs': alljobids,
+    }
+    return JsonResponse(data)
+

@@ -1,10 +1,20 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+{% load static %} 
 {% load sass_tags %}
 
 {% block other_css %}
 <link href="{% sass_src 'front/scss/landing/landing.scss' %}" rel="stylesheet" type="text/css" />
+
+<!-- Stylings for favorite buttons -->
+<link href="{% static 'custom/css/favoriteButtonStylings.css' %}" rel="stylesheet" type="text/css" />
+
 {% endblock %}
 
+{% block sideDashBoard %}
+
+	{% include "sideDashboard.html"%}
+
+{% endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
@@ -182,9 +192,18 @@
          <div class="col-md-6">
             <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
                <div class="applyIconBtn" >
-                  <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                     <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
-                  </a>
+				    <a href="Javascript:void(0);" class="outer unfavoritedBody d-flex justify-content-center align-items-center mr-2" value="{{job.id}}">
+						<div class="heart fa fa-heart-o unfavoritedHeart"></div>
+				 	</a> 
+                   <!--<a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+
+
+
+					  <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span> 
+					 
+					  
+
+                  </a>  -->
                <button type="button" class="btn btn-primary py-2 applyJob" value ="{% url 'search_page' %}?job={{job.id}}" name="{% url 'quick_apply' job.id %}">Apply Job</button>
 <!--				   href="{% url 'search_page' %}?job={{job.id}}"-->
                </div>
@@ -254,6 +273,11 @@
 
 
 {% block other_js %}
+
+<!-- Favorite Button Styling Updating JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteButtons.js' %}"></script>
+
+<!-- ??? -->
 <script>
 $(document).ready(function(){
 	$(".applyJob").on("click", function(e){
@@ -263,4 +287,5 @@ $(document).ready(function(){
 	});
 });
 </script>
+
 {% endblock %}
