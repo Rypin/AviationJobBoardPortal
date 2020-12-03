@@ -120,15 +120,15 @@ def addEvent(request):
 
             obj.save()
             subscribed = id.subscribed_users.all()
-            if subscribed.exists():
-                for x in subscribed:
-                    send_mail(
-                    'You have received a notification from Aviation Job Portal',
-                    'A company you have subscribed to has posted a new event: ' + str(obj.title) + ' at ' + str(id.name) + ' is now available for applications. The Event description is as follows: '+str(obj.description)+' Please visit the Aviation Job Portal for additional information.',
-                    'DoNotReply.AJP@gmail.com',
-                    [x.Email],
-                    fail_silently=False,
-                )
+            # if subscribed.exists():
+            #     for x in subscribed:
+            #         send_mail(
+            #         'You have received a notification from Aviation Job Portal',
+            #         'A company you have subscribed to has posted a new event: ' + str(obj.title) + ' at ' + str(id.name) + ' is now available for applications. The Event description is as follows: '+str(obj.description)+' Please visit the Aviation Job Portal for additional information.',
+            #         'DoNotReply.AJP@gmail.com',
+            #         [x.Email],
+            #         fail_silently=False,
+            #     )
             messages.success(request, f'Event Posted')
             return redirect('company_profile')
         else:

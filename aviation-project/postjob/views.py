@@ -45,13 +45,13 @@ def posting(request):
             if subscribed.exists():
                 for x in subscribed:
                     print(x.Email)
-                    send_mail(
-                    'You have received a notification from Aviation Job Portal',
-                    'A company you have subscribed to has posted a new job: ' + str(obj.title) + ' at ' + str(id.name) + ' is now available for applications. The Job description is as follows: '+str(obj.description)+' Please visit the Aviation Job Portal for additional information.',
-                    'DoNotReply.AJP@gmail.com',
-                    [x.Email],
-                    fail_silently=False,
-                )
+                #     send_mail(
+                #     'You have received a notification from Aviation Job Portal',
+                #     'A company you have subscribed to has posted a new job: ' + str(obj.title) + ' at ' + str(id.name) + ' is now available for applications. The Job description is as follows: '+str(obj.description)+' Please visit the Aviation Job Portal for additional information.',
+                #     'DoNotReply.AJP@gmail.com',
+                #     [x.Email],
+                #     fail_silently=False,
+                # )
             return redirect('company_profile')
     else:
         filled_form = PostingForm()

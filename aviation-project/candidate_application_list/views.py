@@ -27,13 +27,13 @@ def applicationList(request):
         app.status = 'PR'
         app.save()
         users = Users.objects.filter(Username=app.applicant.Username).first()
-        send_mail(
-                'You have received a notification from Aviation Job Portal',
-                'Your job application for ' + str(app.job.title) + ' at ' + str(app.company.name) + ' has been marked for Review. Please visit the Aviation Job Portal to find out more information about this status update, or if any of this information appears to be incorrect please contact AJP support.',
-                'DoNotReply.AJP@gmail.com',
-                [users.Email],
-                fail_silently=False,
-            )
+        # send_mail(
+        #         'You have received a notification from Aviation Job Portal',
+        #         'Your job application for ' + str(app.job.title) + ' at ' + str(app.company.name) + ' has been marked for Review. Please visit the Aviation Job Portal to find out more information about this status update, or if any of this information appears to be incorrect please contact AJP support.',
+        #         'DoNotReply.AJP@gmail.com',
+        #         [users.Email],
+        #         fail_silently=False,
+        #     )
         return redirect('candidate_applications_page')
     elif request.method == 'POST' and 'hire' in request.POST:
         app_id = request.POST.get('hire')
@@ -41,26 +41,26 @@ def applicationList(request):
         app.status = 'AC'
         app.save()
         users = Users.objects.filter(Username=app.applicant.Username).first()
-        send_mail(
-                'You have received a notification from Aviation Job Portal',
-                'Your job application for ' + str(app.job.title) + ' at ' + str(app.company.name) + ' has been updated to ' + 'Hired'+ '. Please visit the Aviation Job Portal to find out more information about this status update, or if any of this information appears to be incorrect please contact AJP support.',
-                'DoNotReply.AJP@gmail.com',
-                [users.Email],
-                fail_silently=False,
-            )
+        # send_mail(
+        #         'You have received a notification from Aviation Job Portal',
+        #         'Your job application for ' + str(app.job.title) + ' at ' + str(app.company.name) + ' has been updated to ' + 'Hired'+ '. Please visit the Aviation Job Portal to find out more information about this status update, or if any of this information appears to be incorrect please contact AJP support.',
+        #         'DoNotReply.AJP@gmail.com',
+        #         [users.Email],
+        #         fail_silently=False,
+        #     )
         return redirect('candidate_applications_page')
     elif request.method == 'POST' and 'reject' in request.POST:
         app_id = request.POST.get('reject')
         app = Application.objects.get(id=app_id)
         app.status = 'RJ'
         users = Users.objects.filter(Username=app.applicant.Username).first()
-        send_mail(
-                'You have received a notification from Aviation Job Portal',
-                'Your job application for ' + str(app.job.title) + ' at ' + str(app.company.name) + ' has been updated to ' + 'Rejected'+ '. Please visit the Aviation Job Portal to find out more information about this status update, or if any of this information appears to be incorrect please contact AJP support.',
-                'DoNotReply.AJP@gmail.com',
-                [users.Email],
-                fail_silently=False,
-            )
+        # send_mail(
+        #         'You have received a notification from Aviation Job Portal',
+        #         'Your job application for ' + str(app.job.title) + ' at ' + str(app.company.name) + ' has been updated to ' + 'Rejected'+ '. Please visit the Aviation Job Portal to find out more information about this status update, or if any of this information appears to be incorrect please contact AJP support.',
+        #         'DoNotReply.AJP@gmail.com',
+        #         [users.Email],
+        #         fail_silently=False,
+        #     )
         app.save()
         return redirect('candidate_applications_page')
     elif request.method == 'POST' and 'filters' in request.POST:

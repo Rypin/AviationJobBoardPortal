@@ -48,12 +48,12 @@ def sendEmailToJobseeker(request, pk):
         message = request.POST['message']
 
         #send email
-        send_mail(
-            'From ' + company_profile.name + ' at Aviation Job Board', #subject
-            message + '\n\n To reply to this message please use the ' + company_profile.name + ' personal email: ' + request.user.email, #message
-            settings.EMAIL_HOST_USER, #from email
-            [jobseeker.Email], #to email
-        )
+        # send_mail(
+        #     'From ' + company_profile.name + ' at Aviation Job Board', #subject
+        #     message + '\n\n To reply to this message please use the ' + company_profile.name + ' personal email: ' + request.user.email, #message
+        #     settings.EMAIL_HOST_USER, #from email
+        #     [jobseeker.Email], #to email
+        # )
         #Alternate way of sending an email that also works
         # message = request.POST['message']
         # msg = EmailMessage('From ' + company_profile.name,
@@ -622,20 +622,20 @@ def applyjob(request , job_id):
         company_profile = CompanyProfile.objects.get(user_id=job.company.id)
         tz_NY = pytz.timezone('America/New_York') 
         datetime_NY = datetime.now(tz_NY)
-        send_mail(
-                'You have received a notification from Aviation Job Portal',
-                'You have successfully applied to ' + str(job.title) + ' at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
-                'DoNotReply.AJP@gmail.com',
-                [request.user.email],
-                fail_silently=False,
-            )
-        send_mail(
-                'You have received a notification from Aviation Job Portal',
-                'You have received a new job application from '+ str(request.user.email) +' for your ' + str(job.title) + ' position at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. To see this application, click here http://127.0.0.1:8000/candidate_applications_page/ If this is incorrect please contact AJP support.',
-                'DoNotReply.AJP@gmail.com',
-                [company_profile.user.email],
-                fail_silently=False,
-            )
+        # send_mail(
+        #         'You have received a notification from Aviation Job Portal',
+        #         'You have successfully applied to ' + str(job.title) + ' at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+        #         'DoNotReply.AJP@gmail.com',
+        #         [request.user.email],
+        #         fail_silently=False,
+        #     )
+        # send_mail(
+        #         'You have received a notification from Aviation Job Portal',
+        #         'You have received a new job application from '+ str(request.user.email) +' for your ' + str(job.title) + ' position at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. To see this application, click here http://127.0.0.1:8000/candidate_applications_page/ If this is incorrect please contact AJP support.',
+        #         'DoNotReply.AJP@gmail.com',
+        #         [company_profile.user.email],
+        #         fail_silently=False,
+        #     )
         files = []
         if len(x) > 0:
             if len(x) > 1:
