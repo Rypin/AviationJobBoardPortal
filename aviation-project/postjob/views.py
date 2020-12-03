@@ -205,15 +205,15 @@ def userviewcompany(request, company_id):
         events = EventListing.objects.filter(company=company_id)
         jobs = Jobform.objects.filter(company=company_id)
         users = Users.objects.filter(Username=request.user.username).first()
+        print(company)
+        print(events)
+        print(jobs)
         subscribed_boolean = False
         subscribed = company.subscribed_users.all()
         if subscribed.exists():
             for x in subscribed:
                 if x == users:
                     subscribed_boolean = True
-        print(company)
-        print(events)
-        print(jobs)
     except company.DoesNotExist:
         raise Http404('There are no Open jobs that match this search')
 
