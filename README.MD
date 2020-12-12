@@ -1,12 +1,12 @@
 # Job Portal Aviation
 
 Developed By:
-Summer 2020 & Fall 2020:<br>
+<br>Summer 2020 & Fall 2020:<br>
 + **Eric Bazan**<br>
 + **Joel Echagarrua**<br>
 + **Dany Franco**<br>
 + **Ryan Pineyro**<br>
-Summer 2020:
+<br>Summer 2020:
 + **Carlos Debasa**<br>
 + **Sebastian Rodriguez**<br>
 + **Malachi Williams**<br>
