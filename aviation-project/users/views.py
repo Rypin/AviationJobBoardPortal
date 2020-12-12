@@ -374,6 +374,8 @@ def removeSkill(users_id , skill):
 @login_required()
 def review(request):
     if request.method == 'GET':
+        came_from = request.META['HTTP_REFERER'].split('/')
+        print(came_from[3])
         if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
             group = Group.objects.get(name='jobseeker')
             request.user.groups.add(group)
@@ -383,7 +385,8 @@ def review(request):
             user = Users(Username=request.user.username, Email=request.user.email)
             user.save()
         print(using_resume)
-        if using_resume is None:
+
+        if came_from[3] != 'resume':
             using_resume = False
         else:
             using_resume = True
@@ -418,7 +421,11 @@ def review(request):
         request.session['parsed_address'] = request.POST.get('address')
         request.session['parsed_status'] = True
         if 'save' in request.POST:
-            ParseSkills(request , request.session['parsed_skills'])
+            if not 'parse_skills' in request.session:
+                print("no")
+            else:
+                print(request.session['parsed_skills'])
+                ParseSkills(request , request.session['parsed_skills'])
             user = Users.objects.filter(Username=request.user.username)
             if not user.exists():
                 user = Users(Username=request.user.username, Email=request.user.email)
