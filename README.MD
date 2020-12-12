@@ -6,7 +6,7 @@ Developed By:
 + **Joel Echagarrua**<br>
 + **Dany Franco**<br>
 + **Ryan Pineyro**<br>
-+ Summer 2020:
+<br> Summer 2020:
 + **Carlos Debasa**<br>
 + **Sebastian Rodriguez**<br>
 + **Malachi Williams**<br>
