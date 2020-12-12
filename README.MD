@@ -1,10 +1,16 @@
 # Job Portal Aviation
 
-Developed By: <br>
+Developed By:
+Summer 2020 & Fall 2020:<br>
 + **Eric Bazan**<br>
 + **Joel Echagarrua**<br>
 + **Dany Franco**<br>
 + **Ryan Pineyro**<br>
+Summer 2020:
++ **Carlos Debasa**<br>
++ **Sebastian Rodriguez**<br>
++ **Malachi Williams**<br>
++ **Tinghui Zhang**<br>
 
 Product Owner: Masoud Sadjadi<br>
 ---
