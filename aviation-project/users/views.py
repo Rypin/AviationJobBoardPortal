@@ -386,7 +386,7 @@ def review(request):
             user.save()
         print(using_resume)
 
-        if came_from[3] != 'resume':
+        if came_from[3] != 'resume' and using_resume is not True:
             using_resume = False
         else:
             using_resume = True
