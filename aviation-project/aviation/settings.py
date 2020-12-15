@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'rrx$k-_mbwtli=dl)t9!0ec8lp++m5c31lle1k06rch1mxad0l'
+SECRET_KEY = 'DJANGO SECRET KEY'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-GOOGLE_MAPS_API_KEY = "AIzaSyCnsDSxDFykyo-hbESQOuY7A7wnavW-7Ps"
+GOOGLE_MAPS_API_KEY = "GOOGLEMAPS KEY"
 
 ALLOWED_HOSTS = []
 
@@ -117,7 +117,7 @@ WSGI_APPLICATION = 'aviation.wsgi.application'
 #     }
 # }
 ########################OLD AWS#########################
-# DATABASES = { 
+# DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': 'postgres',
@@ -143,10 +143,10 @@ WSGI_APPLICATION = 'aviation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'ajbpassfa2020', #Put the password that you used for PostrgeSQL
-        'HOST': 'ajb-2020.cw3uaamzkbuc.us-east-2.rds.amazonaws.com',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '', #Put the password that you used for PostrgeSQL
+        'HOST': '',
         'PORT': '5432',
     }
 }
@@ -201,14 +201,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'EMAILHOST'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 # this is a gmail account I temporarily created for this project
 
-EMAIL_HOST_USER = 'donotreply.ajp@gmail.com'
-EMAIL_HOST_PASSWORD = 'VelocityPoints1!' #I temporarily removed the password
+EMAIL_HOST_USER = 'EMAILUSER'
+EMAIL_HOST_PASSWORD = 'EMAILPASS' #I temporarily removed the password
 
 
 
