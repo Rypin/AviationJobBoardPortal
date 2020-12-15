@@ -51,3 +51,4 @@ class ApplicationForm(forms.ModelForm):
     class Meta:
         model = applicationInfo
         fields = "__all__"
+

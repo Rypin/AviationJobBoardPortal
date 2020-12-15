@@ -1,64 +1,76 @@
 {% extends "base.html" %}
-{% block content %}
 {% load static %}
 
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+{% block other_css %}
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    
+    .dropbtn {
+            background-color: rgb(29, 63, 85);
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            }
+    
+            .dropbtn:hover, .dropbtn:focus {
+            background-color: rgb(38, 91, 126);
+            }
+    
+    
+            .dropdown {
+            position: relative;
+            display: inline-block;
+            }
+    
+            .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            }
+    
+            .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            }
+    
+            .dropdown a:hover {background-color: #ddd;}
+    
+            .show {display: block;}
+  </style>
 
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
+{% endblock %}
 
-.dropbtn {
-        background-color: rgb(29, 63, 85);
-        color: white;
-        padding: 16px;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-        }
+{% block sideDashBoard %}
 
-        .dropbtn:hover, .dropbtn:focus {
-        background-color: rgb(38, 91, 126);
-        }
+    {% include "sideDashboard.html"%}
+
+{% endblock %}
 
 
-        .dropdown {
-        position: relative;
-        display: inline-block;
-        }
-
-        .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f1f1f1;
-        min-width: 160px;
-        overflow: auto;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-        }
-
-        .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-        }
-
-        .dropdown a:hover {background-color: #ddd;}
-
-        .show {display: block;}
-</style>
+{% block content %}
 <div style="margin: 0px 100px 0px 220px">
 <h1>Events</h1>
 <div class="dropdown">
@@ -74,16 +86,18 @@ tr:nth-child(even) {
       <a href="?eventsPerPage=1">1 per Page</a>
       <a href="?eventsPerPage=2">2 per Page</a>
     </div>
+
+<a href="?RSVP_only=None" style="position: relative; bottom: 30px; margin-top:40px; right: 10px; left: 10px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: rgb(38, 91, 126); color: white; border-style: none;" class="btn btn-primary">
+                                        Show ALL Events
+</a>
+
+<a href="?RSVP_only=True" style="position: relative; bottom: 30px; left: 15px; margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: rgb(38, 91, 126); color: white; border-style: none;" class="btn btn-primary">
+                                        Show only RSVP Events
+</a>
+
 </div>
 
-<script>
-    function myFunction() {
-      document.getElementById("myDropdown").classList.toggle("show");
-    }
-    function myFunction2() {
-      document.getElementById("myDropdown2").classList.toggle("show");
-    }
-</script>
+
 
 <table>
     <tr>
@@ -92,6 +106,7 @@ tr:nth-child(even) {
         <th>Description</th>
         <th>Posted</th>
         <th>Day of Event</th>
+        <th>R.S.V.P. for Event</th>
     </tr>
     {% for event in events %}
 
@@ -110,6 +125,11 @@ tr:nth-child(even) {
         </td>
         <td>
             {{ event.deadline }}
+        </td>
+        <td>
+            <a href="{% url 'rsvpEvent_add' event.id %}" style="position: relative; bottom:20px; margin-top:40px; margin-right:20px; float:right; border-radius: 0.2rem; background-color: #1de9b6; color: white; border-style: none;" class="btn btn-primary" name="{{event.id}}" value="{{event.id}}">
+                                        RSVP
+            </a>
         </td>
     </tr>
     {% endfor %}
@@ -136,8 +156,19 @@ tr:nth-child(even) {
     {% endif %}
   </ul>
 {% endif %}
-
-{{ eventsPerPage }}
-{{ epp }}
 </div>
+{% endblock %}
+
+{% block other_js %}
+<!-- Favorite Job Links Loading JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+
+<script>
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+  function myFunction2() {
+    document.getElementById("myDropdown2").classList.toggle("show");
+  }
+</script>
 {% endblock %}

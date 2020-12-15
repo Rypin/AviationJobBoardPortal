@@ -1,14 +1,12 @@
 {% extends "base.html" %}
-
 {% load static %}
-
 {% load sass_tags %}
-
 {% load crispy_forms_tags %}
-{% block content %}
-<head>
+
+{% block other_css %}
+
 <link href="{% sass_src '../static/front/scss/company/company.scss' %}" rel="stylesheet" type="text/css" />
-</head>
+
 <style>
     .card {
 
@@ -22,6 +20,16 @@
     }
 
 </style>
+
+{% endblock %}
+
+{% block sideDashBoard %}
+
+    {% include "sideDashboard.html"%}
+
+{% endblock %}
+
+{% block content %}
 
     <div class="container" style="position: relative;text-align: center;color: white;">
         <img src={{ company_profile.banner.url }} alt="Banner" width="770" height="320">
@@ -58,7 +66,7 @@
     <div class="container" style="position: relative; top: -60px;">
         <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="false">About</a>
+                <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="false">About</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="about-tab" data-toggle="tab" href="#update" role="tab" aria-controls="about" aria-selected="false">Update</a>
@@ -110,15 +118,10 @@
                     <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    {{job.title}}
+                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{job.title}}">{{job.title}}</h5>
 
-                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{job.title}}"></h5>
-                                    {{job.jobtype}}
-
-                                    <p class="card-text"><input class="form-control here" type="hidden" name="type" value="{{job.jobtype}}"></p>
-                                    {{job.description}}
-
-                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{job.description}}"></p>
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="type" value="{{job.jobtype}}">{{job.jobtype}}</p>
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{job.description}}">{{job.description}}</p>
                                 </div>
 
                                 <div class="col ml auto">
@@ -150,11 +153,9 @@
                     <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    {{event.title}}
-                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{event.title}}"></h5>
+                                    <h5 class="card-title"><input class="form-control here" type="hidden" name="name" value="{{event.title}}">{{event.title}}</h5>
 
-                                    {{event.description}}
-                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{event.description}}"></p>
+                                    <p class="card-text"><input class="form-control here" type="hidden" name="description" value="{{event.description}}">{{event.description}}</p>
                                 </div>
 
                                 <div class="col ml auto">
@@ -176,4 +177,11 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block other_js %}
+
+<!-- Favorite Job Links Loading JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteJobs.js' %}"></script>
+
 {% endblock %}

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
+<script>
+    var subscribed_boolean = {{ postjob.views.userviewcompany.subscribed_boolean }};
+</script>
+
 <style>
     .card {
 
@@ -29,9 +33,18 @@
                     <div class="row" style="position:relative;bottom: 1px;left: 18px;">{{company.address}}</div>
                 </div>
 
-
-                <div style="position: absolute;bottom: 8px;right: 30px;"><button type="button" class="btn btn-success btn-lg">+ Follow</button></div>
-
+                {% if subscribed_boolean == False %}
+                <div style="position: absolute;bottom: 8px;right: 30px;"><a href="/subscribe/{{company.id}}" style="margin-top:40px; float:right" class="btn btn-primary" , name='subscribe'>
+                                        Subscribe
+                                    </a>
+                </div>  
+                {% elif subscribed_boolean == True %}
+                <div style="position: absolute;bottom: 8px;right: 30px;"><a href="/unsubscribe/{{company.id}}" style="margin-top:40px; float:right" class="btn btn-primary" , name='subscribe'>
+                                        Unsubscribe
+                                    </a>
+                </div>  
+                {% endif %} 
+            </div>                  
             </div>
             
         </div>

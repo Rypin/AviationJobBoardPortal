@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from postjob import views as postjob_views
@@ -26,62 +27,87 @@ from events_app import views as events_app_views
 
 
 urlpatterns = [
-    path('', home_view, name='home'),
-    path('company/',companypage_view, name='company_page'),
+
+    ### Home Page ### 
+    path('', home_view, name='home'), # [X] No Sidebar Issues
+
+    ### Inbox Page ###
     path('inbox/',chatRoom_view, name='inbox'),
-    path('admin/', admin.site.urls),
-    path('jobpost/', postjob_views.posting, name='post_job'),
-    
-    # JOB SEARCH PATH
-    path('search/', postjob_views.jobsearch, name='search_page'),
-    
-    # Candate APPLICATION PATH
-    path('candidate_applications_page/', appList_view.applicationList, name='candidate_applications_page'),
-    
-    path('events/', events_app_views.events_view, name='event_list'),
+
+    ### Candidate Application Related Pages ###
+    path('candidate_applications_page/', appList_view.applicationList, name='candidate_applications_page'), # [X] No Sidebar Issues
+
+    ### User Profile Related Pages ###
+    path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'), # [X] No Sidebar Issues
+    path('about/', user_views.about, name = 'userProfile-about'),
+    path('addwork/', user_views.addWorkingExperience, name = 'userProfile-addwork'),
+    path('addeducation/', user_views.addEducationExperience, name = 'userProfile-addeducation'),
+
+    ### Login/Logout/Register Related Pages ###
     path('register/', user_views.register, name='register'),
-    path('company_register', user_views.company_register, name='company_register'),
-    path('company_profile_creator/', user_views.addCompanyProfile, name='company_profile_creator'),
-    path('company_profile', user_views.company_profile, name='company_profile'),
-    path('user_search_page', user_views.user_search_page, name='user_search_page'),
-    path('choose_register/', chooseRegister_view, name='choose_register'),
-    path('appStatus/', user_views.applicationStatus_view, name='application_status'),
-    path('resume/', user_views.resume, name='resume'),
-    path('review/', user_views.review, name='review'),
- #   path('profile/', user_views.jobseeker_profile_view, name='profile'),
     path('choose_register/', chooseRegister_view, name='choose_register'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+
+    ### Company Subscription Related Pages ###
+    path('subscribe/<int:company_id>', user_views.subscribe, name='subscribe'),
+    path('unsubscribe/<int:company_id>', user_views.subscribe, name='unsubscribe'),
+
+    ### Password/Pass-Reset Related Pages ###
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'), name='password_reset'),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'), name='password_reset_done'),
     path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'), name='password_reset_confirm'),
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), name='password_reset_complete'),
-    path('oauth/', include('social_django.urls', namespace='social')),
+
+    ### Job Search Related Pages ###
+    path('search/', postjob_views.jobsearch, name='search_page'), # [X] No Sidebar Issues
+    path('trysearch/', user_views.trysearch, name='trysearch'),
+    path('jobsearch/', postjob_views.jobsearch, name='jobsearch'), # Redundent?
+    path('jobsearch/<int:job_id>/', postjob_views.job_detail, name='job_detail'),
+    path('applyjob/<int:job_id>', user_views.applyjob, name='applyjob'),
+    path('quickapply/<int:job_id>/', user_views.quickApply, name='quick_apply'),
+    url(r'^ajax/filterJobtype/$', postjob_views.filterJobtype, name='filter_jobtype'),
+
+    ### Job Post Related Pages ###
     path('postjob/', postjob_views.posting, name='posting'),
+    path('jobpost/', postjob_views.posting, name='post_job'),
+    path('editJob/<int:pk>', postjob_views.editJob, name='editJob'),
+
+    ### Events Related Pages ###
+    path('events/', events_app_views.events_view, name='event_list'), # [X] No Sidebar Issues
     path('postEvent/', events_app_views.addEvent, name='postEvent'),
     path('editEvent/<int:pk>', events_app_views.editEvent, name='editEvent'),
-    path('editJob/<int:pk>', postjob_views.editJob, name='editJob'),
+    path('rsvpEvents/<int:event_id>', user_views.rsvpEvent_add, name='rsvpEvent_add'),
+
+    ### Company Profile Related Pages ###
+    path('company/',companypage_view, name='company_page'), 
+    path('company_register', user_views.company_register, name='company_register'),
+    path('company_profile_creator/', user_views.addCompanyProfile, name='company_profile_creator'),
+    path('company_profile', user_views.company_profile, name='company_profile'), # [X] No Sidebar Issues
+
+    ### User Search Page ###
+    path('user_search_page', user_views.user_search_page, name='user_search_page'), # [X] No Sidebar Issues
+
+    ### Favoriting Job Related Pages ###
+    # path('fav/<int:job_id>', user_views.favorite_add, name='favorite_add'),
+    url(r'^ajax/add_favoritejobs/$', user_views.favorite_toggle, name='favorite_toggle'),
+    url(r'^ajax/load_favoritejobs/$', user_views.loadJobs, name='favoritejobs'),
+    url(r'^ajax/refresh_favoritejobbutton_styles/$', user_views.refreshHomePageFavButtonStyles, name='favjobbutton_home_refresh'),
+    
+    ### Admin Related Pages ###
+    path('admin/', admin.site.urls),
+    path('oauth/', include('social_django.urls', namespace='social')),
+
+    ### Misc./Unsorted Pages ###
+    path('appStatus/', user_views.applicationStatus_view, name='application_status'),
+    path('resume/', user_views.resume, name='resume'),
+    path('review/', user_views.review, name='review'),
     path('sendEmailToJobseeker/<int:pk>', user_views.sendEmailToJobseeker, name='sendEmailToJobseeker'),
     path('viewUser/<int:user_id>', user_views.view_jobseeker_profile, name='viewJobseeker'),
     path('uploadProfilePic/', user_views.uploadProfilePic_view, name='uploadProfilePic'),
-
-    # JOB SEARCH PATHS
-    # path('postjob/', postjob_view, name='posting'),
-    path('jobsearch/', postjob_views.jobsearch, name='jobsearch'),
-    path('jobsearch/<int:job_id>/', postjob_views.job_detail, name='job_detail'),
     path('view-applications/', user_views.viewApplications, name ='company_applications'),
-    
-    path('userprofile/', user_views.jobseeker_profile_view, name = 'userProfile-home'),
-    path('about/', user_views.about, name = 'userProfile-about'),
-    # path('signup/', user_views.signup, name = 'userProfile-signup'),
-    path('addwork/', user_views.addWorkingExperience, name = 'userProfile-addwork'),
-    path('addeducation/', user_views.addEducationExperience, name = 'userProfile-addeducation'),
-    # path('signin/', user_views.signin, name = 'userProfile-signin'),
-    # path('changepassword/', user_views.changepassword, name = 'userProfile-changepassword'),
-    # path('upload/', user_views.upload, name = 'userProfile-upload'),
-    path('trysearch/', user_views.trysearch, name='trysearch'),
-    path('applyjob/<int:job_id>', user_views.applyjob, name='applyjob'),
     path('userviewcompany/<int:company_id>',postjob_views.userviewcompany, name='userviewcompany'),
+
 ]
 
 if settings.DEBUG:

@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse
+from urllib.parse import urlencode
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm , UserUpdateForm , CompanyRegisterForm , CompanyUpdateForm , CompanyProfileForm
@@ -9,7 +11,7 @@ from django.conf import settings
 import os
 from django.http import HttpResponse
 from django.contrib.auth.models import User , auth
-from .models import Users , CompanyProfile , Skill
+from .models import Users , CompanyProfile , Skill, Subscription
 from .models import workExperience
 from .models import educationExperience
 from postjob.models import Jobform
@@ -22,11 +24,13 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate , login
 from postjob.models import Jobform , Jobtype, Category
 from django.http import HttpResponse , HttpResponseRedirect
-import psycopg2,pytz
+from datetime import datetime
+import pytz
+import psycopg2
 from django.core.mail import send_mail, EmailMessage
 from .filters import UsersFilter
 from events_app.models import EventListing
-
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -85,6 +89,7 @@ def user_search_page(request):
 
 @unauthenticated_user
 def register(request):
+
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -107,6 +112,7 @@ def register(request):
             return redirect('review')
     else:
         form = UserRegisterForm()
+        # request.session.flush()
     return render(request , 'users/register.html' , {'form': form})
 
 
@@ -141,9 +147,13 @@ def company_register(request):
     return render(request , 'users/company_register.html' , {'form': form})
 
 
+
 def addCompanyProfile(request):
     cp_form = CompanyProfileForm(request.POST)
     if request.method == 'POST':
+        if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
+            group = Group.objects.get(name='company_owner')
+            request.user.groups.add(group)
         cp_form = CompanyProfileForm(request.POST)
         if cp_form.is_valid():
             name = cp_form.cleaned_data['name']
@@ -248,16 +258,14 @@ def resume(request):
     if request.method == 'POST' and 'upload' in request.POST:
         uploaded_file = request.FILES['resume']
         if uploaded_file.name.endswith(".pdf") or uploaded_file.name.endswith(".docx"):
-            path = settings.MEDIA_ROOT + "\\" + str(request.user.id) + "\\"
-            fs = FileSystemStorage(location=path)
-            if uploaded_file.name.endswith(".pdf"):
-                new_name = 'resume.pdf'
-            elif uploaded_file.name.endswith(".docx"):
-                new_name = 'resume.docx'
-            path = os.path.join(settings.MEDIA_ROOT , str(request.user.id)) + '/' + new_name
-            os.remove(path)
-            fs.save(new_name , uploaded_file)
-            parsed_info = ResumeParser(path).get_extracted_data()
+            user = Users.objects.get(Username=request.user.username)
+            if QuickApply.objects.filter(user=user).exists():
+                qa = QuickApply.objects.get(user=user)
+                qa.replace_resume(uploaded_file)
+            else:
+                qa = QuickApply(user=user, resume=uploaded_file)
+                qa.save()
+            parsed_info = ResumeParser(qa.resume.path).get_extracted_data()
             request.session['parsed_name'] = parsed_info.pop('name')
             request.session['parsed_email'] = parsed_info.pop('email')
             request.session['parsed_number'] = parsed_info.pop('mobile_number')
@@ -364,14 +372,28 @@ def removeSkill(users_id , skill):
             connection.close()
 
 @login_required()
-@allowed_users(allowed_roles=['jobseeker'])
 def review(request):
     if request.method == 'GET':
-        using_resume = request.GET.get('using_resume')
-        if 'parsed_status' in request.session:
-            using_resume = True
-        else:
+        came_from = request.META['HTTP_REFERER'].split('/')
+        print(came_from[3])
+        if request.user.groups != 'jobseeker' and request.user.groups != 'company_owner':
+            group = Group.objects.get(name='jobseeker')
+            request.user.groups.add(group)
+        using_resume = request.session.get('parsed_status', None)
+        user = Users.objects.filter(Username=request.user.username)
+        if not user.exists():
+            user = Users(Username=request.user.username, Email=request.user.email)
+            user.save()
+        print(using_resume)
+
+        if came_from[3] != 'resume' and using_resume is not True:
             using_resume = False
+        else:
+            using_resume = True
+        # if request.session['parsed_status'] in request.session:
+        #     using_resume = True
+        # else:
+        #     using_resume = False
         if 'parsed_skills' in request.session:
             context = {'name': request.session.get('parsed_name') ,
                        'email': request.session.get('parsed_email') ,
@@ -399,7 +421,11 @@ def review(request):
         request.session['parsed_address'] = request.POST.get('address')
         request.session['parsed_status'] = True
         if 'save' in request.POST:
-            ParseSkills(request , request.session['parsed_skills'])
+            if not 'parse_skills' in request.session:
+                print("no")
+            else:
+                print(request.session['parsed_skills'])
+                ParseSkills(request , request.session['parsed_skills'])
             user = Users.objects.filter(Username=request.user.username)
             if not user.exists():
                 user = Users(Username=request.user.username, Email=request.user.email)
@@ -484,12 +510,51 @@ def jobseeker_profile_view(request):
         ParseSkills(request , [request.POST['newSkill']])
         skills = getSkills(request.user.username)
         redirect('userProfile-home')
+    if request.method == 'POST' and 'uploadResume' in request.FILES:
+        print(request.FILES['uploadResume'])
+        user = Users.objects.get(Username=request.user.username)
+        if QuickApply.objects.filter(user=user).exists():
+            qa = QuickApply.objects.get(user=user)
+            qa.replace_resume(request.FILES['uploadResume'])
+        else:
+            print('qa not found')
+            resume = request.FILES['uploadResume']
+            # fs = FileSystemStorage(location=(settings.MEDIA_ROOT + "\\" + str(request.user.id) + "\\"))
+            # filename = fs.save('resume.pdf', resume)
+            qa = QuickApply(user=user, resume=request.FILES['uploadResume'])
+            qa.save()
+            print(qa)
     applications = Application.objects.filter(applicant=users.first()).all()
     # apptest =
     # application_statuses = ApplicationStatus.objects.filter(application=applications.id)
+    print('rendering')
     return render(request , 'userProfile/profile2.html' ,
                   {'users': users , 'works': works , 'educations': educations , 'applications': applications ,
                    'skills': skills})
+
+
+def uploadProfilePic_view(request):
+    users = Users.objects.filter(Username=request.user.username)
+    if request.method == 'GET':
+        return render(request, 'users/uploadProfilePic.html')
+    if request.method == 'POST' and 'upload' in request.POST:
+            profilePic = request.FILES['image']
+            thisuser = Users.objects.get(Username=request.user.username)
+            thisuser.image = profilePic
+            thisuser.save()
+            tz_NY = pytz.timezone('America/New_York') 
+            datetime_NY = datetime.now(tz_NY)
+            send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have successfully updated your profile picture in your Aviation Job Portal Profile at '+datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
+            return redirect('userProfile-home')
+    return render(request, 'userProfile/profile2.html')
+                    
+
 
 @login_required()
 @allowed_users(allowed_roles=['company_owner'])
@@ -507,6 +572,7 @@ def view_jobseeker_profile(request, user_id):
         'skills':skills
     }
     return render(request, 'userProfile/profileViewer.html', context)
+
 def trysearch(request):
     jobs = Jobform.objects.all()
     if request.method == 'POST' and 'apply' in request.POST:
@@ -517,8 +583,39 @@ def trysearch(request):
         # application = ApplicationStatus(title=title, jobtype=jobtype, description=description, username=username)
         # application.save()
     return render(request , 'trysearch.html' , {'jobs': jobs})
-
-
+@login_required()
+def quickApply(request, job_id):
+    user = Users.objects.get(Username = request.user.username)
+    job = Jobform.objects.get(id=job_id)
+    company = CompanyProfile.objects.get(id=job.company.id)
+    files = []
+    qa = QuickApply.objects.filter(user=user)
+    if qa.exists():
+        qa = qa.first()
+        fileName = qa.resume.name
+        if '/' in fileName:
+            fileName = qa.resume.name.split('/')
+            fileName = fileName[len(fileName) - 1]
+        files.append(fileName)
+        if not (Application.objects.filter(applicant=user,job=job).exists()):
+            app = Application(applicant=user, job = job, company = company, files = files)
+            app.save()
+            path = settings.MEDIA_ROOT + "\\" + str(user.id) + "\\application_files\\" + str(app.id)
+            fs = FileSystemStorage(location=path)
+            print('Saving to '+ path)
+            file = qa.resume.open()
+            print(fileName)
+            fs.save(fileName,file)
+            file = qa.resume.close()
+            messages.success(request , f'Successfully Applied for the Job.')
+        else:
+            messages.warning(request ,
+                             f'You have already applied to this job.')
+            print('Already Applied')
+    else:
+        messages.warning(request , f'Quick Apply not initialized, please go to your user profile and upload a resume.')
+        return redirect('userProfile-home')
+    return redirect('search_page')
 @login_required()
 @allowed_users(allowed_roles=['jobseeker'])
 def applyjob(request , job_id):
@@ -529,6 +626,23 @@ def applyjob(request , job_id):
             return redirect('userProfile-home')
         job = Jobform.objects.filter(id=job_id).first()
         company = CompanyProfile.objects.filter(id=job.company.id).first()
+        company_profile = CompanyProfile.objects.get(user_id=job.company.id)
+        tz_NY = pytz.timezone('America/New_York') 
+        datetime_NY = datetime.now(tz_NY)
+        send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have successfully applied to ' + str(job.title) + ' at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
+        send_mail(
+                'You have received a notification from Aviation Job Portal',
+                'You have received a new job application from '+ str(request.user.email) +' for your ' + str(job.title) + ' position at ' + str(company.name) + ' at ' + datetime_NY.strftime("%H:%M:%S")+' EST. To see this application, click here http://127.0.0.1:8000/candidate_applications_page/ If this is incorrect please contact AJP support.',
+                'DoNotReply.AJP@gmail.com',
+                [company_profile.user.email],
+                fail_silently=False,
+            )
         files = []
         if len(x) > 0:
             if len(x) > 1:
@@ -539,7 +653,7 @@ def applyjob(request , job_id):
             app = Application(applicant=users , job=job , company=company , files=files)
             print(app)
             app.save()
-            path = settings.MEDIA_ROOT + "\\" + str(request.user.id) + "\\application_files\\" + str(app.id)
+            path = settings.MEDIA_ROOT + "\\" + str(users.id) + "\\application_files\\" + str(app.id)
             fs = FileSystemStorage(location=path)
             for i in x:
                 fs.save(i.name , i)
@@ -547,9 +661,31 @@ def applyjob(request , job_id):
             app = Application(applicant=users , job=job , company=company , files=files)
             print(app)
             app.save()
+
         return redirect('userProfile-home')
         ##SOME ISSUES WITH FS IDK HOW TO FIX THE ISSUE OF HAVING DUPLICATE FILES IN SAME APPLICATION##
     return render(request , 'applyjob.html')
+
+
+def subscribe(request, company_id):
+    users = Users.objects.filter(Username=request.user.username).first()
+    company = CompanyProfile.objects.filter(id=company_id).first()
+    s1 = Subscription(jobseeker = users, name = users.Email, company = company)
+    subscribed = company.subscribed_users.all()
+    if subscribed.exists():
+        for x in subscribed:
+            if x == s1.jobseeker: 
+                company.subscribed_users.remove(x)
+                return render(request, 'unsubscribe.html')
+        else:
+            s1.save()   
+            print(company.subscribed_users.all())
+            return render(request, 'subscribe.html')            
+    else:
+        s1.save()   
+        print(company.subscribed_users.all())
+        return render(request, 'subscribe.html')
+    
 
 
 def getFiles(applications):
@@ -558,6 +694,7 @@ def getFiles(applications):
         user = User.objects.get(username=x.applicant.Username)
         for y in x.files:
             path = "/media/" + str(user.id) + "/application_files/" + str(x.id) + "/" + y
+
             test = {
                 y:path
             }
@@ -670,3 +807,77 @@ def addEducationExperience(request):
 
 def about(request):
     return render(request , 'userProfile/profile2.html')
+
+
+#############################################################################################
+#############################################################################################
+#############################################################################################
+
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
+def favorite_add(request, job_id):
+    user = Users.objects.get(Username=request.user.username)
+
+    if user.favoriteJobs.filter(id=job_id).exists():
+        e = user.favoriteJobs.get(id=job_id)
+        user.favoriteJobs.remove(e)
+    else:
+        user.favoriteJobs.add(job_id)
+
+    return HttpResponse('<script>history.back();</script>')
+    
+    #return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
+def favorite_toggle(request):
+    user = Users.objects.get(Username=request.user.username)
+
+    if user.favoriteJobs.filter(id=request.GET.get('JobID')).exists():
+        e = user.favoriteJobs.get(id=request.GET.get('JobID'))
+        user.favoriteJobs.remove(e)
+    else:
+        user.favoriteJobs.add(request.GET.get('JobID'))
+
+    data = {
+        'jobID': request.GET.get('JobID'),
+    }
+
+    return JsonResponse(data)
+
+@login_required()
+@allowed_users(allowed_roles=['jobseeker'])
+def rsvpEvent_add(request, event_id):
+    user = Users.objects.get(Username=request.user.username)
+
+    if user.rsvpEvents.filter(id=event_id).exists():
+        e = user.rsvpEvents.get(id=event_id)
+        user.rsvpEvents.remove(e)
+    else:
+        user.rsvpEvents.add(event_id)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+def loadJobs(request):
+    user = Users.objects.get(Username=request.user.username)
+    alljobs = []
+
+    for job in user.favoriteJobs.all():
+        alljobs.append((job.id, job.title))
+
+    data = {
+        'jobs': alljobs,
+    }
+    return JsonResponse(data)
+
+def refreshHomePageFavButtonStyles(request):
+    user = Users.objects.get(Username=request.user.username)
+    alljobids = []
+
+    for job in user.favoriteJobs.all():
+        alljobids.append(job.id)
+
+    data = {
+        'jobIDs': alljobids,
+    }
+    return JsonResponse(data)
+

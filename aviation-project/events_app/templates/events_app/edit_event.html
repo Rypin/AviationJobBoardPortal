@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+<div style="margin: 0px 100px 0px 220px">
 {% if user.is_authenticated %}
 {% if request.user.groups.all.0.name == "company_owner" %}
 
@@ -12,9 +13,7 @@
     <button type="submit" class="btn btn-success btn-lg float-right ">Submit</button>
     </form>
 
-
-
-
 {% endif %}
 {% endif %}
+</div>
 {% endblock %}

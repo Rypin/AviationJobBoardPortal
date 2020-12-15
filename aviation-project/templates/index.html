@@ -1,12 +1,33 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+{% load static %} 
 {% load sass_tags %}
 
 {% block other_css %}
 <link href="{% sass_src 'front/scss/landing/landing.scss' %}" rel="stylesheet" type="text/css" />
+
+<!-- Stylings for favorite buttons -->
+<link href="{% static 'custom/css/favoriteButtonStylings.css' %}" rel="stylesheet" type="text/css" />
+
 {% endblock %}
 
+{% block sideDashBoard %}
+
+	{% include "sideDashboard.html"%}
+
+{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
+{% if request.user.groups.all.0.name != "jobseeker" %}
+{% if request.user.groups.all.0.name != "company_owner" %}
+<h1>
+	Choose whether you're a jobseeker or a company owner
+</h1>
+<h3 style="margin-top:30px;"> <a class="user btn-lg" href="{% url 'review' %}">Jobseeker (search for jobs, events, etc...)</a></h3>
+                <h3 style="margin-top:20px;"> <a class="employer btn-lg" href="{% url 'company_profile_creator' %}">Company Owner</a></h3>
+{% endif %}
+{% endif %}
+{% endif %}
 <div class="container-fluid">
 	<div class="searchBox">
 		<h1 class='display-4 text-center jobSearching'>Job searching just got easier</h1>
@@ -18,7 +39,7 @@
 			</div>
 			<div class="tab-content">
 				<div class="row active" id="job" data-tab-content>
-					<form class="form-inline" method="GET" action="{%url 'choose_register'%}" novalidate>
+					<form class="form-inline" method="GET" action="{%url 'jobsearch'%}" novalidate>
 						<div class="col-lg-3">
 							<div class="form-group ">
 								<div class='form-control lines'> {{PostingForm.title}} </div>
@@ -41,7 +62,7 @@
 								<select id="jobtype" class="form-control" name="jobtype" style="margin-right: -0px; border: .5px inset #495057">
 									<option checkbox>Job Type</option> 
 									    {% for jobtypes in jobtypes %}
-									        <option value="{{ jobtypes}}">{{ jobtypes }}</option> 
+									        <option value="{{jobtypes}}">{{ jobtypes }}</option>
 									    {% endfor %} 
 								</select>
 							</div>
@@ -111,8 +132,10 @@
                {% for category in categories %}
            <div class="col-lg-3 ftco-animate">
         		<ul class="category">
+
         			<li><a href="{% url 'search_page' %}?category={{category.id}}">{{category.name}}<br><span class="number">{{category.count}}</span> <span>Open position</span><i class="ion-ios-arrow-forward"></i></a></li>
-        		</ul>
+
+          		</ul>
         	</div>
                {% endfor %}
 <!--        	<div class="col-md-3 ftco-animate">-->
@@ -169,10 +192,20 @@
          <div class="col-md-6">
             <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
                <div class="applyIconBtn" >
-                  <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                     <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span>
-                  </a>
-               <a href="{% url 'search_page' %}?job={{job.id}}" class="btn btn-primary py-2">Apply Job</a>
+				    <a href="Javascript:void(0);" class="outer unfavoritedBody d-flex justify-content-center align-items-center mr-2" value="{{job.id}}">
+						<div class="heart fa fa-heart-o unfavoritedHeart"></div>
+				 	</a> 
+                   <!--<a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+
+
+
+					  <span class="icon-heart"> <i class="fa fa-heart" aria-hidden="true"></i></span> 
+					 
+					  
+
+                  </a>  -->
+               <button type="button" class="btn btn-primary py-2 applyJob" value ="{% url 'search_page' %}?job={{job.id}}" name="{% url 'quick_apply' job.id %}">Apply Job</button>
+<!--				   href="{% url 'search_page' %}?job={{job.id}}"-->
                </div>
             </div>
          </div>
@@ -209,9 +242,50 @@
 <!--      </div>-->
 <!--   </div> -->
 <!--   -->
+<div class="modal fade" id="applyModal" tabindex="-1" role="dialog">
+     <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                   <div class="modal-header">
+                          <h5 class="modal-title">Would you like to apply with quick apply?</h5>
+                    </div>
+                   <div class="modal-body">
+                         <div class="row">
+                             <div class="col col-md-5">
+                                    <a href="" class="btn btn-success float-right" id = "quickApply">Quick Apply</a>
+                             </div>
+                             <div class="col-md-2">
+                                 <center>
+                                     <small class="text-muted">
+                                            Or
+                                     </small>
+                                 </center>
+                             </div>
+                             <div class="col col-md-5">
+                                 <a href="" class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="applyManually">Apply Manually</a>
+                              </div>
+                         </div>
+                   </div>
+            </div>
+      </div>
+</div>
+</section>
+{% endblock %}
 
-</section> 
 
-		
-		</section>
+{% block other_js %}
+
+<!-- Favorite Button Styling Updating JavaScript -->
+<script src="{% static 'custom/js/loadFavoriteButtons.js' %}"></script>
+
+<!-- ??? -->
+<script>
+$(document).ready(function(){
+	$(".applyJob").on("click", function(e){
+		$("#applyModal").modal("show");
+		$("#quickApply").attr("href", $(this).attr("name"));
+		$("#applyManually").attr("href", $(this).val());
+	});
+});
+</script>
+
 {% endblock %}
